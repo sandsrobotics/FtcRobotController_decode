@@ -51,7 +51,7 @@ public class T3_AutoExample extends LinearOpMode{
 
     public void initAuto(){
         transformFunc = (v) -> v;
-        fieldStartPos = new Vector3(14.375, -62, -90);
+        fieldStartPos = new Vector3(0, 0, 0);
     }
 
     private Vector3 tileToInchAuto(Vector3 tiles){
@@ -116,13 +116,18 @@ public class T3_AutoExample extends LinearOpMode{
 
     public void TestAuto(TimedTask autoTasks) { // from 14273
         // Positions to travel in Auto
-        Vector3 start = new Vector3(14.375, -62, -90);
-        Vector3 launch = new Vector3(14.375, -50, -45);
+        //Vector3 start = new Vector3(14.375, -62, -90);
+        //Vector3 start = new Vector3(-23.5, 23.5, 180);
+        Vector3 launch = new Vector3(0, 0, 0);
+        Vector3 shootRed = new Vector3(12, 12, 45);
+        Vector3 shootBlue = new Vector3(-12, -12, -45);
         // Reset and Get Ready.
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.loseSettings));
         // First Sample to ObservationZone.
-        positionSolver.addMoveToTaskEx(start, autoTasks);
-        positionSolver.addMoveToTaskEx(launch, autoTasks);
-
+        //positionSolver.addMoveToTaskEx(start, autoTasks);
+        //positionSolver.addMoveToTaskEx(launch, autoTasks);
+        positionSolver.addMoveToTaskEx(shootRed, autoTasks);
+        sleep(1000);
+        positionSolver.addMoveToTaskEx(shootBlue, autoTasks);
     }
 }

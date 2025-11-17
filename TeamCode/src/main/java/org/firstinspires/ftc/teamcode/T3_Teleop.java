@@ -1,16 +1,15 @@
-package org.firstinspires.ftc.teamcode.depricated.opmodes;
+package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
-import org.firstinspires.ftc.teamcode.depricated.intake2.IntakeTeleop2;
-import org.firstinspires.ftc.teamcode.depricated.intake2.Intake2;
+import org.firstinspires.ftc.teamcode.parts.intake3.Intake3;
+import org.firstinspires.ftc.teamcode.parts.intake3.IntakeTeleop3;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.XRelativeSolver;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
@@ -21,9 +20,9 @@ import java.text.DecimalFormat;
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.utils.Vector3;
 import static om.self.ezftc.utils.Constants.tileSide;
-@Disabled
-@TeleOp(name="27050 Teleop", group="27050")
-public class ClawTeleop extends LinearOpMode {
+
+@TeleOp(name="Arcade", group="32859")
+public class T3_Teleop extends LinearOpMode {
     Drive drive;
     Robot robot;
     PositionSolver positionSolver;
@@ -52,8 +51,8 @@ public class ClawTeleop extends LinearOpMode {
         odo = new Pinpoint(pt,false);
         pt.positionSourceId = Pinpoint.class;
 
-        Intake2 intake = new Intake2(robot, "Teleop");
-        new IntakeTeleop2(intake);
+        Intake3 intake = new Intake3(robot, "Teleop");
+        new IntakeTeleop3(intake);
         robot.init();
 
         while (!isStarted()) {
@@ -67,12 +66,14 @@ public class ClawTeleop extends LinearOpMode {
             robot.run();
             telemetry.addData("position tracker", pt.getCurrentPosition());
             telemetry.addData("time", System.currentTimeMillis() - start);
+            telemetry.addData("LaunchServo", intake.getHardware().launchServo.getPosition());
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();
         }
         robot.stop();
     }
 
+    /************************* Utilities **************************/
     public void moveRobot(Vector3 target){
         positionSolver.setNewTarget(target, false);
     }

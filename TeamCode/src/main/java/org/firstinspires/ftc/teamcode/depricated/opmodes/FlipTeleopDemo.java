@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
 import org.firstinspires.ftc.teamcode.parts.drive.settings.DriveTeleopSettings;
-import org.firstinspires.ftc.teamcode.parts.intake.FlipbotSettings;
+import org.firstinspires.ftc.teamcode.depricated.intake.FlipbotSettings;
 
 @TeleOp(name="14273.0 DEMO", group="14273")
 @Disabled

@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.parts.drive.settings;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.parts.intake.FlipbotSettings;
+import org.firstinspires.ftc.teamcode.depricated.intake.FlipbotSettings;
 
 import java.util.function.Supplier;
 

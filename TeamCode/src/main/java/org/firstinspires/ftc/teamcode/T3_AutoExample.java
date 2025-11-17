@@ -5,14 +5,14 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
-import org.firstinspires.ftc.teamcode.parts.intake2.Intake2;
+import org.firstinspires.ftc.teamcode.depricated.intake2.Intake2;
+import org.firstinspires.ftc.teamcode.parts.intake3.Intake3;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
@@ -28,40 +28,26 @@ import om.self.task.core.Group;
 import om.self.task.other.TimedTask;
 import static om.self.ezftc.utils.Constants.tileSide;
 
-@Config
+//@Config
 @Autonomous(name="32859 Auto Example ", group="32859")
 public class T3_AutoExample extends LinearOpMode{
     public Function<Vector3, Vector3> transformFunc;
-    public Vector3 customStartPos;
     public boolean shutdownps;
     PositionSolver positionSolver;
     PositionTracker pt;
-    Vector3 startPosition;
     Pinpoint odo;
-    Intake2 intake;
+    Intake3 intake;
     //  DASHBOARD VARIABLES (static public)
     static public int shortDelay = 1000;
     static public int midDelay = 2000;
     static public int longDelay = 3000;
     public static int maxDelay = 3000;
     /**************************/
-    public int startDelay;
-    private int parkPosition;
     Vector3 fieldStartPos;
 
     public void initAuto(){
         transformFunc = (v) -> v;
         fieldStartPos = new Vector3(0, 0, 0);
-    }
-
-    private Vector3 tileToInchAuto(Vector3 tiles){
-        return Constants.tileToInch(transformFunc.apply(tiles));
-    }
-
-    private Vector3 tileToInchAutoNoZ(Vector3 tiles){ return Constants.tileToInch(transformFunc.apply(tiles)).withZ(tiles.Z); }
-
-    public Vector3 fieldToTile(Vector3 p){
-        return new Vector3(p.X / tileSide, p.Y / tileSide, p.Z);
     }
 
     @Override
@@ -75,8 +61,7 @@ public class T3_AutoExample extends LinearOpMode{
         Robot robot = new Robot(this);
         Drive drive = new Drive(robot);
         new BulkRead(robot);
-        intake = new Intake2(robot, "Autonomous");
-
+        intake = new Intake3(robot, "Autonomous");
         PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,
                 100, new Vector3(2, 2, 2), fieldStartPos);
         pt = new PositionTracker(robot, pts, PositionTrackerHardware.makeDefault(robot));
@@ -90,6 +75,7 @@ public class T3_AutoExample extends LinearOpMode{
         while (!isStarted()) {
             sleep(50);
         }
+        
         odo.setPosition(fieldStartPos);
         robot.start();
 
@@ -99,11 +85,12 @@ public class T3_AutoExample extends LinearOpMode{
         Group container = new Group("container", robot.taskManager);
         TimedTask autoTasks = new TimedTask("auto task", container);
 
+        // call the method to create auto tasks
         TestAuto(autoTasks);
 
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
-            robot.run();
+            robot.run(); // Tasks are run as part of this run.
             dashboardTelemetry.addData("position", pt.getCurrentPosition());
             telemetry.addData("position", pt.getCurrentPosition());
             telemetry.addData("tile position", fieldToTile(pt.getCurrentPosition()));
@@ -114,20 +101,33 @@ public class T3_AutoExample extends LinearOpMode{
         robot.stop();
     }
 
+    /*********************** Autonomous Methods ******************/
     public void TestAuto(TimedTask autoTasks) { // from 14273
         // Positions to travel in Auto
-        //Vector3 start = new Vector3(14.375, -62, -90);
-        //Vector3 start = new Vector3(-23.5, 23.5, 180);
-        Vector3 launch = new Vector3(0, 0, 0);
         Vector3 shootRed = new Vector3(12, 12, 45);
         Vector3 shootBlue = new Vector3(-12, -12, -45);
-        // Reset and Get Ready.
+        // set accuracy of position
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.loseSettings));
-        // First Sample to ObservationZone.
-        //positionSolver.addMoveToTaskEx(start, autoTasks);
-        //positionSolver.addMoveToTaskEx(launch, autoTasks);
+        // movement tasks
         positionSolver.addMoveToTaskEx(shootRed, autoTasks);
-        sleep(1000);
+        sleep(5000);
         positionSolver.addMoveToTaskEx(shootBlue, autoTasks);
+    }
+
+
+
+
+
+    /************************* Utilities ************************/
+    private Vector3 tileToInchAuto(Vector3 tiles){
+        return Constants.tileToInch(transformFunc.apply(tiles));
+    }
+
+    private Vector3 tileToInchAutoNoZ(Vector3 tiles){
+        return Constants.tileToInch(transformFunc.apply(tiles)).withZ(tiles.Z);
+    }
+
+    public Vector3 fieldToTile(Vector3 p){
+        return new Vector3(p.X / tileSide, p.Y / tileSide, p.Z);
     }
 }

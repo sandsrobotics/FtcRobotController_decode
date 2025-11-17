@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode.depricated.opmodes;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.teamcode.parts.intake.FlipbotSettings;
+import org.firstinspires.ftc.teamcode.depricated.intake.FlipbotSettings;
 
 @TeleOp(name="14273.4 Arcade BLUE", group="B14273")
 @Disabled

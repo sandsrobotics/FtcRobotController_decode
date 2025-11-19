@@ -9,7 +9,6 @@ public class DecodeSettings {
     */
 
    static boolean modeTeleOp = true;
-   public static int artifactPos = 1;
 
    static Vector3 robotPosition = new Vector3();   //starts with all zeroes
    public static boolean isRedGood = true;

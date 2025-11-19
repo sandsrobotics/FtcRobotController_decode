@@ -74,7 +74,11 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
         setConfig(settings, hardware);
     }
     public void setServoIntake(double speed) {
-        getHardware().intakeServo.setPower(speed);
+        getHardware().intakeServo.setPosition(speed);
+    }
+    public double getIntakeServoPos() {
+        double intakeServoPos = getHardware().intakeServo.getPosition();
+        return intakeServoPos;
     }
     private void setMotorsToRunConfig() {
         getHardware().intakeMotor.setMode(DcMotorEx.RunMode.STOP_AND_RESET_ENCODER);

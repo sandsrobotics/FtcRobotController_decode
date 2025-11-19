@@ -36,7 +36,6 @@ public class IntakeTasks {
         artifactIntakeTask.addStep(()->{
             intake.getHardware().intakeMotor.setPower(intake.getSettings().motorIntakeIn);
             intake.setServoIntake(intake.getSettings().servoIntakeIn);
-            artifactIntakeTask.isDone();
         });
         /*    Artifact Extake Task */
         artifactExtakeTask.autoStart = false;
@@ -44,14 +43,12 @@ public class IntakeTasks {
             intake.getHardware().intakeMotor.setPower(intake.getSettings().motorIntakeOut);
             intake.setServoIntake(intake.getSettings().servoIntakeOut);
             intake.getHardware().intakeServo.setPosition(intake.getSettings().servoIntakeOut);
-            artifactExtakeTask.isDone();
         });
         /*   Artifact Intake Stop Task   */
         artifactIntakeStopTask.autoStart = false;
         artifactIntakeStopTask.addStep(()-> {
             intake.getHardware().intakeMotor.setPower(intake.getSettings().motorIntakeStop);
             intake.setServoIntake(intake.getSettings().servoIntakeStop);
-            artifactIntakeStopTask.isDone();
         });
 
 

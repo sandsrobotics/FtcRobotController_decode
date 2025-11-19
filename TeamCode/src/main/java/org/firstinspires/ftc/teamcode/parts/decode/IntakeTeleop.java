@@ -110,24 +110,25 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
         if (!buttonMgr.getState(1, Buttons.start, State.isPressed)) {
             /*          Intake Task Initiator            */
             /*             intake suppliers          */
-            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasTapped)) {
+            if (buttonMgr.getState(1, Buttons.right_bumper, State.isPressed)) {
                 if (parent.getHardware().intakeServo.isSetPosition(parent.getSettings().servoIntakeOut)) {
-                    parent.setServoIntake(parent.getSettings().servoIntakeStop);
+                    parent.tasks.artifactIntakeStopTask.restart();
 
                 } else {
-                    parent.setServoIntake(parent.getSettings().servoIntakeOut);
                     parent.tasks.artifactExtakeTask.restart();
                 }
             }
-            if (buttonMgr.getState(2, Buttons.left_bumper, State.wasTapped)) {
+            if (buttonMgr.getState(1, Buttons.left_bumper, State.isPressed)) {
                 if (parent.getHardware().intakeServo.isSetPosition(parent.getSettings().servoIntakeIn)) {
-                    parent.setServoIntake(parent.getSettings().servoIntakeStop);
+                    parent.tasks.artifactIntakeStopTask.restart();
                 } else {
-                    parent.setServoIntake(parent.getSettings().servoIntakeIn);
                     parent.tasks.artifactIntakeTask.restart();
                 }
 
                 // Driver 1
+            }
+            if (buttonMgr.getState(1,Buttons.x,State.wasPressed)) {
+                parent.tasks.artifactIntakeStopTask.restart();
             }
             // Driver 1 - start button is a "shift" key; anything below is when start is held first
             else {

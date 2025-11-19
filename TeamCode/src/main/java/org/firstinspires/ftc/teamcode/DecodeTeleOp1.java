@@ -10,6 +10,8 @@ import org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
+import org.firstinspires.ftc.teamcode.parts.decode.Intake;
+import org.firstinspires.ftc.teamcode.parts.decode.hardware.IntakeHardware;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
 import org.firstinspires.ftc.teamcode.parts.drive.hardware.DriveHardware;
@@ -142,7 +144,7 @@ public class DecodeTeleOp1 extends LinearOpMode {
 //                intake.tasks.prepareToHangRobotTask.restart();
 //            }
 //            DecodeSettings.storeRobotPosition(pt.getCurrentPosition());
-            telemetry.addData("Artifact Position", DecodeSettings.artifactPos);
+            telemetry.addData("servoIntake", intake.getIntakeServoPos());
 
 
             dashboard.sendTelemetryPacket(packet);

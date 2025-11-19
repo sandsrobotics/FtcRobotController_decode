@@ -1,10 +1,10 @@
-package org.firstinspires.ftc.teamcode.parts.intake;
+package org.firstinspires.ftc.teamcode.depricated.intake;
 
 import org.apache.commons.lang3.ObjectUtils;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.Buttons;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.State;
-import org.firstinspires.ftc.teamcode.parts.intake.settings.IntakeTeleopSettings;
+import org.firstinspires.ftc.teamcode.depricated.intake.settings.IntakeTeleopSettings;
 
 import om.self.ezftc.core.part.LoopedPartImpl;
 
@@ -72,10 +72,10 @@ public class IntakeTeleopDemo extends LoopedPartImpl<Intake, IntakeTeleopSetting
         // Driver 1 right_bumper is a dead man switch for Driver 2
         if (buttonMgr.getState(1, Buttons.right_bumper, State.isPressed)) {
             enableDemoDriver = true;
-            FlipbotSettings.demoDriverMultiplier = FlipbotSettings.demoDriverDefaultMultiplier;
+            FlipBotSettings.demoDriverMultiplier = FlipBotSettings.demoDriverDefaultMultiplier;
         } else {
             enableDemoDriver = false;
-            FlipbotSettings.demoDriverMultiplier = 0;
+            FlipBotSettings.demoDriverMultiplier = 0;
         }
 
         // Slide control

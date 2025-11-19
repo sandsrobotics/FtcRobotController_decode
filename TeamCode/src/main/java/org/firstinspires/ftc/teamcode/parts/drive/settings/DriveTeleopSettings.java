@@ -2,7 +2,8 @@ package org.firstinspires.ftc.teamcode.parts.drive.settings;
 
 import com.qualcomm.robotcore.hardware.Gamepad;
 
-import org.firstinspires.ftc.teamcode.parts.intake.FlipbotSettings;
+import org.firstinspires.ftc.teamcode.depricated.intake.FlipBotSettings;
+import org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings;
 
 import java.util.function.Supplier;
 
@@ -37,7 +38,7 @@ public class DriveTeleopSettings {
         return new DriveTeleopSettings(
                 () -> new Vector3(
                         gamepad.left_stick_x,
-                        -gamepad.left_stick_y,
+                        gamepad.left_stick_y,
                         gamepad.right_stick_x
                 ),
                 () -> gamepad.x,
@@ -55,7 +56,7 @@ public class DriveTeleopSettings {
         return new DriveTeleopSettings(
                 () -> new Vector3(
                         gamepad.left_stick_x,
-                        -gamepad.left_stick_y,
+                        gamepad.left_stick_y,
                         gamepad.right_stick_x
                 ),
                 () -> gamepad.x,
@@ -74,7 +75,7 @@ public class DriveTeleopSettings {
                 () -> new Vector3(
                         gamepad.left_stick_x,
 //                        gamepad.left_trigger - gamepad.right_trigger,
-                        gamepad.right_trigger - gamepad.left_trigger,
+                        -gamepad.right_trigger + gamepad.left_trigger,
                         gamepad.right_stick_x
                 ),
                 () -> gamepad.x,
@@ -118,9 +119,9 @@ public class DriveTeleopSettings {
 
         return new DriveTeleopSettings(
                 () -> new Vector3(
-                        FlipbotSettings.getControlGovernor().X * (gamepad.left_stick_x != 0 ? gamepad.left_stick_x : gamepad2.left_stick_x * FlipbotSettings.demoDriverMultiplier),
-                        FlipbotSettings.getControlGovernor().Y * (gamepad.left_stick_y != 0 ? -gamepad.left_stick_y : -gamepad2.left_stick_y * FlipbotSettings.demoDriverMultiplier),
-                        FlipbotSettings.getControlGovernor().Z * (gamepad.right_stick_x != 0 ? gamepad.right_stick_x : gamepad2.right_stick_x * FlipbotSettings.demoDriverMultiplier)
+                        FlipBotSettings.getControlGovernor().X * (gamepad.left_stick_x != 0 ? gamepad.left_stick_x : gamepad2.left_stick_x * DecodeSettings.demoDriverMultiplier),
+                        FlipBotSettings.getControlGovernor().Y * (gamepad.left_stick_y != 0 ? -gamepad.left_stick_y : -gamepad2.left_stick_y * DecodeSettings.demoDriverMultiplier),
+                        FlipBotSettings.getControlGovernor().Z * (gamepad.right_stick_x != 0 ? gamepad.right_stick_x : gamepad2.right_stick_x * DecodeSettings.demoDriverMultiplier)
                 ),
                 () -> false, // () -> gamepad.x,
                 () -> false, // new LatchedModifier().toSupplier(() -> gamepad.right_bumper),

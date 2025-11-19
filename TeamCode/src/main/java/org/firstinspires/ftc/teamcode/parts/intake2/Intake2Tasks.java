@@ -1,7 +1,7 @@
 package org.firstinspires.ftc.teamcode.parts.intake2;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import org.firstinspires.ftc.teamcode.parts.intake.hardware.IntakeHardware;
+import org.firstinspires.ftc.teamcode.depricated.intake.hardware.IntakeHardware;
 import om.self.ezftc.core.Robot;
 import om.self.task.core.Group;
 import om.self.task.other.TimedTask;

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.parts.intake.settings;
+package org.firstinspires.ftc.teamcode.depricated.intake.settings;
 
 public class  IntakeSettings {
 

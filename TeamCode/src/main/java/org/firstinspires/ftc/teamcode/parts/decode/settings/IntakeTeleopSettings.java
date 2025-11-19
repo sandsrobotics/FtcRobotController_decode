@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.parts.intake.settings;
+package org.firstinspires.ftc.teamcode.parts.decode.settings;
 
 import om.self.ezftc.core.Robot;
 

@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.parts.intake;
+package org.firstinspires.ftc.teamcode.depricated.intake;
 
 public class IntakeControl {
     public int sweeperPower;

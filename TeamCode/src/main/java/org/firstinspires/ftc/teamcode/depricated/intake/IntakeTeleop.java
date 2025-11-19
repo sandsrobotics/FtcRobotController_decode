@@ -1,11 +1,11 @@
-package org.firstinspires.ftc.teamcode.parts.intake;
+package org.firstinspires.ftc.teamcode.depricated.intake;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.MotorControlAlgorithm;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.firstinspires.ftc.teamcode.parts.intake.settings.IntakeTeleopSettings;
+import org.firstinspires.ftc.teamcode.depricated.intake.settings.IntakeTeleopSettings;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.Buttons;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.State;
@@ -70,7 +70,7 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
         }
 
         //in telelop, disable positiontracker if Driver1 uses controls
-        if (FlipbotSettings.isTeleOp()) {
+        if (FlipBotSettings.isTeleOp()) {
             if (parent.parent.opMode.gamepad1.right_trigger+
                     parent.parent.opMode.gamepad1.left_trigger+
                     parent.parent.opMode.gamepad1.left_stick_x+
@@ -161,7 +161,7 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
                 parent.tasks.startAutoHome();
             }
             if (buttonMgr.getState(2, Buttons.y, State.wasTapped)) {
-                FlipbotSettings.isYellowGood = !FlipbotSettings.isYellowGood;
+                FlipBotSettings.isYellowGood = !FlipBotSettings.isYellowGood;
             }
             // test out-take speed
             if (buttonMgr.getState(2, Buttons.left_bumper, State.wasTapped)) {

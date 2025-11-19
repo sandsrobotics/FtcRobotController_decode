@@ -1,8 +1,8 @@
-package org.firstinspires.ftc.teamcode.parts.intake;
+package org.firstinspires.ftc.teamcode.depricated.intake;
 
 import om.self.ezftc.utils.Vector3;
 
-public class FlipbotSettings {
+public class FlipBotSettings {
 
    /* The purpose of this class is to store values accessible to all classes in FlipBot,
       and which can remain from run to run
@@ -54,5 +54,4 @@ public class FlipbotSettings {
    private static double clamp(double val, double min, double max) {
       return Math.max(min, Math.min(val, max));
    }
-
 }

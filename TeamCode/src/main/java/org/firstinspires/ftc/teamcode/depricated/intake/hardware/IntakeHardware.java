@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.parts.intake.hardware;
+package org.firstinspires.ftc.teamcode.depricated.intake.hardware;
 
 import com.qualcomm.hardware.rev.Rev2mDistanceSensor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;

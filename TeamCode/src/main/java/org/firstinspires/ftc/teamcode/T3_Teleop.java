@@ -27,7 +27,7 @@ public class T3_Teleop extends LinearOpMode {
     Robot robot;
     PositionSolver positionSolver;
     PositionTracker pt;
-    Vector3 fieldStartPos = new Vector3(0,0,180);
+    Vector3 fieldStartPos = new Vector3(0,0,0);
     Pinpoint odo;
     public void initTeleop(){
         new DriveTeleop(this.drive);

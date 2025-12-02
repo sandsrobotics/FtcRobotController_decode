@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -11,7 +10,6 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
-import org.firstinspires.ftc.teamcode.depricated.intake2.Intake2;
 import org.firstinspires.ftc.teamcode.parts.intake3.Intake3;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
@@ -29,8 +27,8 @@ import om.self.task.other.TimedTask;
 import static om.self.ezftc.utils.Constants.tileSide;
 
 //@Config
-@Autonomous(name="32859 Auto Example ", group="32859")
-public class T3_AutoExample extends LinearOpMode{
+@Autonomous(name="32859 Auto Base", group="32859")
+public class T3_AutoBase extends LinearOpMode{
     public Function<Vector3, Vector3> transformFunc;
     public boolean shutdownps;
     PositionSolver positionSolver;
@@ -47,7 +45,7 @@ public class T3_AutoExample extends LinearOpMode{
 
     public void initAuto(){
         transformFunc = (v) -> v;
-        fieldStartPos = new Vector3(0, 0, 0);
+        fieldStartPos = new Vector3(-51, 51, 143);
     }
 
     @Override
@@ -69,7 +67,6 @@ public class T3_AutoExample extends LinearOpMode{
         pt.positionSourceId = Pinpoint.class;
         positionSolver = new PositionSolver(drive); // removed so it won't rotate 90deg clockwise
         DecimalFormat df = new DecimalFormat("#0.0");
-
         robot.init();
 
         while (!isStarted()) {
@@ -86,7 +83,7 @@ public class T3_AutoExample extends LinearOpMode{
         TimedTask autoTasks = new TimedTask("auto task", container);
 
         // call the method to create auto tasks
-        TestAuto(autoTasks);
+        BaseAuto(autoTasks);
 
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
@@ -95,10 +92,16 @@ public class T3_AutoExample extends LinearOpMode{
             telemetry.addData("position", pt.getCurrentPosition());
             telemetry.addData("tile position", fieldToTile(pt.getCurrentPosition()));
             telemetry.addData("time", System.currentTimeMillis() - start);
+            telemetry.addData("current launch speed", df.format(intake.getLaunchSpeed()));
+            telemetry.addData("launch servo", intake.getHardware().launchServo.getPosition());
             dashboardTelemetry.update();
             telemetry.update();
         }
         robot.stop();
+    }
+
+    public void BaseAuto(TimedTask autoTasks) {
+        TestAuto(autoTasks);
     }
 
     /*********************** Autonomous Methods ******************/
@@ -106,17 +109,12 @@ public class T3_AutoExample extends LinearOpMode{
         // Positions to travel in Auto
         Vector3 shootRed = new Vector3(12, 12, 45);
         Vector3 shootBlue = new Vector3(-12, -12, -45);
+        Vector3 fieldzero = new Vector3(0, 0, 0);
         // set accuracy of position
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.loseSettings));
         // movement tasks
-        positionSolver.addMoveToTaskEx(shootRed, autoTasks);
-        sleep(5000);
-        positionSolver.addMoveToTaskEx(shootBlue, autoTasks);
+        positionSolver.addMoveToTaskEx(fieldzero, autoTasks);
     }
-
-
-
-
 
     /************************* Utilities ************************/
     private Vector3 tileToInchAuto(Vector3 tiles){

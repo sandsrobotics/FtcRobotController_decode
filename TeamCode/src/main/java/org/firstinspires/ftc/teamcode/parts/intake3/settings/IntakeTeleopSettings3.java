@@ -13,7 +13,6 @@ public class IntakeTeleopSettings3 {
     public static double servoPosition = 0.5;
     public static double ticksPerRev = 38;
 
-
     public IntakeTeleopSettings3() {}
 
     public static IntakeTeleopSettings3 makeDefault(Robot robot) {

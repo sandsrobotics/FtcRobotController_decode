@@ -26,7 +26,7 @@ public class Intake3Tasks {
         /* ***** autoBallLaunchTask ******/
         ballLaunchTask.autoStart = false;
         ballLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.BLUE.getLedPwm()));
-        ballLaunchTask.addStep(()-> intake.getHardware().launchServo.setPosition(.5));
+        ballLaunchTask.addStep(()-> intake.getHardware().launchServo.setPosition(.9));
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo.isDone());
         ballLaunchTask.addDelay(1000);
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo.setPosition(0));

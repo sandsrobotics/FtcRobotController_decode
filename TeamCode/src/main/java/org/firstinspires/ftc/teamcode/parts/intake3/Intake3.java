@@ -47,21 +47,25 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 //        }
 //    }
 
-    public void setLaunchSpeed(int RPM) {
+    public void setLaunchRPM(int RPM) {
         this.launchRPM = RPM;
         double targetTPS = (RPM / 60.0) * IntakeTeleopSettings3.ticksPerRev;
         getHardware().launchMotor.setVelocity(targetTPS);
     }
 
-    public double getLaunchSpeed() {
+    public double getTargetLaunchRPM() {
+        return this.launchRPM;
+    }
+
+    public double getCurrentLaunchRPM() {
         return ((getHardware().launchMotor.getVelocity()/IntakeTeleopSettings3.ticksPerRev) * 60);
     }
 
-    public boolean launchRPMInTolerance(int RPM) {
-        return ((getHardware().launchMotor.getVelocity() * 60) / IntakeSettings3.ticksPerRev) > (RPM - IntakeSettings3.launchRPMTolerance);
+    public boolean launchRPMInTolerance() {
+        return ((getHardware().launchMotor.getVelocity() * 60) / IntakeSettings3.ticksPerRev) >= (this.launchRPM - IntakeSettings3.launchRPMTolerance);
     }
 
-    public void setIntakeSpeed(int RPM) {
+    public void setIntakeRPM(int RPM) {
         double targetTPS = (RPM / 60.0) * IntakeTeleopSettings3.ticksPerRev;
         getHardware().intakeMotor.setVelocity(targetTPS);
     }
@@ -78,9 +82,8 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         getHardware().launchServo.stop();
     }
 
-
     public void initializeServos() {
-//        getHardware().launchServo.setSweepTime(getSettings().launchSweepTime);
+        getHardware().launchServo.setSweepTime(getSettings().launchServoSweepTime);
     }
 
     @Override

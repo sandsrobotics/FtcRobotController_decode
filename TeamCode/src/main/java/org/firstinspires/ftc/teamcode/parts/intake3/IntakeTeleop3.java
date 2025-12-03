@@ -8,7 +8,6 @@ import org.firstinspires.ftc.teamcode.lib.ButtonMgr.Buttons;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.State;
 import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeTeleopSettings3;
 import om.self.ezftc.core.part.LoopedPartImpl;
-import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 @Config
 public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeTeleopSettings3, ObjectUtils.Null> {
@@ -64,25 +63,17 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeTeleopSettings3
             parent.eStop();
         }
         if (buttonMgr.getState(1, Buttons.x, State.wasTapped)) {
-            double targetTPS = (IntakeTeleopSettings3.intakeRPM / 60.0) * IntakeTeleopSettings3.ticksPerRev;
-            parent.getHardware().intakeMotor.setVelocity(targetTPS);
+            parent.setIntakeRPM(IntakeTeleopSettings3.intakeRPM);
         }
         if (buttonMgr.getState(1, Buttons.x, State.wasDoubleTapped)){
-            parent.getHardware().intakeMotor.setVelocity(0);;
+            parent.setIntakeRPM(0);
         }
         if (buttonMgr.getState(1, Buttons.y, State.wasTapped)) {
-            double targetTPS = (IntakeTeleopSettings3.launchRPM / 60.0) * IntakeTeleopSettings3.ticksPerRev;
-            parent.getHardware().launchMotor.setVelocity(targetTPS);
+            parent.setLaunchRPM(IntakeTeleopSettings3.launchRPM);
         }
         if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
-            parent.getHardware().launchMotor.setVelocity(0);;
+            parent.setLaunchRPM(0);
         }
-//        if (buttonMgr.getState(1, Buttons.b, State.wasTapped)) {
-//            parent.getHardware().launchServo.setPosition(IntakeTeleopSettings3.servoPosition);
-//        }
-//        if (buttonMgr.getState(1, Buttons.b, State.wasDoubleTapped)) {
-//            parent.getHardware().launchServo.setPosition(0);
-//        }
         parent.getHardware().launchServo.setPosition(parent.parent.opMode.gamepad1.right_trigger);
     }
 }

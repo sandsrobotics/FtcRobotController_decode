@@ -90,9 +90,10 @@ public class T3_AutoBase extends LinearOpMode{
             robot.run(); // Tasks are run as part of this run.
             dashboardTelemetry.addData("position", pt.getCurrentPosition());
             telemetry.addData("position", pt.getCurrentPosition());
-            telemetry.addData("tile position", fieldToTile(pt.getCurrentPosition()));
+            //telemetry.addData("tile position", fieldToTile(pt.getCurrentPosition()));
             telemetry.addData("time", System.currentTimeMillis() - start);
-            telemetry.addData("current launch speed", df.format(intake.getLaunchSpeed()));
+            telemetry.addData("target launch speed", intake.getTargetLaunchRPM());
+            telemetry.addData("current launch speed", df.format(intake.getCurrentLaunchRPM()));
             telemetry.addData("launch servo", intake.getHardware().launchServo.getPosition());
             dashboardTelemetry.update();
             telemetry.update();

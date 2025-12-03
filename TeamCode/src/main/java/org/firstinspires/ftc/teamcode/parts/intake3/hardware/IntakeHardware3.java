@@ -30,7 +30,7 @@ public class IntakeHardware3 {
     //beans
     public static IntakeHardware3 makeDefault(HardwareMap hardwareMap)  {
         MotorSettings intakeMotorSettings =new MotorSettings(MotorSettings.Number.ZERO_B, DcMotorEx.Direction.REVERSE, DcMotorEx.ZeroPowerBehavior.BRAKE, DcMotorEx.RunMode.RUN_USING_ENCODER, 1);
-        MotorSettings launchMotorSettings = new MotorSettings(MotorSettings.Number.THREE_B, DcMotorEx.Direction.FORWARD, DcMotorEx.ZeroPowerBehavior.FLOAT, DcMotorEx.RunMode.RUN_USING_ENCODER, 1);
+        MotorSettings launchMotorSettings = new MotorSettings(MotorSettings.Number.THREE_B, DcMotorEx.Direction.FORWARD, DcMotorEx.ZeroPowerBehavior.BRAKE, DcMotorEx.RunMode.RUN_USING_ENCODER, 1);
 
         return new IntakeHardware3(
             intakeMotorSettings.makeExMotor(hardwareMap),

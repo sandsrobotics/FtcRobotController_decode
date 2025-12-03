@@ -34,11 +34,12 @@ public class T3_AutoBlueLaunch extends T3_AutoBase {
         int RPM = launchData.getRPM();
         Vector3 pos = launchData.getPosition();
         positionSolver.addMoveToTaskExNoWait(pos, autoTasks);
-        autoTasks.addStep(() -> intake.setLaunchSpeed(RPM));
-        autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(RPM), 5000);
+        autoTasks.addStep(() -> intake.setLaunchRPM(RPM));
+        autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
         autoTasks.addStep(intake.tasks.ballLaunchTask::restart);
-        autoTasks.addStep(intake.tasks.ballLaunchTask::isDone);
-        autoTasks.addStep(() -> intake.setLaunchSpeed(0));
+        //autoTasks.addStep(intake.tasks.ballLaunchTask::isDone);
+        autoTasks.addDelay(1000);
+        autoTasks.addStep(() -> intake.setLaunchRPM(0));
         positionSolver.addMoveToTaskEx(blueLaunchStart, autoTasks);
     }
 }

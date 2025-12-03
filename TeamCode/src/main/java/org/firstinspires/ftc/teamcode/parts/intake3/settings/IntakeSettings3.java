@@ -9,9 +9,9 @@ import om.self.ezftc.utils.Vector3;
 public class IntakeSettings3 {
     public static double launchServoLaunch = 0.9;
     public static double launchServoRest = 0;
-//    public static int launchBlue1RPM= 3400;
+    public static int launchServoSweepTime = 1000;
     public static double ticksPerRev = 38;
-    public static int launchRPMTolerance = 100;
+    public static int launchRPMTolerance = 200;
     public static Map<String, LaunchData> launchPosiMap = new HashMap<String, LaunchData>();
 
     public IntakeSettings3() {

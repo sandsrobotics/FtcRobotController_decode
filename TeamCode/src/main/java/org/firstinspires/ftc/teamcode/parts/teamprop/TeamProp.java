@@ -17,8 +17,8 @@ import om.self.ezftc.core.part.LoopedPartImpl;
 public class TeamProp extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUtils.Null> {
     OpenCvCamera camera;
     private VisionPortal visionPortal;
-    public TeamPropDetectionPipeline pipeline;
-    public TeamPropDetectionPipeline.PixelPosition pixPos;
+    public BallDetectionPipeline pipeline;
+    public BallDetectionPipeline.PixelPosition pixPos;
 
     public TeamProp(Robot parent) {
         super(parent, "team prop");
@@ -35,7 +35,7 @@ public class TeamProp extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUtil
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         FtcDashboard.getInstance().startCameraStream(camera, 10);
-        pipeline = new TeamPropDetectionPipeline();
+        pipeline = new BallDetectionPipeline();
         camera.setPipeline(pipeline);
         camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
         {

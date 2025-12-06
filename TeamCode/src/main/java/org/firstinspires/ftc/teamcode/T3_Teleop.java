@@ -16,6 +16,8 @@ import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.hardware.PositionTrackerHardware;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.settings.PositionTrackerSettings;
+import org.firstinspires.ftc.teamcode.parts.teamprop.TeamProp;
+
 import java.text.DecimalFormat;
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.utils.Vector3;
@@ -29,6 +31,7 @@ public class T3_Teleop extends LinearOpMode {
     PositionTracker pt;
     Vector3 fieldStartPos = new Vector3(0,0,0);
     Pinpoint odo;
+    TeamProp balls;
     public void initTeleop(){
         new DriveTeleop(this.drive);
     }
@@ -42,6 +45,7 @@ public class T3_Teleop extends LinearOpMode {
         robot = new Robot(this);
         new BulkRead(robot);
         drive = new Drive(robot);
+        balls = new TeamProp(robot);
         initTeleop();
 
         PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,

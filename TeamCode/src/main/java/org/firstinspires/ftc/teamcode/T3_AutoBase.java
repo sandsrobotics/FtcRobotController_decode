@@ -22,13 +22,14 @@ import java.text.DecimalFormat;
 import java.util.function.Function;
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.utils.Constants;
+import om.self.ezftc.utils.Vector;
 import om.self.ezftc.utils.Vector3;
 import om.self.task.core.Group;
 import om.self.task.other.TimedTask;
 import static om.self.ezftc.utils.Constants.tileSide;
 
 //@Config
-@Disabled
+//@Disabled
 @Autonomous(name="32859 Auto Base", group="32859")
 public class T3_AutoBase extends LinearOpMode{
     public Function<Vector3, Vector3> transformFunc;
@@ -113,10 +114,16 @@ public class T3_AutoBase extends LinearOpMode{
         Vector3 shootRed = new Vector3(12, 12, 45);
         Vector3 shootBlue = new Vector3(-12, -12, -45);
         Vector3 fieldzero = new Vector3(0, 0, 0);
+
+        Vector3 StartOpt1 = new Vector3(-50,52,141);
+        Vector3 AprilTag = new Vector3(-38.85,38.4,0.67);
+        Vector3 ShootingPosition = new Vector3(-24.9,17.7,113.7);
         // set accuracy of position
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.loseSettings));
         // movement tasks
-        positionSolver.addMoveToTaskEx(fieldzero, autoTasks);
+        positionSolver.addMoveToTaskEx(StartOpt1, autoTasks);
+        positionSolver.addMoveToTaskEx(AprilTag, autoTasks);
+        positionSolver.addMoveToTaskEx(ShootingPosition, autoTasks);
     }
 
     /************************* Utilities ************************/

@@ -45,7 +45,7 @@ public class T3_Teleop extends LinearOpMode {
         robot = new Robot(this);
         new BulkRead(robot);
         drive = new Drive(robot);
-        balls = new TeamProp(robot);
+//        balls = new TeamProp(robot);
         initTeleop();
 
         PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,
@@ -58,7 +58,7 @@ public class T3_Teleop extends LinearOpMode {
         Intake3 intake = new Intake3(robot, "Teleop");
         new IntakeTeleop3(intake);
         robot.init();
-
+        odo.setPosition(fieldStartPos);
         while (!isStarted()) {
             telemetry.addData("position", odo.getPosition());
             telemetry.update();

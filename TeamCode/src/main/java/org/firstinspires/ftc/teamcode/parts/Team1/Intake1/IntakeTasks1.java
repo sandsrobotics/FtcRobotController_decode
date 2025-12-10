@@ -1,0 +1,44 @@
+package org.firstinspires.ftc.teamcode.parts.Team1.Intake1;
+
+//import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
+
+import om.self.ezftc.core.Robot;
+import om.self.task.core.Group;
+import om.self.task.other.TimedTask;
+
+public class IntakeTasks1 {
+    protected final Group movementTask;
+    private final TimedTask homeTask;
+    public final TimedTask ballLaunchTask;
+    private final Intake1 intake;
+    private final Robot robot;
+
+    public IntakeTasks1(Intake1 intake, Robot robot) {
+        this.intake = intake;
+        this.robot = robot;
+        movementTask = new Group("auto movement", intake.getTaskManager());
+        homeTask = new TimedTask(TaskNames.Home, movementTask);
+        ballLaunchTask= new TimedTask(TaskNames.BallLaunch, movementTask);
+    }
+
+    public void constructAllIntakeTasks() {
+        homeTask.autoStart = false;
+        /* ***** autoBallLaunchTask ******/
+        ballLaunchTask.autoStart = false;
+        ballLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake1.LEDColor.VIOLET.getLedPwm()));
+        ballLaunchTask.addStep(()-> intake.getHardware().launchServo.setPosition(.9));
+        ballLaunchTask.addStep(()-> intake.getHardware().launchServo.isDone());
+        ballLaunchTask.addDelay(1000);
+        ballLaunchTask.addStep(()-> intake.getHardware().launchServo.setPosition(0));
+    }
+
+    /***********************************************************************************/
+    public static final class TaskNames {
+        public final static String Home = "auto home";
+        public final static String BallLaunch = "auto ball launch";
+    }
+
+    public static final class Events {
+        public static  final String homeComplete = "HOME_COMPLETE";
+    }
+}

@@ -14,6 +14,9 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeTeleopSettings3
     private IntakeTeleopSettings3 settings;
     ButtonMgr buttonMgr;
 
+    // NEW: Servo selector
+    private int selectedServo = 0;   // 0, 1, or 2
+
     public IntakeTeleop3(Intake3 parent) {
         super(parent, "Intake teleop");
         setSettings(IntakeTeleopSettings3.makeDefault(parent.parent));
@@ -57,15 +60,18 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeTeleopSettings3
     }
 
     public void driverControls() {
-        // e-stop, either driver
+
+        // e-stop
         if (buttonMgr.getState(2, Buttons.back, State.wasPressed) ||
                 buttonMgr.getState(1, Buttons.back, State.wasPressed)) {
             parent.eStop();
         }
+
+        // intake/launch stuff
         if (buttonMgr.getState(1, Buttons.x, State.wasTapped)) {
             parent.setIntakeRPM(IntakeTeleopSettings3.intakeRPM);
         }
-        if (buttonMgr.getState(1, Buttons.x, State.wasDoubleTapped)){
+        if (buttonMgr.getState(1, Buttons.x, State.wasDoubleTapped)) {
             parent.setIntakeRPM(0);
         }
         if (buttonMgr.getState(1, Buttons.y, State.wasTapped)) {
@@ -74,6 +80,44 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeTeleopSettings3
         if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
             parent.setLaunchRPM(0);
         }
-        parent.getHardware().launchServo.setPosition(parent.parent.opMode.gamepad1.right_trigger);
+
+
+        // left bumper : cycle through servos 0 → 1 → 2 → 0
+        if (buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
+            selectedServo = (selectedServo + 1) % 3;  // wrap
+        }
+
+        // right bumper : activate selected servo
+        if (buttonMgr.getState(1, Buttons.right_bumper, State.wasTapped)) {
+            switch (selectedServo) {
+                case 0:
+                    parent.getHardware().launchServo0.setPosition(IntakeTeleopSettings3.servoPosition);
+                    break;
+
+                case 1:
+                    parent.getHardware().launchServo1.setPosition(IntakeTeleopSettings3.servoPosition);
+                    break;
+
+                case 2:
+                    parent.getHardware().launchServo2.setPosition(IntakeTeleopSettings3.servoPosition);
+                    break;
+            }
+        }
+        // right bumper : activate selected servo
+        if (buttonMgr.getState(1, Buttons.right_bumper, State.wasDoubleTapped)) {
+            switch (selectedServo) {
+                case 0:
+                    parent.getHardware().launchServo0.setPosition(0);
+                    break;
+
+                case 1:
+                    parent.getHardware().launchServo1.setPosition(0);
+                    break;
+
+                case 2:
+                    parent.getHardware().launchServo2.setPosition(0);
+                    break;
+            }
+        }
     }
 }

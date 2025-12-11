@@ -9,7 +9,7 @@ import om.self.ezftc.core.Robot;
 public class IntakeTeleopSettings3 {
     public static PIDFCoefficients spinnerPID = new PIDFCoefficients(100,0,0,12.4);
     public static int launchRPM = 2500;
-    public static int intakeRPM = 1500;
+    public static int intakeRPM = 875;
     public static double servoPosition = 0.5;
     public static double ticksPerRev = 38;
 

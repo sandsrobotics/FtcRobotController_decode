@@ -97,7 +97,7 @@ public class T3_AutoBase extends LinearOpMode{
             telemetry.addData("time", System.currentTimeMillis() - start);
             telemetry.addData("target launch speed", intake.getTargetLaunchRPM());
             telemetry.addData("current launch speed", df.format(intake.getCurrentLaunchRPM()));
-            telemetry.addData("launch servo", intake.getHardware().launchServo.getPosition());
+            telemetry.addData("launch servo", intake.getHardware().launchServo0.getPosition());
             dashboardTelemetry.update();
             telemetry.update();
         }

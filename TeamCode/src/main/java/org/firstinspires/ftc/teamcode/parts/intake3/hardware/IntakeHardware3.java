@@ -11,13 +11,18 @@ import om.self.ezftc.utils.hardware.motor.MotorSettings;
 public class IntakeHardware3 {
     public final DcMotorEx intakeMotor;
     public final DcMotorEx launchMotor;
-    public final ServoSSR launchServo;
+    public final ServoSSR launchServo0;
+    public final ServoSSR launchServo1;
+    public final ServoSSR launchServo2;
     public final ServoSSR pixel;
 
-    public IntakeHardware3(DcMotorEx intakeMotor, DcMotorEx launchMotor, ServoSSR launchServo, ServoSSR pixel) {
+    public IntakeHardware3(DcMotorEx intakeMotor, DcMotorEx launchMotor, ServoSSR launchServo0,ServoSSR launchServo1,ServoSSR launchServo2, ServoSSR pixel) {
         this.intakeMotor = intakeMotor;
         this.launchMotor = launchMotor;
-        this.launchServo = launchServo;
+        this.launchServo0 = launchServo0;
+        this.launchServo1 = launchServo1;
+        this.launchServo2 = launchServo2;
+
         this.pixel = pixel;
 
         DcMotorEx[] motors = {this.intakeMotor, this.launchMotor};
@@ -35,7 +40,9 @@ public class IntakeHardware3 {
         return new IntakeHardware3(
             intakeMotorSettings.makeExMotor(hardwareMap),
             launchMotorSettings.makeExMotor(hardwareMap),
-            new ServoSSR(hardwareMap.get(Servo.class,"servo0")),
+            new ServoSSR(hardwareMap.get(Servo.class,"servo0B")), // launch servo on the left
+                new ServoSSR(hardwareMap.get(Servo.class,"servo1B")), //launch servo in the middle
+                new ServoSSR(hardwareMap.get(Servo.class,"servo2B")), // launch servo on the right
             new ServoSSR(hardwareMap.get(Servo.class,"servo5"))
         );
     }

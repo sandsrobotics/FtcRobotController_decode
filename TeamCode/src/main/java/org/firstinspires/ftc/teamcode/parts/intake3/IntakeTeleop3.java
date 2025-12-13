@@ -6,12 +6,12 @@ import org.apache.commons.lang3.ObjectUtils;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.Buttons;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.State;
-import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeTeleopSettings3;
+import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
 import om.self.ezftc.core.part.LoopedPartImpl;
 
-@Config
-public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeTeleopSettings3, ObjectUtils.Null> {
-    private IntakeTeleopSettings3 settings;
+//@Config
+public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, ObjectUtils.Null> {
+    private IntakeSettings3 settings;
     ButtonMgr buttonMgr;
 
     // NEW: Servo selector
@@ -19,21 +19,21 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeTeleopSettings3
 
     public IntakeTeleop3(Intake3 parent) {
         super(parent, "Intake teleop");
-        setSettings(IntakeTeleopSettings3.makeDefault(parent.parent));
+        setSettings(IntakeSettings3.makeDefault());
         buttonMgr = parent.parent.buttonMgr;
     }
 
-    public IntakeTeleop3(Intake3 parent, IntakeTeleopSettings3 settings) {
+    public IntakeTeleop3(Intake3 parent, IntakeSettings3 settings) {
         super(parent, "Intake teleop");
         setSettings(settings);
         buttonMgr = parent.parent.buttonMgr;
     }
 
-    public IntakeTeleopSettings3 getSettings() {
+    public IntakeSettings3 getSettings() {
         return settings;
     }
 
-    public void setSettings(IntakeTeleopSettings3 settings) {
+    public void setSettings(IntakeSettings3 settings) {
         this.settings = settings;
     }
 
@@ -45,8 +45,8 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeTeleopSettings3
 
     @Override
     public void onStart() {
-        parent.setBaseController(() -> new IntakeControl3(0, false, 0, false), true);
-        parent.getHardware().launchMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, IntakeTeleopSettings3.spinnerPID);
+        parent.setBaseController(() -> new IntakeControl3(false), true);
+        parent.getHardware().launchMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, IntakeSettings3.spinnerPID);
     }
 
     @Override
@@ -69,18 +69,22 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeTeleopSettings3
 
         // intake/launch stuff
         if (buttonMgr.getState(1, Buttons.x, State.wasTapped)) {
-            parent.setIntakeRPM(IntakeTeleopSettings3.intakeRPM);
+            parent.setIntakeRPM(IntakeSettings3.intakeRPM);
         }
         if (buttonMgr.getState(1, Buttons.x, State.wasDoubleTapped)) {
             parent.setIntakeRPM(0);
         }
         if (buttonMgr.getState(1, Buttons.y, State.wasTapped)) {
-            parent.setLaunchRPM(IntakeTeleopSettings3.launchRPM);
+            parent.setLaunchRPM(IntakeSettings3.launchRPM);
         }
         if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
             parent.setLaunchRPM(0);
         }
 
+        if (buttonMgr.getState(1, Buttons.b, State.wasTapped)) {
+            parent.stopAllIntakeTasks();
+            parent.tasks.ballLaunchTask.restart();
+        }
 
         // left bumper : cycle through servos 0 → 1 → 2 → 0
         if (buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
@@ -91,15 +95,15 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeTeleopSettings3
         if (buttonMgr.getState(1, Buttons.right_bumper, State.wasTapped)) {
             switch (selectedServo) {
                 case 0:
-                    parent.getHardware().launchServo0.setPosition(IntakeTeleopSettings3.servoPosition);
+                    parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
                     break;
 
                 case 1:
-                    parent.getHardware().launchServo1.setPosition(IntakeTeleopSettings3.servoPosition);
+                    parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
                     break;
 
                 case 2:
-                    parent.getHardware().launchServo2.setPosition(IntakeTeleopSettings3.servoPosition);
+                    parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
                     break;
             }
         }
@@ -107,15 +111,15 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeTeleopSettings3
         if (buttonMgr.getState(1, Buttons.right_bumper, State.wasDoubleTapped)) {
             switch (selectedServo) {
                 case 0:
-                    parent.getHardware().launchServo0.setPosition(0);
+                    parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
                     break;
 
                 case 1:
-                    parent.getHardware().launchServo1.setPosition(0);
+                    parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
                     break;
 
                 case 2:
-                    parent.getHardware().launchServo2.setPosition(0);
+                    parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
                     break;
             }
         }

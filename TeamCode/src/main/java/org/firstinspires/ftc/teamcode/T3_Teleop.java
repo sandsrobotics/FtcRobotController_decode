@@ -10,6 +10,7 @@ import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
 import org.firstinspires.ftc.teamcode.parts.intake3.Intake3;
 import org.firstinspires.ftc.teamcode.parts.intake3.IntakeTeleop3;
+import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.XRelativeSolver;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
@@ -32,6 +33,7 @@ public class T3_Teleop extends LinearOpMode {
     Vector3 fieldStartPos = new Vector3(0,0,0);
     Pinpoint odo;
     TeamProp balls;
+    LimeLight limelight;
     public void initTeleop(){
         new DriveTeleop(this.drive);
     }
@@ -45,6 +47,7 @@ public class T3_Teleop extends LinearOpMode {
         robot = new Robot(this);
         new BulkRead(robot);
         drive = new Drive(robot);
+        limelight = new LimeLight(robot);
 //        balls = new TeamProp(robot);
         initTeleop();
 
@@ -70,8 +73,8 @@ public class T3_Teleop extends LinearOpMode {
             robot.run();
             telemetry.addData("position tracker", pt.getCurrentPosition());
             telemetry.addData("time", System.currentTimeMillis() - start);
-            telemetry.addData("LaunchServo", intake.getHardware().launchServo0.getPosition());
             telemetry.addData("Intake speed",intake.getHardware().intakeMotor.getVelocity());
+            telemetry.addData("launch speed",intake.getCurrentLaunchRPM());
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();
         }

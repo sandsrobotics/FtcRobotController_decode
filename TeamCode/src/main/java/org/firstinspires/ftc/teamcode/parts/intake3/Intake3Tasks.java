@@ -26,19 +26,28 @@ public class Intake3Tasks {
         /* ***** autoBallLaunchTask ******/
         ballLaunchTask.autoStart = false;
         ballLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.VIOLET.getLedPwm()));
-        ballLaunchTask.addStep(()-> intake.getHardware().launchServo0.setPosition(.9));
+        // launch all three balls one after the other
+        ballLaunchTask.addStep(()-> intake.getHardware().launchServo0.setPosition(intake.getSettings().launchServo0Launch));
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo0.isDone());
-        ballLaunchTask.addDelay(1000);
-        ballLaunchTask.addStep(()-> intake.getHardware().launchServo0.setPosition(0));
+        ballLaunchTask.addDelay(intake.getSettings().launchServoDelay);
+        ballLaunchTask.addStep(()-> intake.getHardware().launchServo1.setPosition(intake.getSettings().launchServo1Launch));
+        ballLaunchTask.addStep(()-> intake.getHardware().launchServo1.isDone());
+        ballLaunchTask.addDelay(intake.getSettings().launchServoDelay);
+        ballLaunchTask.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Launch));
+        ballLaunchTask.addStep(()-> intake.getHardware().launchServo2.isDone());
+        ballLaunchTask.addDelay(intake.getSettings().launchServoDelay);
+
+        // put all launch servos into rest position
+        ballLaunchTask.addStep(()-> intake.getHardware().launchServo0.setPosition(intake.getSettings().launchServo0Rest));
+        ballLaunchTask.addStep(()-> intake.getHardware().launchServo1.setPosition(intake.getSettings().launchServo1Rest));
+        ballLaunchTask.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Rest));
+        ballLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.GREEN.getLedPwm()));
+
     }
 
     /***********************************************************************************/
     public static final class TaskNames {
         public final static String Home = "auto home";
         public final static String BallLaunch = "auto ball launch";
-    }
-
-    public static final class Events {
-        public static  final String homeComplete = "HOME_COMPLETE";
     }
 }

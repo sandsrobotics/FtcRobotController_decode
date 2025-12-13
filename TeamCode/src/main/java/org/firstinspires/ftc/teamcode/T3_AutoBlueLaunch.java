@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
+import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
 import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3.*;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
-import java.util.Map;
+
 import om.self.ezftc.utils.Vector3;
 import om.self.task.other.TimedTask;
 
@@ -29,7 +31,7 @@ public class T3_AutoBlueLaunch extends T3_AutoBase {
 
         MoveAndLaunch(autoTasks, intake.getSettings().launchPosiMap.get("blueshoot1"));
         autoTasks.addStep(() -> intake.stopAllIntakeTasks());
-        autoTasks.addStep(() -> intake.setIntakeRPM(1000));
+        autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
         positionSolver.addMoveToTaskEx(pickupBallBlue1, autoTasks);
         positionSolver.addMoveToTaskEx(pickupBallBlue2, autoTasks);
         autoTasks.addStep(() -> intake.setIntakeRPM(0));

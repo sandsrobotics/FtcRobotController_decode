@@ -1,19 +1,9 @@
 package org.firstinspires.ftc.teamcode.parts.intake3;
 
-import android.graphics.Color;
-
-import com.acmerobotics.dashboard.config.Config;
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.LED;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
-import org.firstinspires.ftc.teamcode.parts.drive.DriveControl;
 import org.firstinspires.ftc.teamcode.parts.intake3.hardware.IntakeHardware3;
 import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
-import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeTeleopSettings3;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
-
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.core.part.ControllablePart;
 import om.self.supplier.consumer.EdgeConsumer;
@@ -32,9 +22,8 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 
     //***** Constructors *****
     public Intake3(Robot parent, String modeName) {
-        super(parent, "Slider", () -> new IntakeControl3(0.5, false, 0, false));
+        super(parent, "Slider", () -> new IntakeControl3(false));
         this.isTeleop = modeName.equalsIgnoreCase("Teleop");
-
         setConfig(
                 IntakeSettings3.makeDefault(),
                 IntakeHardware3.makeDefault(parent.opMode.hardwareMap)
@@ -49,7 +38,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 
     public void setLaunchRPM(int RPM) {
         this.launchRPM = RPM;
-        double targetTPS = (RPM / 60.0) * IntakeTeleopSettings3.ticksPerRev;
+        double targetTPS = (RPM / 60.0) * IntakeSettings3.ticksPerRev;
         getHardware().launchMotor.setVelocity(targetTPS);
     }
 
@@ -58,7 +47,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     }
 
     public double getCurrentLaunchRPM() {
-        return ((getHardware().launchMotor.getVelocity()/IntakeTeleopSettings3.ticksPerRev) * 60);
+        return ((getHardware().launchMotor.getVelocity()/IntakeSettings3.ticksPerRev) * 60);
     }
 
     public boolean launchRPMInTolerance() {
@@ -66,12 +55,8 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     }
 
     public void setIntakeRPM(int RPM) {
-        double targetTPS = (RPM / 60.0) * IntakeTeleopSettings3.ticksPerRev;
+        double targetTPS = (RPM / 60.0) * IntakeSettings3.ticksPerRev1150;
         getHardware().intakeMotor.setVelocity(targetTPS);
-    }
-
-    public void launchBall() {
-
     }
 
     public void eStop() {
@@ -88,6 +73,9 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         getHardware().launchServo0.setSweepTime(getSettings().launchServoSweepTime);
         getHardware().launchServo1.setSweepTime(getSettings().launchServoSweepTime);
         getHardware().launchServo2.setSweepTime(getSettings().launchServoSweepTime);
+        getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
+        getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
+        getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
     }
 
     @Override

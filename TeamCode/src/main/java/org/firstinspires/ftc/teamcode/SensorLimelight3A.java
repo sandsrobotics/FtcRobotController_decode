@@ -106,9 +106,9 @@ public class SensorLimelight3A extends LinearOpMode {
                 double captureLatency = result.getCaptureLatency();
                 double targetingLatency = result.getTargetingLatency();
                 double parseLatency = result.getParseLatency();
-                telemetry.addData("LL Latency", captureLatency + targetingLatency);
-                telemetry.addData("Parse Latency", parseLatency);
-                telemetry.addData("PythonOutput", java.util.Arrays.toString(result.getPythonOutput()));
+//                telemetry.addData("LL Latency", captureLatency + targetingLatency);
+//                telemetry.addData("Parse Latency", parseLatency);
+//                telemetry.addData("PythonOutput", java.util.Arrays.toString(result.getPythonOutput()));
 
                 telemetry.addData("tx", result.getTx());
                 telemetry.addData("txnc", result.getTxNC());
@@ -117,23 +117,23 @@ public class SensorLimelight3A extends LinearOpMode {
 
                 telemetry.addData("Botpose", botpose.toString());
 
-                // Access barcode results
-                List<LLResultTypes.BarcodeResult> barcodeResults = result.getBarcodeResults();
-                for (LLResultTypes.BarcodeResult br : barcodeResults) {
-                    telemetry.addData("Barcode", "Data: %s", br.getData());
-                }
-
-                // Access classifier results
-                List<LLResultTypes.ClassifierResult> classifierResults = result.getClassifierResults();
-                for (LLResultTypes.ClassifierResult cr : classifierResults) {
-                    telemetry.addData("Classifier", "Class: %s, Confidence: %.2f", cr.getClassName(), cr.getConfidence());
-                }
-
-                // Access detector results
-                List<LLResultTypes.DetectorResult> detectorResults = result.getDetectorResults();
-                for (LLResultTypes.DetectorResult dr : detectorResults) {
-                    telemetry.addData("Detector", "Class: %s, Area: %.2f", dr.getClassName(), dr.getTargetArea());
-                }
+//                // Access barcode results
+//                List<LLResultTypes.BarcodeResult> barcodeResults = result.getBarcodeResults();
+//                for (LLResultTypes.BarcodeResult br : barcodeResults) {
+//                    telemetry.addData("Barcode", "Data: %s", br.getData());
+//                }
+//
+//                // Access classifier results
+//                List<LLResultTypes.ClassifierResult> classifierResults = result.getClassifierResults();
+//                for (LLResultTypes.ClassifierResult cr : classifierResults) {
+//                    telemetry.addData("Classifier", "Class: %s, Confidence: %.2f", cr.getClassName(), cr.getConfidence());
+//                }
+//
+//                // Access detector results
+//                List<LLResultTypes.DetectorResult> detectorResults = result.getDetectorResults();
+//                for (LLResultTypes.DetectorResult dr : detectorResults) {
+//                    telemetry.addData("Detector", "Class: %s, Area: %.2f", dr.getClassName(), dr.getTargetArea());
+//                }
 
                 // Access fiducial results
                 List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();

@@ -115,14 +115,15 @@ public class T3_AutoBase extends LinearOpMode{
         Vector3 shootBlue = new Vector3(-12, -12, -45);
         Vector3 fieldzero = new Vector3(0, 0, 0);
 
-        Vector3 StartOpt1 = new Vector3(-50,52,141);
-        Vector3 AprilTag = new Vector3(-38.85,38.4,0.67);
-        Vector3 ShootingPosition = new Vector3(-24.9,17.7,113.7);
+//        Vector3 StartOpt1 = new Vector3(-50,52,141);
+        Vector3 AprilTag = new Vector3(-23.199,20.818,67.953);
+        Vector3 ShootingPosition = new Vector3(-23.199,20.818,135.608);
         // set accuracy of position
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.loseSettings));
         // movement tasks
-        positionSolver.addMoveToTaskEx(StartOpt1, autoTasks);
+//        positionSolver.addMoveToTaskEx(StartOpt1, autoTasks);
         positionSolver.addMoveToTaskEx(AprilTag, autoTasks);
+        autoTasks.addDelay(5000);
         positionSolver.addMoveToTaskEx(ShootingPosition, autoTasks);
     }
 

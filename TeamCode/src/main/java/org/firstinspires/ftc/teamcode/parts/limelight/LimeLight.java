@@ -14,9 +14,9 @@ import om.self.ezftc.core.Robot;
 import om.self.ezftc.core.part.LoopedPartImpl;
 
 public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUtils.Null> {
-    Limelight3A limelight = null;
+    private Limelight3A limelight;
     public LimeLight(Robot parent) {
-        super(parent, "LL3A");
+        super(parent, "limelight");
     }
 
     @Override
@@ -58,15 +58,14 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
 
     @Override
     public void onInit() {
-        Limelight3A limelight = parent.opMode.hardwareMap.get(Limelight3A.class, "limelight");
+        limelight = parent.opMode.hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
         parent.opMode.telemetry.setMsTransmissionInterval(11);
+        limelight.start();
     }
 
     @Override
-    public void onStart() {
-        limelight.start();
-    }
+    public void onStart() {}
 
     @Override
     public void onStop() {

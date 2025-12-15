@@ -86,6 +86,11 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.tasks.ballLaunchTask.restart();
         }
 
+        if (buttonMgr.getState(1, Buttons.a, State.wasTapped)) {
+            parent.stopAllIntakeTasks();
+            parent.tasks.sameTimeBallLaunchTask.restart();
+        }
+
         // left bumper : cycle through servos 0 → 1 → 2 → 0
         if (buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
             selectedServo = (selectedServo + 1) % 3;  // wrap

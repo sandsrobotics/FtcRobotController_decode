@@ -10,6 +10,7 @@ public class Intake3Tasks {
     protected final Group movementTask;
     private final TimedTask homeTask;
     public final TimedTask ballLaunchTask;
+    public final TimedTask sameTimeBallLaunchTask;
     private final Intake3 intake;
     private final Robot robot;
 
@@ -19,6 +20,7 @@ public class Intake3Tasks {
         movementTask = new Group("auto movement", intake.getTaskManager());
         homeTask = new TimedTask(TaskNames.Home, movementTask);
         ballLaunchTask= new TimedTask(TaskNames.BallLaunch, movementTask);
+        sameTimeBallLaunchTask = new TimedTask(TaskNames.sameTimeBallLaunch, movementTask);
     }
 
     public void constructAllIntakeTasks() {
@@ -43,11 +45,29 @@ public class Intake3Tasks {
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Rest));
         ballLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.GREEN.getLedPwm()));
 
+        // all three ball task at the same time
+        sameTimeBallLaunchTask.autoStart = false;
+        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.VIOLET.getLedPwm()));
+        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo0.setPosition(intake.getSettings().launchServo0Launch));
+        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo1.setPosition(intake.getSettings().launchServo1Launch));
+        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Launch));
+        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo0.isDone());
+        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo1.isDone());
+        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo2.isDone());
+        sameTimeBallLaunchTask.addDelay(intake.getSettings().launchServoDelay);
+
+        // put all launch servos into rest position
+        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo0.setPosition(intake.getSettings().launchServo0Rest));
+        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo1.setPosition(intake.getSettings().launchServo1Rest));
+        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Rest));
+        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.GREEN.getLedPwm()));
+
     }
 
     /***********************************************************************************/
     public static final class TaskNames {
         public final static String Home = "auto home";
         public final static String BallLaunch = "auto ball launch";
+        public final static String sameTimeBallLaunch = "auto same time ball launch task";
     }
 }

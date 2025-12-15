@@ -9,21 +9,21 @@ import om.self.ezftc.utils.Vector3;
 
 @Config
 public class IntakeSettings3 {
-    public static double launchServo0Launch = 0.475;
-    public static double launchServo1Launch = 0.478;
-    public static double launchServo2Launch = 0.396;
+    public static double launchServo0Launch = 0.477;
     public static double launchServo0Rest = 0.638;
-    public static double launchServo1Rest = 0.180;
-    public static double launchServo2Rest = 0.277;
-    public static int launchServoDelay = 500;
+    public static double launchServo1Launch = 0.5;
+    public static double launchServo1Rest = 0.351;
+    public static double launchServo2Launch = 0.4;
+    public static double launchServo2Rest = 0.25;
+    public static int launchServoDelay = 200;
     public static int launchServoSweepTime = 1000;
-    public static double ticksPerRev1150 = 145.1;
     public static int launchRPMTolerance = 250;
     public static Map<String, LaunchData> launchPosiMap = new HashMap<String, LaunchData>();
     public static PIDFCoefficients spinnerPID = new PIDFCoefficients(100,0,0,12.4);
-    public static int launchRPM = 2700; // for teleop tests
-    public static int intakeRPM = 875;
+    public static int launchRPM = 3150; // for teleop tests
+    public static int intakeRPM = 435;
     public static double ticksPerRev = 28;
+    public static double ticksPerRev1150 = 145.1;
 
     public IntakeSettings3() {}
 

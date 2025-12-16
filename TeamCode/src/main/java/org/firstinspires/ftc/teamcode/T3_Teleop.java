@@ -5,6 +5,8 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.teamcode.parts.artifact.ArtifactDetectionPipeline;
+import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
@@ -48,7 +50,7 @@ public class T3_Teleop extends LinearOpMode {
         new BulkRead(robot);
         drive = new Drive(robot);
         limelight = new LimeLight(robot);
-//        balls = new TeamProp(robot);
+//        Artifacts artifacts = new Artifacts(robot);
         initTeleop();
 
         PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,
@@ -61,7 +63,11 @@ public class T3_Teleop extends LinearOpMode {
         Intake3 intake = new Intake3(robot, "Teleop");
         new IntakeTeleop3(intake);
         robot.init();
+
+        /* *********** Take this out for competition ************/
         odo.setPosition(fieldStartPos);
+        /*  ******************************************************/
+
         while (!isStarted()) {
             telemetry.addData("position", odo.getPosition());
             telemetry.update();
@@ -76,7 +82,7 @@ public class T3_Teleop extends LinearOpMode {
             telemetry.addData("Intake speed",intake.getHardware().intakeMotor.getVelocity());
             telemetry.addData("launch speed",intake.getCurrentLaunchRPM());
             dashboard.sendTelemetryPacket(packet);
-            telemetry.update();
+
         }
         robot.stop();
     }

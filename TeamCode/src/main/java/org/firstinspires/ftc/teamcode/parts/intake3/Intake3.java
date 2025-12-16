@@ -9,8 +9,6 @@ import om.self.ezftc.core.part.ControllablePart;
 import om.self.supplier.consumer.EdgeConsumer;
 import om.self.task.core.Group;
 
-import static java.lang.Math.abs;
-
 //@Config
 public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHardware3, IntakeControl3> {
     private final EdgeConsumer homingBucketZero = new EdgeConsumer();
@@ -70,9 +68,9 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     }
 
     public void initializeServos() {
-        getHardware().launchServo0.setSweepTime(getSettings().launchServoSweepTime);
-        getHardware().launchServo1.setSweepTime(getSettings().launchServoSweepTime);
-        getHardware().launchServo2.setSweepTime(getSettings().launchServoSweepTime);
+        getHardware().launchServo0.setSweepTime(IntakeSettings3.launchServoSweepTime);
+        getHardware().launchServo1.setSweepTime(IntakeSettings3.launchServoSweepTime);
+        getHardware().launchServo2.setSweepTime(IntakeSettings3.launchServoSweepTime);
         getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
         getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
         getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);

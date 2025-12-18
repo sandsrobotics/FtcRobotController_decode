@@ -74,6 +74,9 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         if (buttonMgr.getState(1, Buttons.x, State.wasDoubleTapped)) {
             parent.setIntakeRPM(0);
         }
+        if (buttonMgr.getState(1, Buttons.right_trigger, State.wasTapped)) {
+            parent.setIntakeRPM(IntakeSettings3.intakeRPM);
+        }
         if (buttonMgr.getState(1, Buttons.y, State.wasTapped)) {
             parent.setLaunchRPM(IntakeSettings3.launchRPM);
         }

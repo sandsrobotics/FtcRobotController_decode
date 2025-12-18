@@ -28,7 +28,7 @@ public class IntakeSettings3 {
     public IntakeSettings3() {}
 
     public static IntakeSettings3 makeDefault(){
-        launchPosiMap.put("blueshoot1", new LaunchData(2700,new Vector3(-12, 12, 135)));
+        launchPosiMap.put("blueshoot1", new LaunchData(2700,new Vector3(-16, -16, -139)));
         launchPosiMap.put("blueshoot2", new LaunchData(10,new Vector3(2,0,0)));
         launchPosiMap.put("blueshoot3", new LaunchData(10,new Vector3(3,0,0)));
         launchPosiMap.put("blueshoot4", new LaunchData(10,new Vector3(4,0,0)));

@@ -37,7 +37,6 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
     static final int tpREGION_WIDTH = 200;
     static final int tpREGION_HEIGHT = 200;
 
-    Artifact[] artifacts;
     Scalar rectangleColor = BLOCK;
 
     /* Points which actually define the sample region rectangles, derived from above values
@@ -67,16 +66,21 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
     Point region3_pointB = new Point(
             REGION3_TOPLEFT_ANCHOR_POINT.x + tpREGION_WIDTH,
             REGION3_TOPLEFT_ANCHOR_POINT.y + tpREGION_HEIGHT);
+
+    Artifact[] artifacts = new Artifact[]{
+            new Artifact(ArtifactColor.NONE, null, region1_pointA, region1_pointB, 0),
+            new Artifact(ArtifactColor.NONE, null, region2_pointA, region2_pointB, 0),
+            new Artifact(ArtifactColor.NONE, null, region3_pointA, region3_pointB, 0)
+    };
+
     /*
      * Working variables
      */
     Mat inputConv = new Mat();
     Mat extracted = new Mat();
 
-    // Volatile since accessed by OpMode thread w/o synchronization
+//    Volatile since accessed by OpMode thread w/o synchronization
 //    public volatile TeamPropPosition position = TeamPropPosition.NONE;
-
-    //public TeamPropDetectionPipeline(){}
 
     /*
      * This function takes the RGB frame, converts to YCrCb,
@@ -114,16 +118,10 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
          * buffer. Any changes to the child affect the parent, and the
          * reverse also holds true.
          */
-        // add region corner points to the array
-        artifacts = new Artifact[]{
-                new Artifact(ArtifactColor.NONE, null, region1_pointA, region1_pointB, 0),
-                new Artifact(ArtifactColor.NONE, null, region2_pointA, region2_pointB, 0),
-                new Artifact(ArtifactColor.NONE, null, region3_pointA, region3_pointB, 0)
-        };
 
         // create the region mat for each artifact
         for (Artifact  artifact : artifacts) {
-            artifact.region = extracted.submat(new Rect(artifact.pta, artifact.ptb));
+            artifact.submat = extracted.submat(new Rect(artifact.pta, artifact.ptb));
         }
     }
 
@@ -142,7 +140,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
 
         // Determine the color and status of artifacts in array
         for (Artifact  artifact : artifacts) {
-            artifact.average = (int) Core.mean(extracted.submat(new Rect(region1_pointA, region1_pointB))).val[0];
+            artifact.average = (int) Core.mean(artifact.submat).val[0];
             rectangleColor = BLOCK;
             if (artifact.average > 34 && artifact.average < 91) {
                 rectangleColor = GREEN;
@@ -177,14 +175,14 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
 
     public static class Artifact{
         public ArtifactDetectionPipeline.ArtifactColor color;
-        public Mat region;
+        public Mat submat;
         public Point pta;
         public Point ptb;
         public int average;
 
-        private Artifact(ArtifactDetectionPipeline.ArtifactColor color, Mat region, Point pta, Point ptb, int average) {
+        private Artifact(ArtifactDetectionPipeline.ArtifactColor color, Mat submat, Point pta, Point ptb, int average) {
             this.color = color;
-            this.region = region;
+            this.submat = submat;
             this.average = average;
         }
     }

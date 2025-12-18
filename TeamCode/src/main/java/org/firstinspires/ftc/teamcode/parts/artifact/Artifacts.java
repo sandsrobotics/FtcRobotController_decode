@@ -19,7 +19,7 @@ public class Artifacts extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     public ArtifactDetectionPipeline pipeline;
     public ArtifactDetectionPipeline.Artifact[] artifactList;
     public Artifacts(Robot parent) {
-        super(parent, "team prop");
+        super(parent, "artifacts");
     }
 
     @Override

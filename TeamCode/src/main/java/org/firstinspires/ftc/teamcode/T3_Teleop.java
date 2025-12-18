@@ -34,7 +34,7 @@ public class T3_Teleop extends LinearOpMode {
     PositionTracker pt;
     Vector3 fieldStartPos = new Vector3(0,0,0);
     Pinpoint odo;
-    TeamProp balls;
+    Artifacts artifacts;
     LimeLight limelight;
     public void initTeleop(){
         new DriveTeleop(this.drive);
@@ -49,8 +49,8 @@ public class T3_Teleop extends LinearOpMode {
         robot = new Robot(this);
         new BulkRead(robot);
         drive = new Drive(robot);
-        limelight = new LimeLight(robot);
-//        Artifacts artifacts = new Artifacts(robot);
+//        limelight = new LimeLight(robot);
+//        artifacts = new Artifacts(robot);
         initTeleop();
 
         PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,
@@ -82,7 +82,7 @@ public class T3_Teleop extends LinearOpMode {
             telemetry.addData("Intake speed",intake.getHardware().intakeMotor.getVelocity());
             telemetry.addData("launch speed",intake.getCurrentLaunchRPM());
             dashboard.sendTelemetryPacket(packet);
-
+            telemetry.update();
         }
         robot.stop();
     }

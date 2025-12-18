@@ -9,12 +9,12 @@ import om.self.ezftc.utils.Vector3;
 
 @Config
 public class IntakeSettings3 {
-    public static double launchServo0Launch = 0.477;
-    public static double launchServo0Rest = 0.638;
+    public static double launchServo0Launch = 0.367;
+    public static double launchServo0Rest = 0.687;
     public static double launchServo1Launch = 0.5;
-    public static double launchServo1Rest = 0.351;
-    public static double launchServo2Launch = 0.4;
-    public static double launchServo2Rest = 0.25;
+    public static double launchServo1Rest = 0.267;
+    public static double launchServo2Launch = 0.5;
+    public static double launchServo2Rest = 0.267;
     public static int launchServoDelay = 200;
     public static int launchServoSweepTime = 1000;
     public static int launchRPMTolerance = 250;

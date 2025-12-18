@@ -94,38 +94,35 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.tasks.sameTimeBallLaunchTask.restart();
         }
 
-        // left bumper : cycle through servos 0 → 1 → 2 → 0
+        // left bumper: cycle servo selection
         if (buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
-            selectedServo = (selectedServo + 1) % 3;  // wrap
+            selectedServo = (selectedServo + 1) % 3;
         }
 
-        // right bumper : activate selected servo
+        // right bumper: activate selected servo
         if (buttonMgr.getState(1, Buttons.right_bumper, State.wasTapped)) {
             switch (selectedServo) {
                 case 0:
                     parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
                     break;
-
                 case 1:
                     parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
                     break;
-
                 case 2:
                     parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
                     break;
             }
         }
-        // right bumper : activate selected servo
+
+        // right bumper double tap: return selected servo to rest
         if (buttonMgr.getState(1, Buttons.right_bumper, State.wasDoubleTapped)) {
             switch (selectedServo) {
                 case 0:
                     parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
                     break;
-
                 case 1:
                     parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
                     break;
-
                 case 2:
                     parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
                     break;

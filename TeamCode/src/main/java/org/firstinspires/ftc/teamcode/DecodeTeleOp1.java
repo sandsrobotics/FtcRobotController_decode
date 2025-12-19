@@ -144,8 +144,6 @@ public class DecodeTeleOp1 extends LinearOpMode {
 //                intake.tasks.prepareToHangRobotTask.restart();
 //            }
 //            DecodeSettings.storeRobotPosition(pt.getCurrentPosition());
-            telemetry.addData("servoIntake", intake.getIntakeServoPos());
-
 
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();

@@ -81,54 +81,53 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
         // Driver 2 - slide control
 //        parent.setUserSlidePower(-parent.parent.opMode.gamepad2.left_stick_y);
         // Driver 2 - start button is a "shift" key; anything below is if start is not pushed
-        /*           Intake Task Initiater            */
         if (!buttonMgr.getState(2, Buttons.start, State.isPressed)) {
             // Driver 2
-
+            /*      Transfer Tasks     */
+            //        all
+            if (buttonMgr.getState(2, Buttons.dpad_down, State.isPressed)) {
+                parent.tasks.allServoTransfer.restart();
+            }
+            //       pink
+            if (buttonMgr.getState(2, Buttons.dpad_left, State.isPressed)) {
+                parent.tasks.pinkServoTransfer.restart();
+            }
+            //        blue
+            if (buttonMgr.getState(2, Buttons.dpad_up, State.isPressed)) {
+                parent.tasks.blueServoTransfer.restart();
+            }
+            //         green
+            if (buttonMgr.getState(2, Buttons.dpad_right, State.isPressed)) {
+                parent.tasks.greenServoTransfer.restart();
+            }
+            /*      Launch Tasks          */
+            if (buttonMgr.getState(2, Buttons.left_bumper, State.isPressed)) {
+                if (!(parent.getHardware().launchMotorLeft.getVelocity() == parent.getSettings().launchMotorVelocityStart)) {
+                    parent.tasks.startLaunch.restart();
+                } else parent.tasks.stopLaunch.restart();
+            }
         }
 
 
         // Driver 2 - start button is a "shift" key; anything below is when start is held first
         else {
 
-            if (buttonMgr.getState(2, Buttons.y, State.wasTapped)) {
-                org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings.isYellowGood = !org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings.isYellowGood;
-            }
-            // test out-take speed
-            if (buttonMgr.getState(2, Buttons.left_bumper, State.wasTapped)) {
-                parent.testSpinnerOut += parent.sIncrement;
-                parent.testSpinnerOut = Math.max(0, Math.min(parent.testSpinnerOut, 0.5));
-            }
-            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasTapped)) {
-                parent.testSpinnerOut -= parent.sIncrement;
-                parent.testSpinnerOut = Math.max(0, Math.min(parent.testSpinnerOut, 0.5));
-            }
+
         }
 
         // *** DRIVER 1 CONTROLS ***
         // Driver 1 - start button is a "shift" key; anything below is if start is not pushed
         if (!buttonMgr.getState(1, Buttons.start, State.isPressed)) {
-            /*          Intake Task Initiator            */
-            /*             intake suppliers          */
+            //           DRIVER 1
+            //             intake Task
             if (buttonMgr.getState(1, Buttons.right_bumper, State.isPressed)) {
-                if (parent.getHardware().intakeServo.isSetPosition(parent.getSettings().servoIntakeOut)) {
-                    parent.tasks.artifactIntakeStopTask.restart();
-
-                } else {
-                    parent.tasks.artifactExtakeTask.restart();
-                }
+                if (!(parent.getHardware().intakeMotor.getPower() == parent.getSettings().intakeIn)) {
+                    parent.tasks.intakeTask.restart();
+                } else parent.tasks.artifactIntakeStopTask.restart();
             }
-            if (buttonMgr.getState(1, Buttons.left_bumper, State.isPressed)) {
-                if (parent.getHardware().intakeServo.isSetPosition(parent.getSettings().servoIntakeIn)) {
-                    parent.tasks.artifactIntakeStopTask.restart();
-                } else {
-                    parent.tasks.artifactIntakeTask.restart();
-                }
+
 
                 // Driver 1
-            }
-            if (buttonMgr.getState(1,Buttons.x,State.wasPressed)) {
-                parent.tasks.artifactIntakeStopTask.restart();
             }
             // Driver 1 - start button is a "shift" key; anything below is when start is held first
             else {
@@ -137,4 +136,4 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
 
             }
         }
-    }}
+    }

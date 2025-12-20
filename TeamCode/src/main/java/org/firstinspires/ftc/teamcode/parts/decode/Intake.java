@@ -188,6 +188,7 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
     @Override
     public void onInit() {
         initilaizeMotors();
+        initializeServos();
         if (DecodeSettings.isAuto()) {
             initializeServos();
             if (DecodeSettings.firstRun) {

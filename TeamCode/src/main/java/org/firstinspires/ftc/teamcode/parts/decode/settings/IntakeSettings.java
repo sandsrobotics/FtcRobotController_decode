@@ -15,7 +15,7 @@ public class  IntakeSettings {
     public double servoBlueLaunch =                          0.671;
     public double ticksPerRevolution =                          28;
     public double secondsPerMinute =                            60;
-    public double launchMotorRPM =                             2500;
+    public double launchMotorRPM =                            3200;
     public double launchMotorVelocityStart =                 launchMotorRPM/secondsPerMinute*ticksPerRevolution;
     public double launchMotorVelocityStop =                      0;
 

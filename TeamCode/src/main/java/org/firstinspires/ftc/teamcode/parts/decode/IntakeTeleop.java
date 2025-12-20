@@ -127,7 +127,7 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
             if (buttonMgr.getState(1, Buttons.left_bumper, State.isPressed)) {
                 parent.tasks.artifactIntakeStopTask.restart();
             }
-            if ((buttonMgr.getState(1, Buttons.right_bumper, State.isPressed)) && (buttonMgr.getState(1,Buttons.left_bumper, State.isPressed))) {
+            if (buttonMgr.getState(1, Buttons.a, State.isPressed)) {
                 parent.tasks.outtakeTask.restart();
             }
 

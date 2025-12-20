@@ -6,12 +6,12 @@ public class  IntakeSettings {
     public double intakeStop =                                   0;
     public double sorterStop =                                 0.5;
     public double sorterStart =                                  0;
-    public double servoGreenDock =                           0.425;
-    public double servoGreenLaunch =                         0.275;
-    public double servoPinkDock =                            0.546;
-    public double servoPinkLaunch =                           0.34;
+    public double servoGreenDock =                           0.463;
+    public double servoGreenLaunch =                         0.235;
+    public double servoPinkDock =                            0.518;
+    public double servoPinkLaunch =                          0.719;
     public double servoBlueDock =                            0.494;
-    public double servoBlueLaunch =                           0.65;
+    public double servoBlueLaunch =                          0.671;
     public double launchMultiplierRate =                        28;
     public double ticksPerMinute =                              60;
     public double launchMotorRPM =                            6000;

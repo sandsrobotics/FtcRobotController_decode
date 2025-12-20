@@ -31,11 +31,11 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
      * The core values which define the location and size of the sample regions
      */
     static final double leftTagLeftTopLeft = 50;
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,400);
-    static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(550,350);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1080,400);
+    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,300);
+    static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(550,400);
+    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1080,300);
     static final int tpREGION_WIDTH = 200;
-    static final int tpREGION_HEIGHT = 200;
+    static final int tpREGION_HEIGHT = 300;
 
     Scalar rectangleColor = BLOCK;
 
@@ -149,11 +149,11 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
         // Determine the color and status of artifacts in array
         for (Artifact  artifact : artifacts) {
             artifact.average = (int) Core.mean(artifact.submat).val[0];
-            if (artifact.average > 70 && artifact.average < 82) {
+            if (artifact.average > 60 && artifact.average < 90) {
                 rectangleColor = GREEN;
                 artifact.color = ArtifactColor.GREEN;
             }
-            else if (artifact.average > 130 && artifact.average < 150) {
+            else if (artifact.average > 120 && artifact.average < 155) {
                 rectangleColor = PURPLE;
                 artifact.color = ArtifactColor.PURPLE;
             } else {

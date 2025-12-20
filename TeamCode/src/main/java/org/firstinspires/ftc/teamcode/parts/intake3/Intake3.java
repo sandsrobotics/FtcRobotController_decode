@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.parts.intake3;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.intake3.hardware.IntakeHardware3;
 import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
+import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
+import org.firstinspires.ftc.teamcode.parts.positionsolver.XRelativeSolver;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.core.part.ControllablePart;
@@ -15,9 +17,11 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     protected Drive drive;
     public Intake3Tasks tasks;
     protected PositionTracker pt;
+    protected PositionSolver positionSolver;
     public boolean isTeleop;
     public int launchRPM;
     public int intakeRPM;
+    public IntakeSettings3.LaunchData launchData;
 
     //***** Constructors *****
     public Intake3(Robot parent, String modeName) {
@@ -91,6 +95,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         tasks = new Intake3Tasks(this, parent);
         tasks.constructAllIntakeTasks();
         getHardware().pixel.setPosition(LEDColor.GREEN.getLedPwm());
+        PositionSolver positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
     }
 
     public void stopAllIntakeTasks() {

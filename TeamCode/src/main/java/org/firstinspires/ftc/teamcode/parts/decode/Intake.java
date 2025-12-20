@@ -84,11 +84,14 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
     }
 
     public void initializeServos() {
+        getHardware().pinkServo.setPosition(getSettings().servoPinkDock);
+        getHardware().blueServo.setPosition(getSettings().servoBlueDock);
+        getHardware().greenServo.setPosition(getSettings().servoGreenDock);
         // apply settings
         if (DecodeSettings.isAuto()) {
-            getHardware().pinkServo.setPosition(getSettings().servoPinkDock);
-            getHardware().blueServo.setPosition(getSettings().servoBlueDock);
-            getHardware().greenServo.setPosition(getSettings().servoGreenDock);
+//            getHardware().pinkServo.setPosition(getSettings().servoPinkDock);
+//            getHardware().blueServo.setPosition(getSettings().servoBlueDock);
+//            getHardware().greenServo.setPosition(getSettings().servoGreenDock);
         }
         else {
         }

@@ -89,7 +89,7 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
                 parent.tasks.allServoTransfer.restart();
             }
             //       pink
-            if (buttonMgr.getState(2, Buttons.dpad_left, State.isPressed)) {
+            if (buttonMgr.getState(2, Buttons.dpad_right, State.isPressed)) {
                 parent.tasks.pinkServoTransfer.restart();
             }
             //        blue
@@ -97,7 +97,7 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
                 parent.tasks.blueServoTransfer.restart();
             }
             //         green
-            if (buttonMgr.getState(2, Buttons.dpad_right, State.isPressed)) {
+            if (buttonMgr.getState(2, Buttons.dpad_left, State.isPressed)) {
                 parent.tasks.greenServoTransfer.restart();
             }
             /*      Launch Tasks          */

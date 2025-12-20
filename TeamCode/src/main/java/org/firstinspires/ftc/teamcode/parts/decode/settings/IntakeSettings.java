@@ -4,6 +4,7 @@ public class  IntakeSettings {
 
     public double intakeIn =                                    -1;
     public double intakeStop =                                   0;
+    public double intakeOut =                                    1;
     public double sorterStop =                                 0.5;
     public double sorterStart =                                  0;
     public double servoGreenDock =                           0.463;
@@ -12,11 +13,10 @@ public class  IntakeSettings {
     public double servoPinkLaunch =                          0.719;
     public double servoBlueDock =                            0.494;
     public double servoBlueLaunch =                          0.671;
-    public double launchMultiplierRate =                        28;
-    public double ticksPerMinute =                              60;
-    public double launchMotorRPM =                            6000;
-    public double launchMotorVelocityStart =                  launchMotorRPM*ticksPerMinute/launchMultiplierRate;
-
+    public double ticksPerRevolution =                          28;
+    public double secondsPerMinute =                            60;
+    public double launchMotorRPM =                             2500;
+    public double launchMotorVelocityStart =                 launchMotorRPM/secondsPerMinute*ticksPerRevolution;
     public double launchMotorVelocityStop =                      0;
 
 

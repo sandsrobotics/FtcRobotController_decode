@@ -14,12 +14,14 @@ public class IntakeTasks {
     public final Group intakeTasksGroup;
     public final TimedTask intakeTask;
     public final TimedTask artifactIntakeStopTask;
+    public final TimedTask outtakeTask;
     public final TimedTask pinkServoTransfer;
     public final TimedTask blueServoTransfer;
     public final TimedTask greenServoTransfer;
     public final TimedTask allServoTransfer;
     public final TimedTask startLaunch;
     public final TimedTask stopLaunch;
+
 
 
 
@@ -35,6 +37,7 @@ public class IntakeTasks {
         intakeTasksGroup = new Group("intake", intake.getTaskManager());
         intakeTask = new TimedTask(TaskNames.intakeTask, intakeTasksGroup);
         artifactIntakeStopTask = new TimedTask(TaskNames.artifactIntakeStop, intakeTasksGroup);
+        outtakeTask = new TimedTask(TaskNames.outtakeTask, intakeTasksGroup);
         pinkServoTransfer = new TimedTask(TaskNames.pinkServoTransfer, intakeTasksGroup);
         blueServoTransfer = new TimedTask(TaskNames.blueServoTransfer, intakeTasksGroup);
         greenServoTransfer = new TimedTask(TaskNames.greenServoTransfer, intakeTasksGroup);
@@ -59,6 +62,10 @@ public class IntakeTasks {
         artifactIntakeStopTask.addStep(()-> {
             intake.getHardware().intakeMotor.setPower(intake.getSettings().intakeStop);
         });
+
+        /*    Artifact Extake Task*/
+        outtakeTask.autoStart = false;
+        outtakeTask.addStep(() -> intake.getHardware().intakeMotor.setPower(intake.getSettings().intakeOut));
 
         /*    Servo Transfer Tasks      */
         //         pink
@@ -93,15 +100,15 @@ public class IntakeTasks {
         //    start Launch
         startLaunch.autoStart = false;
         startLaunch.addStep(() -> {
-            intake.getHardware().launchMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
-            intake.getHardware().launchMotorLeft.setPower(intake.getSettings().launchMotorVelocityStart);
-            intake.getHardware().launchMotorRight.setPower(intake.getSettings().launchMotorVelocityStart);
+//            intake.getHardware().launchMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
+            intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().launchMotorVelocityStart);
+            intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().launchMotorVelocityStart);
         });
         //     stop launch
         stopLaunch.autoStart = false;
         stopLaunch.addStep(() -> {
-            intake.getHardware().launchMotorLeft.setPower(intake.getSettings().launchMotorVelocityStop);
-            intake.getHardware().launchMotorRight.setPower(intake.getSettings().launchMotorVelocityStop);
+            intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().launchMotorVelocityStop);
+            intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().launchMotorVelocityStop);
         });
 
 
@@ -116,6 +123,7 @@ public class IntakeTasks {
     public static final class TaskNames {
         public final static String intakeTask = "motor intake";
        public final static String artifactIntakeStop = "artifact intake stop";
+       public final static String outtakeTask = "outtake Task";
         public final static String pinkServoTransfer = "pink servo transfer";
         public final static String blueServoTransfer = "blue servo transfer";
         public final static String greenServoTransfer = "green servo transfer";

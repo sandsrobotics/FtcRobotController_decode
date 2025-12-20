@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.parts.decode;
 
 import static java.lang.Math.abs;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.parts.decode.hardware.IntakeHardware;
@@ -41,6 +43,8 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
     // for testing PID
     public PIDFCoefficients pidf_rue = new PIDFCoefficients();
     public PIDFCoefficients pidf_rtp = new PIDFCoefficients();
+
+    public static PIDFCoefficients launchSpinPID = new PIDFCoefficients(100,0,0,12.4);
 //    public PIDFCoefficients sample_pidf_rue = new PIDFCoefficients();
 //    public PIDFCoefficients sample_pidf_rtp = new PIDFCoefficients();
     public float pIncrement = 1;
@@ -82,12 +86,31 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
     public void initializeServos() {
         // apply settings
         if (DecodeSettings.isAuto()) {
+            getHardware().pinkServo.setPosition(getSettings().servoPinkDock);
+            getHardware().blueServo.setPosition(getSettings().servoBlueDock);
+            getHardware().greenServo.setPosition(getSettings().servoGreenDock);
         }
         else {
         }
     }
 
+    public void initilaizeMotors() {
+        getHardware().intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        getHardware().launchMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
+        getHardware().launchMotorLeft.setDirection(DcMotorEx.Direction.FORWARD);
+        getHardware().launchMotorRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        getHardware().launchMotorLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        getHardware().launchMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        getHardware().launchMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        getHardware().launchMotorRight.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER,launchSpinPID);
+        getHardware().launchMotorLeft.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER,launchSpinPID);
 
+    }
+
+    public int getLaunchMotorRPM() {
+        int launchMotorVelocity = (int) getHardware().launchMotorRight.getVelocity();
+        return (launchMotorVelocity/28)*60;
+    }
 
 
 
@@ -137,17 +160,6 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
 
 
 
-    public int getSlidePosition() {
-        return currentSlidePos;
-    }
-
-    public void zeroLiftPos() {
-        currentLiftPos = 0;
-    }
-
-    public int getLiftPosition() {
-        return currentLiftPos;
-    }
 
 
     public void eStop() {
@@ -175,7 +187,7 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
 
     @Override
     public void onInit() {
-        setMotorsToRunConfig();
+        initilaizeMotors();
         if (DecodeSettings.isAuto()) {
             initializeServos();
             if (DecodeSettings.firstRun) {

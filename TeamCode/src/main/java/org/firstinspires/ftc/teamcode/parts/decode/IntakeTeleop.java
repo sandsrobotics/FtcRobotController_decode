@@ -102,9 +102,10 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
             }
             /*      Launch Tasks          */
             if (buttonMgr.getState(2, Buttons.left_bumper, State.isPressed)) {
-                if (!(parent.getHardware().launchMotorLeft.getVelocity() == parent.getSettings().launchMotorVelocityStart)) {
                     parent.tasks.startLaunch.restart();
-                } else parent.tasks.stopLaunch.restart();
+            }
+            if (buttonMgr.getState(2, Buttons.right_bumper, State.isPressed)) {
+                parent.tasks.stopLaunch.restart();
             }
         }
 
@@ -121,11 +122,14 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
             //           DRIVER 1
             //             intake Task
             if (buttonMgr.getState(1, Buttons.right_bumper, State.isPressed)) {
-                if (!(parent.getHardware().intakeMotor.getPower() == parent.getSettings().intakeIn)) {
-                    parent.tasks.intakeTask.restart();
-                } else parent.tasks.artifactIntakeStopTask.restart();
+                parent.tasks.intakeTask.restart();
             }
-
+            if (buttonMgr.getState(1, Buttons.left_bumper, State.isPressed)) {
+                parent.tasks.artifactIntakeStopTask.restart();
+            }
+            if ((buttonMgr.getState(1, Buttons.right_bumper, State.isPressed)) && (buttonMgr.getState(1,Buttons.left_bumper, State.isPressed))) {
+                parent.tasks.outtakeTask.restart();
+            }
 
                 // Driver 1
             }

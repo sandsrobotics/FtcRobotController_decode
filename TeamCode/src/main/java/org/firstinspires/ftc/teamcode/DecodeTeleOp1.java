@@ -60,6 +60,7 @@ public class DecodeTeleOp1 extends LinearOpMode {
 //        drive = new Drive(robot, DriveSettings.makeDefault(), DriveHardware.lkTestChassis(robot.opMode.hardwareMap));
         initTeleop();
 
+
 //        final Vector3 p_atObsZone = new Vector3(33.5, -56.5, 90); // p_12: Position near ObsZone for Pickup-Specimen.
 //        Vector3 tempPosition = org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings.getRobotPosition();
 //
@@ -139,6 +140,7 @@ public class DecodeTeleOp1 extends LinearOpMode {
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
             robot.run();
+            telemetry.addData("Motor RPM", intake.getLaunchMotorRPM());
 //            if (hangTime != 0 && System.currentTimeMillis() > hangTime) {
 //                hangTime = 0;
 //                intake.tasks.prepareToHangRobotTask.restart();

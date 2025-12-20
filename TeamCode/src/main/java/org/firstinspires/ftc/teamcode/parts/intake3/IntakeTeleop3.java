@@ -105,6 +105,10 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         if (buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
             selectedServo = (selectedServo + 1) % 3;
         }
+        if (buttonMgr.getState(1, Buttons.x, State.wasTapped)) {
+            parent.launchData = IntakeSettings3.launchPosiMap.get("blueshoot1");
+            parent.tasks.moveAndLaunch.restart();
+        }
 
         // right bumper: activate selected servo
         if (buttonMgr.getState(1, Buttons.right_bumper, State.wasTapped)) {

@@ -2,7 +2,13 @@ package org.firstinspires.ftc.teamcode.parts.intake3;
 
 //import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
 
+import android.icu.text.Transliterator;
+
+import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
+import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
+
 import om.self.ezftc.core.Robot;
+import om.self.ezftc.utils.Vector3;
 import om.self.task.core.Group;
 import om.self.task.other.TimedTask;
 
@@ -11,8 +17,10 @@ public class Intake3Tasks {
     private final TimedTask homeTask;
     public final TimedTask ballLaunchTask;
     public final TimedTask sameTimeBallLaunchTask;
+    public final TimedTask moveAndLaunch;
     private final Intake3 intake;
     private final Robot robot;
+
 
     public Intake3Tasks(Intake3 intake, Robot robot) {
         this.intake = intake;
@@ -21,6 +29,7 @@ public class Intake3Tasks {
         homeTask = new TimedTask(TaskNames.Home, movementTask);
         ballLaunchTask= new TimedTask(TaskNames.BallLaunch, movementTask);
         sameTimeBallLaunchTask = new TimedTask(TaskNames.sameTimeBallLaunch, movementTask);
+        moveAndLaunch = new TimedTask(TaskNames.MoveAndLaunch, movementTask);
     }
 
     public void constructAllIntakeTasks() {
@@ -62,6 +71,13 @@ public class Intake3Tasks {
         sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Rest));
         sameTimeBallLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.GREEN.getLedPwm()));
 
+        moveAndLaunch.addStep(() -> intake.positionSolver.setNewTarget(intake.launchData.getPosition(), true));
+        moveAndLaunch.addStep(() -> intake.setLaunchRPM(intake.launchData.getRPM()));
+        moveAndLaunch.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
+        moveAndLaunch.addStep(intake.tasks.ballLaunchTask::restart);
+        //autoTasks.addStep(intake.tasks.ballLaunchTask::isDone);
+        moveAndLaunch.addDelay(1000);
+        moveAndLaunch.addStep(() -> intake.setLaunchRPM(0));
     }
 
     /***********************************************************************************/
@@ -69,5 +85,6 @@ public class Intake3Tasks {
         public final static String Home = "auto home";
         public final static String BallLaunch = "auto ball launch";
         public final static String sameTimeBallLaunch = "auto same time ball launch task";
+        public final static String MoveAndLaunch = "auto move and launch";
     }
 }

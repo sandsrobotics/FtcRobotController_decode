@@ -15,7 +15,6 @@ import om.self.ezftc.utils.hardware.servo.ServoSettings;
 
 public class IntakeHardware {
     public final DcMotorEx            intakeMotor;
-    public final ServoSSR             sorterServo;
     public final ServoSSR             pinkServo;
     public final ServoSSR             blueServo;
     public final ServoSSR             greenServo;
@@ -27,10 +26,9 @@ public class IntakeHardware {
 
 
 
-    public IntakeHardware(DcMotorEx intakeMotor, ServoSSR sorterServo, ServoSSR pinkServo, ServoSSR blueServo,
+    public IntakeHardware(DcMotorEx intakeMotor, ServoSSR pinkServo, ServoSSR blueServo,
                           ServoSSR greenServo, DcMotorEx launchMotorLeft, DcMotorEx launchMotorRight) {
         this.intakeMotor = intakeMotor;
-        this.sorterServo = sorterServo;
         this.pinkServo   = pinkServo;
         this.blueServo   = blueServo;
         this.greenServo  = greenServo;
@@ -56,10 +54,9 @@ public class IntakeHardware {
 
         return new IntakeHardware(
                 intakeMotorSettings.makeExMotor(hardwareMap),
-                new ServoSSR(hardwareMap.get(Servo.class,"servo0B")),
-                new ServoSSR(hardwareMap.get(Servo.class,"servo0")),
-                new ServoSSR(hardwareMap.get(Servo.class,"servo1")),
+                new ServoSSR(hardwareMap.get(Servo.class,"servo1")), // pink seervo
                 new ServoSSR(hardwareMap.get(Servo.class,"servo2")),
+                new ServoSSR(hardwareMap.get(Servo.class,"servo3")),
                 launchMotorLeftSettings.makeExMotor(hardwareMap),
                 launchMotorRightSettings.makeExMotor(hardwareMap)
                 );

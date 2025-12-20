@@ -52,35 +52,32 @@ public class IntakeTasks {
         intakeTask.autoStart = false;
         intakeTask.addStep(()->{
             intake.getHardware().intakeMotor.setPower(intake.getSettings().intakeIn);
-            intake.getHardware().sorterServo.setPosition(intake.getSettings().sorterStart);
         });
 
         /*   Artifact Intake Stop Task   */
         artifactIntakeStopTask.autoStart = false;
         artifactIntakeStopTask.addStep(()-> {
             intake.getHardware().intakeMotor.setPower(intake.getSettings().intakeStop);
-            intake.getHardware().sorterServo.setPosition(intake.getSettings().sorterStop);
-
         });
 
         /*    Servo Transfer Tasks      */
         //         pink
         pinkServoTransfer.autoStart = false;
-        pinkServoTransfer.addStep(() -> intake.getHardware().pinkServo.setDirection(Servo.Direction.FORWARD));
         pinkServoTransfer.addStep(() -> intake.getHardware().pinkServo.setPosition(intake.getSettings().servoPinkLaunch));
-        pinkServoTransfer.addDelay(50);
+        pinkServoTransfer.addStep(() -> intake.getHardware().pinkServo.isDone());
+        pinkServoTransfer.addDelay(250);
         pinkServoTransfer.addStep(() -> intake.getHardware().pinkServo.setPosition(intake.getSettings().servoPinkDock));
         //          blue
         blueServoTransfer.autoStart = false;
-        blueServoTransfer.addStep(() -> intake.getHardware().blueServo.setDirection(Servo.Direction.REVERSE));
         blueServoTransfer.addStep(() -> intake.getHardware().blueServo.setPosition(intake.getSettings().servoBlueLaunch));
-        blueServoTransfer.addDelay(50);
+        blueServoTransfer.addStep(() -> intake.getHardware().blueServo.isDone());
+        blueServoTransfer.addDelay(250);
         blueServoTransfer.addStep(() -> intake.getHardware().blueServo.setPosition(intake.getSettings().servoBlueDock));
         //        green
         greenServoTransfer.autoStart = false;
-        greenServoTransfer.addStep(() -> intake.getHardware().greenServo.setDirection(Servo.Direction.FORWARD));
         greenServoTransfer.addStep(() -> intake.getHardware().greenServo.setPosition(intake.getSettings().servoGreenLaunch));
-        greenServoTransfer.addDelay(50);
+        greenServoTransfer.addStep(() -> intake.getHardware().greenServo.isDone());
+        greenServoTransfer.addDelay(250);
         greenServoTransfer.addStep(() -> intake.getHardware().greenServo.setPosition(intake.getSettings().servoGreenDock));
         //           all
         allServoTransfer.autoStart = false;
@@ -89,6 +86,9 @@ public class IntakeTasks {
             blueServoTransfer.restart();
             greenServoTransfer.restart();
         });
+        allServoTransfer.addStep(() ->
+            intake.getHardware().greenServo.isDone() && intake.getHardware().blueServo.isDone() && intake.getHardware().pinkServo.isDone()
+        );
         /*            Launch Tasks         */
         //    start Launch
         startLaunch.autoStart = false;

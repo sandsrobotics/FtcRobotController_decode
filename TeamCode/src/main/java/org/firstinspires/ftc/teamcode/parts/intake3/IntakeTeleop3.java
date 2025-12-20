@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.parts.intake3;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.Buttons;
@@ -68,18 +70,23 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         }
 
         // intake/launch stuff
-        if (buttonMgr.getState(1, Buttons.x, State.wasTapped)) {
+        if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
             parent.setIntakeRPM(IntakeSettings3.intakeRPM);
         }
-        if (buttonMgr.getState(1, Buttons.x, State.wasDoubleTapped)) {
+
+        if (buttonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
+            parent.setIntakeRPM(-IntakeSettings3.intakeRPM);
+        }
+
+        if (buttonMgr.getState(1, Buttons.dpad_down, State.wasDoubleTapped) ||
+            buttonMgr.getState(1, Buttons.dpad_up, State.wasDoubleTapped)) {
             parent.setIntakeRPM(0);
         }
-        if (buttonMgr.getState(1, Buttons.right_trigger, State.wasTapped)) {
-            parent.setIntakeRPM(IntakeSettings3.intakeRPM);
-        }
+
         if (buttonMgr.getState(1, Buttons.y, State.wasTapped)) {
             parent.setLaunchRPM(IntakeSettings3.launchRPM);
         }
+
         if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
             parent.setLaunchRPM(0);
         }

@@ -98,6 +98,12 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
         Core.extractChannel(inputConv, extracted, 1);
     }
 
+    void inputToHsv(Mat input)
+    {
+        Imgproc.cvtColor(input, inputConv, Imgproc.COLOR_RGB2HSV);
+        Core.extractChannel(inputConv, extracted, 0);
+    }
+
     @Override
     public void init(Mat firstFrame)
     {
@@ -110,8 +116,9 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
          * buffer would be re-allocated the first time a real frame
          * was crunched)
          */
-        //inputToCb(firstFrame);
-        inputToSat(firstFrame);
+//        inputToCb(firstFrame);
+//        inputToSat(firstFrame);
+        inputToHsv(firstFrame);
 
         /*
          * Submats are a persistent reference to a region of the parent
@@ -129,7 +136,8 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
     public Mat processFrame(Mat input)
     {
         //inputToCb(input);
-        inputToSat(input);
+//        inputToSat(input);
+        inputToHsv(input);
         /*
          * Compute the average pixel value of each submat region. We're
          * taking the average of a single channel buffer, so the value
@@ -141,14 +149,16 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
         // Determine the color and status of artifacts in array
         for (Artifact  artifact : artifacts) {
             artifact.average = (int) Core.mean(artifact.submat).val[0];
-            rectangleColor = BLOCK;
-            if (artifact.average > 34 && artifact.average < 91) {
+            if (artifact.average > 70 && artifact.average < 82) {
                 rectangleColor = GREEN;
                 artifact.color = ArtifactColor.GREEN;
             }
-            else if (artifact.average > 120 && artifact.average < 165) {
+            else if (artifact.average > 130 && artifact.average < 150) {
                 rectangleColor = PURPLE;
                 artifact.color = ArtifactColor.PURPLE;
+            } else {
+                rectangleColor = WHITE;
+                artifact.color = ArtifactColor.NONE;
             }
 
             Imgproc.rectangle(
@@ -183,6 +193,8 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
         private Artifact(ArtifactDetectionPipeline.ArtifactColor color, Mat submat, Point pta, Point ptb, int average) {
             this.color = color;
             this.submat = submat;
+            this.pta = pta;
+            this.ptb = ptb;
             this.average = average;
         }
     }

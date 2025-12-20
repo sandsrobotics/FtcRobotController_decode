@@ -17,6 +17,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     protected PositionTracker pt;
     public boolean isTeleop;
     public int launchRPM;
+    public int intakeRPM;
 
     //***** Constructors *****
     public Intake3(Robot parent, String modeName) {
@@ -53,8 +54,13 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     }
 
     public void setIntakeRPM(int RPM) {
+        this.intakeRPM = RPM;
         double targetTPS = (RPM / 60.0) * IntakeSettings3.ticksPerRev1150;
         getHardware().intakeMotor.setVelocity(targetTPS);
+    }
+
+    public double getTargetIntakeRPM() {
+        return this.intakeRPM;
     }
 
     public void eStop() {

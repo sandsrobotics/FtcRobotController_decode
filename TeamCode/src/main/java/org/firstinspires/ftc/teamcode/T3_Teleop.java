@@ -5,6 +5,8 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.teamcode.depricated.intake.FlipbotSettings;
+import org.firstinspires.ftc.teamcode.lib.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.parts.artifact.ArtifactDetectionPipeline;
 import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
@@ -15,6 +17,7 @@ import org.firstinspires.ftc.teamcode.parts.intake3.IntakeTeleop3;
 import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.XRelativeSolver;
+import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.hardware.PositionTrackerHardware;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
@@ -56,9 +59,11 @@ public class T3_Teleop extends LinearOpMode {
         PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,
                 100, new Vector3(2,2,2), fieldStartPos);
         pt = new PositionTracker(robot,pts, PositionTrackerHardware.makeDefault(robot));
-        XRelativeSolver solver = new XRelativeSolver(drive);
+//        XRelativeSolver solver = new XRelativeSolver(drive);
         odo = new Pinpoint(pt,false);
         pt.positionSourceId = Pinpoint.class;
+        positionSolver = new PositionSolver(drive);
+        positionSolver.setSettings(PositionSolverSettings.specimenAssistSettings);
 
         Intake3 intake = new Intake3(robot, "Teleop");
         new IntakeTeleop3(intake);

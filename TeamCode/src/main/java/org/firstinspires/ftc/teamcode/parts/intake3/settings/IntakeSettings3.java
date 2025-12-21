@@ -17,18 +17,18 @@ public class IntakeSettings3 {
     public static double launchServo2Rest = 0.267;
     public static int launchServoDelay = 200;
     public static int launchServoSweepTime = 1000;
-    public static int launchRPMTolerance = 250;
+    public static int launchRPMTolerance = 200;
     public static Map<String, LaunchData> launchPosiMap = new HashMap<String, LaunchData>();
     public static PIDFCoefficients spinnerPID = new PIDFCoefficients(100,0,0,12.4);
     public static int launchRPM = 3150; // for teleop tests
-    public static int intakeRPM = 435;
+    public static int intakeRPM = 600;
     public static double ticksPerRev = 28;
     public static double ticksPerRev1150 = 145.1;
 
     public IntakeSettings3() {}
 
     public static IntakeSettings3 makeDefault(){
-        launchPosiMap.put("blueshoot1", new LaunchData(2700,new Vector3(-16, -16, -139)));
+        launchPosiMap.put("blueshoot1", new LaunchData(3200,new Vector3(-12, -12, -139)));
         launchPosiMap.put("blueshoot2", new LaunchData(10,new Vector3(2,0,0)));
         launchPosiMap.put("blueshoot3", new LaunchData(10,new Vector3(3,0,0)));
         launchPosiMap.put("blueshoot4", new LaunchData(10,new Vector3(4,0,0)));

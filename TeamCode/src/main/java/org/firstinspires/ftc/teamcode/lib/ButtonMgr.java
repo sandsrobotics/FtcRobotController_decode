@@ -11,6 +11,7 @@ public class ButtonMgr {
     public Gamepad gamepad2;
     ControlData[] controlData;
     int tapTime = 500;             // less than = tap, greater than = hold
+    int repeatTime = 200;
 
     public ButtonMgr(OpMode opMode){
         construct(opMode);
@@ -108,6 +109,13 @@ public class ButtonMgr {
         return controlData[getIndex(controller, button)].isSingleTapHeld;
     }
 
+    public boolean isRepeating(cButton ctrlButton) {
+        return isRepeating(ctrlButton.controller, ctrlButton.button);
+    }
+    public boolean isRepeating(int controller, Buttons button) {
+        return controlData[getIndex(controller, button)].isRepeating;
+    }
+
     int getIndex(int controller, Buttons button){
         //This converts an index of 0-31 based on the controller 1-2 and button 0-15
         if (controller < 1 || controller > 2) controller = 0; else controller--;
@@ -130,7 +138,16 @@ public class ButtonMgr {
             case wasSingleTapped:   return controlData[getIndex(controller, button)].wasSingleTapped;
             case wasDoubleTapped:   return controlData[getIndex(controller, button)].wasDoubleTapped;
             case isSingleTapHeld:   return controlData[getIndex(controller, button)].isSingleTapHeld;
+            case isRepeating:       return controlData[getIndex(controller, button)].isRepeating;
             default:                return false;
+        }
+    }
+
+    public boolean getState(int controller, String button, State state) {
+        try {
+            return getState(controller, Buttons.valueOf(button), state);
+        } catch (Exception e) {
+            return false;
         }
     }
 
@@ -139,6 +156,7 @@ public class ButtonMgr {
         Buttons name;
         boolean lastStatus;
         long lastTime;
+        long nextRepeat;
         boolean wasPressed;          // Rise
         boolean wasReleased;         // Fall
         boolean isHeld;              // Rise + Long Hold (> tapTime)
@@ -147,6 +165,7 @@ public class ButtonMgr {
         boolean wasSingleTapped;     // Rise + Short Hold (< tapTime) + Fall + Gap (> tapTime)
         boolean wasDoubleTapped;     // Rise + Short Hold (< tapTime) + Fall + Short Gap (< tapTime) x2
         boolean isSingleTapHeld;     // Rise + Short Hold (< tapTime) + Fall + Short Gap (< tapTime) + Rise + Long Hold (> tapTime)
+        boolean isRepeating;         // Rise + Hold (tapTime) + x*Repeat (repeatTime)
         char tapEventCounter;
 
         public void initData(int index)
@@ -211,6 +230,7 @@ public class ButtonMgr {
             wasSingleTapped = false;
             wasDoubleTapped = false;
             isHeld = false;
+            isRepeating = false;
 
             if (!lastStatus && currentState) {   // change from not pressed to pressed
                 wasPressed = true;               // this will last for one loop!
@@ -220,6 +240,8 @@ public class ButtonMgr {
                     tapEventCounter = 0;
                 }
                 lastTime = currentTime;          // reset the time
+                nextRepeat = tapTime;
+                isRepeating = true;
             }
             if (lastStatus && !currentState) {   // change from pressed to not pressed
                 wasReleased = true;              // this will last for one loop!
@@ -244,6 +266,10 @@ public class ButtonMgr {
                         isSingleTapHeld = true;  // will reset when released
                     }
                     tapEventCounter = 0;
+                }
+                if (deltaTime >= nextRepeat) {
+                    isRepeating = true;
+                    nextRepeat += repeatTime;
                 }
             }
             if (!lastStatus && !currentState) {  // still not held
@@ -295,6 +321,7 @@ public class ButtonMgr {
         wasHeld,
         wasSingleTapped,
         wasDoubleTapped,
-        isSingleTapHeld
+        isSingleTapHeld,
+        isRepeating
     }
 }

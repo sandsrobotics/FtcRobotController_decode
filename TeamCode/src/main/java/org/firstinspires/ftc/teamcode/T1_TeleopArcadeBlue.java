@@ -5,7 +5,9 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
+import org.firstinspires.ftc.teamcode.lib.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
 import org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings;
@@ -18,8 +20,11 @@ import org.firstinspires.ftc.teamcode.parts.drive.settings.DriveTeleopSettings;
 import org.firstinspires.ftc.teamcode.parts.intake1.Intake1Teleop;
 import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
+import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
+import org.firstinspires.ftc.teamcode.parts.positiontracker.hardware.PositionTrackerHardware;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
+import org.firstinspires.ftc.teamcode.parts.positiontracker.settings.PositionTrackerSettings;
 
 import java.text.DecimalFormat;
 
@@ -63,16 +68,16 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         initTeleop();
 
 
-//        final Vector3 p_atObsZone = new Vector3(33.5, -56.5, 90); // p_12: Position near ObsZone for Pickup-Specimen.
-//        Vector3 tempPosition = org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings.getRobotPosition();
-//
-//        if (tempPosition.X == 0.0 && tempPosition.Y == 0.0 && tempPosition.Z == 0.0)  {
-//            org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings.storeRobotPosition(p_atObsZone);
-//        }
-//
+        final Vector3 p_atObsZone = new Vector3(33.5, -56.5, 90); // p_12: Position near ObsZone for Pickup-Specimen.
+        Vector3 tempPosition = org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings.getRobotPosition();
+
+        if (tempPosition.X == 0.0 && tempPosition.Y == 0.0 && tempPosition.Z == 0.0)  {
+            org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings.storeRobotPosition(p_atObsZone);
+        }
+
 //        PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,
 ////               100, new Vector3(2,2,2), fieldStartPos);
-//                100, new Vector3(2,2,2), org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings.getRobotPosition());
+//                100, new Vector3(2,2,2), org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings.getRobotPosition());
 //        pt = new PositionTracker(robot,pts, PositionTrackerHardware.makeDefault(robot));
 //        // XRelativeSolver solver = new XRelativeSolver(drive);
 //
@@ -89,20 +94,20 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         intake = new Intake1(robot);
         if (!DecodeSettings.isDemoMode) new Intake1Teleop(intake);
         robot.init();
-        odo.setPosition(fieldStartPos);
+//        odo.setPosition(fieldStartPos);
 
-        long timer = System.currentTimeMillis() + 2500;
-        while (odo.getValidPosition() == null && System.currentTimeMillis() <= timer) {
-            telemetry.addLine("Waiting for Pinpoint...");
-            telemetry.update();
-            //todo: What to do if it doesn't initialize?
-        }
-        try {
-            odo.setPosition(org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings.getRobotPosition());
-        } catch (Exception e) {
-            telemetry.addLine("Exception while odo.setPosition; Ignoring");
-            telemetry.update();
-        }
+//        long timer = System.currentTimeMillis() + 2500;
+//        while (odo.getValidPosition() == null && System.currentTimeMillis() <= timer) {
+//            telemetry.addLine("Waiting for Pinpoint...");
+//            telemetry.update();
+//            //todo: What to do if it doesn't initialize?
+//        }
+//        try {
+//            odo.setPosition(org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings.getRobotPosition());
+//        } catch (Exception e) {
+//            telemetry.addLine("Exception while odo.setPosition; Ignoring");
+//            telemetry.update();
+//        }
 
 
 
@@ -126,10 +131,10 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
                 intake.initializeServos();
             }
             telemetry.addData("Drive motors", testModeReverse ? "Test Reverse (AndyMark Chassis)" : "Normal - Competition");
-            Vector3 position = odo.getPosition();
-            DecodeSettings.storeRobotPosition(position);
-            telemetry.addData("Position", position);
-            dashboard.sendTelemetryPacket(packet);
+//            Vector3 position = odo.getPosition();
+//            DecodeSettings.storeRobotPosition(position);
+//            telemetry.addData("Position", position);
+//            dashboard.sendTelemetryPacket(packet);
             telemetry.update();
 
         }

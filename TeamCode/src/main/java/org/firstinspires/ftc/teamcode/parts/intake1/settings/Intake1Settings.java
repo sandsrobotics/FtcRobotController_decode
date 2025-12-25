@@ -1,5 +1,8 @@
 package org.firstinspires.ftc.teamcode.parts.intake1.settings;
 
+import com.acmerobotics.dashboard.config.Config;
+
+@Config
 public class Intake1Settings {
 
     public double intakeIn =                                    -1;

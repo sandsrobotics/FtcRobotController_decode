@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
+import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
 import org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings;
 import org.firstinspires.ftc.teamcode.parts.intake1.Intake1;
@@ -15,6 +16,7 @@ import org.firstinspires.ftc.teamcode.parts.drive.hardware.DriveHardware;
 import org.firstinspires.ftc.teamcode.parts.drive.settings.DriveSettings;
 import org.firstinspires.ftc.teamcode.parts.drive.settings.DriveTeleopSettings;
 import org.firstinspires.ftc.teamcode.parts.intake1.Intake1Teleop;
+import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
@@ -30,6 +32,8 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
     Drive drive;
     Robot robot;
     Intake1 intake;
+    Artifacts artifacts;
+    LimeLight limelight;
     PositionSolver positionSolver;
     PositionTracker pt;
     Pinpoint odo;
@@ -52,6 +56,10 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         new BulkRead(robot);
         drive = new Drive(robot);
 //        drive = new Drive(robot, DriveSettings.makeDefault(), DriveHardware.lkTestChassis(robot.opMode.hardwareMap));
+
+//        limelight = new LimeLight(robot);
+        artifacts = new Artifacts(robot);
+
         initTeleop();
 
 

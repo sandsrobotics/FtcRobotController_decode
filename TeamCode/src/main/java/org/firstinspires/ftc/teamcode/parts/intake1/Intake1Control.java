@@ -1,12 +1,12 @@
-package org.firstinspires.ftc.teamcode.parts.decode;
+package org.firstinspires.ftc.teamcode.parts.intake1;
 
-public class IntakeControl {
+public class Intake1Control {
     public int sweeperPower;
     ;
 
     // todo: eliminate this like the others
 
-    public IntakeControl(int sweeperPower){
+    public Intake1Control(int sweeperPower){
 
         this.sweeperPower = sweeperPower;
 

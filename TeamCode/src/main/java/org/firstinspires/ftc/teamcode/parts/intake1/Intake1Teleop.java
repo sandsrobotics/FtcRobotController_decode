@@ -1,34 +1,34 @@
-package org.firstinspires.ftc.teamcode.parts.decode;
+package org.firstinspires.ftc.teamcode.parts.intake1;
 
 import org.apache.commons.lang3.ObjectUtils;
-import org.firstinspires.ftc.teamcode.parts.decode.settings.IntakeTeleopSettings;
+import org.firstinspires.ftc.teamcode.parts.intake1.settings.Intake1TeleopSettings;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.Buttons;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.State;
 
 import om.self.ezftc.core.part.LoopedPartImpl;
 
-public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, ObjectUtils.Null> {
-    private IntakeTeleopSettings settings;
+public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings, ObjectUtils.Null> {
+    private Intake1TeleopSettings settings;
     ButtonMgr buttonMgr;
 
-    public IntakeTeleop(Intake parent) {
+    public Intake1Teleop(Intake1 parent) {
         super(parent, "Intake teleop");
-        setSettings(IntakeTeleopSettings.makeDefault(parent.parent));
+        setSettings(Intake1TeleopSettings.makeDefault(parent.parent));
         buttonMgr = parent.parent.buttonMgr;
     }
 
-    public IntakeTeleop(Intake parent, IntakeTeleopSettings settings) {
+    public Intake1Teleop(Intake1 parent, Intake1TeleopSettings settings) {
         super(parent, "Intake teleop");
         setSettings(settings);
         buttonMgr = parent.parent.buttonMgr;
     }
 
-    public IntakeTeleopSettings getSettings() {
+    public Intake1TeleopSettings getSettings() {
         return settings;
     }
 
-    public void setSettings(IntakeTeleopSettings settings) {
+    public void setSettings(Intake1TeleopSettings settings) {
         this.settings = settings;
     }
 
@@ -43,7 +43,7 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
 
     @Override
     public void onStart() {
-        parent.setBaseController(() -> new IntakeControl(
+        parent.setBaseController(() -> new Intake1Control(
                 0
         ), true);
     }
@@ -66,7 +66,7 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
         }
 
         //in telelop, disable positiontracker if Driver1 uses controls
-        if (org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings.isTeleOp()) {
+        if (org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings.isTeleOp()) {
             if (parent.parent.opMode.gamepad1.right_trigger +
                     parent.parent.opMode.gamepad1.left_trigger +
                     parent.parent.opMode.gamepad1.left_stick_x +

@@ -1,6 +1,6 @@
-package org.firstinspires.ftc.teamcode.parts.decode.settings;
+package org.firstinspires.ftc.teamcode.parts.intake1.settings;
 
-public class  IntakeSettings {
+public class Intake1Settings {
 
     public double intakeIn =                                    -1;
     public double intakeStop =                                   0;
@@ -21,11 +21,11 @@ public class  IntakeSettings {
 
 
 
-    public IntakeSettings() {
+    public Intake1Settings() {
     }
 
-    public static IntakeSettings makeDefault(){
-        return new IntakeSettings();
+    public static Intake1Settings makeDefault(){
+        return new Intake1Settings();
     }
 }
 

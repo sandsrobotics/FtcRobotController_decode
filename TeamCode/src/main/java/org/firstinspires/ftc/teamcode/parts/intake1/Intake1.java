@@ -1,14 +1,12 @@
-package org.firstinspires.ftc.teamcode.parts.decode;
+package org.firstinspires.ftc.teamcode.parts.intake1;
 
 import static java.lang.Math.abs;
 
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
-import org.firstinspires.ftc.teamcode.parts.decode.hardware.IntakeHardware;
-import org.firstinspires.ftc.teamcode.parts.decode.settings.IntakeSettings;
+import org.firstinspires.ftc.teamcode.parts.intake1.hardware.Intake1Hardware;
+import org.firstinspires.ftc.teamcode.parts.intake1.settings.Intake1Settings;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.drive.DriveControl;
 
@@ -18,9 +16,9 @@ import om.self.ezftc.utils.Vector3;
 import om.self.supplier.consumer.EdgeConsumer;
 import om.self.task.core.Group;
 
-public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardware, IntakeControl> {
+public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Hardware, Intake1Control> {
 
-    public IntakeTasks tasks;
+    public Intake1Tasks tasks;
     protected Drive drive;
 //    protected Pinpoint pinpoint;
 //    protected PositionSolver positionSolver;
@@ -65,16 +63,16 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
     public final Vector3 p_beforeHighRung = new Vector3(2.75 - 6, -40.25 + 1 , -90); // Y: (-40.25 + 5); p_19: Position before High-Rung for Hang-Specimen.
 
     //***** Constructors *****
-    public Intake(Robot parent) {
-        super(parent, "Slider", () -> new IntakeControl(0));
+    public Intake1(Robot parent) {
+        super(parent, "Slider", () -> new Intake1Control(0));
         setConfig(
-                IntakeSettings.makeDefault(),
-                IntakeHardware.makeDefault(parent.opMode.hardwareMap)
+                Intake1Settings.makeDefault(),
+                Intake1Hardware.makeDefault(parent.opMode.hardwareMap)
         );
     }
 
-    public Intake(Robot parent, IntakeSettings settings, IntakeHardware hardware) {
-        super(parent, "slider", () -> new IntakeControl(0));
+    public Intake1(Robot parent, Intake1Settings settings, Intake1Hardware hardware) {
+        super(parent, "slider", () -> new Intake1Control(0));
         setConfig(settings, hardware);
     }
 
@@ -203,7 +201,7 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
         }
 //        pinpoint = getBeanManager().getBestMatch(Pinpoint.class, false);
 //        positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
-        tasks = new IntakeTasks(this, parent);
+        tasks = new Intake1Tasks(this, parent);
         tasks.constructAllIntakeTasks();
     }
 
@@ -213,7 +211,7 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
     }
 
     @Override
-    public void onRun(IntakeControl control) {
+    public void onRun(Intake1Control control) {
         spinnerSliderPower = 0.0; // control.strafePower;
     }
 

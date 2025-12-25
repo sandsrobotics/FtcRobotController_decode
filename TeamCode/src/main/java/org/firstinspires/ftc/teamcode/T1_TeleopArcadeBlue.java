@@ -5,51 +5,45 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
-import org.firstinspires.ftc.teamcode.lib.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
-import org.firstinspires.ftc.teamcode.parts.decode.Intake;
-import org.firstinspires.ftc.teamcode.parts.decode.hardware.IntakeHardware;
+import org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings;
+import org.firstinspires.ftc.teamcode.parts.intake1.Intake1;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
 import org.firstinspires.ftc.teamcode.parts.drive.hardware.DriveHardware;
 import org.firstinspires.ftc.teamcode.parts.drive.settings.DriveSettings;
 import org.firstinspires.ftc.teamcode.parts.drive.settings.DriveTeleopSettings;
+import org.firstinspires.ftc.teamcode.parts.intake1.Intake1Teleop;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
-import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
-import org.firstinspires.ftc.teamcode.parts.positiontracker.hardware.PositionTrackerHardware;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
-import org.firstinspires.ftc.teamcode.parts.positiontracker.settings.PositionTrackerSettings;
 
 import java.text.DecimalFormat;
 
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.utils.Vector3;
 
-@TeleOp(name="14273 First Decode", group="B14273")
-public class DecodeTeleOp1 extends LinearOpMode {
+@TeleOp(name="14273 TeleArcadeBlue", group="B14273")
+public class T1_TeleopArcadeBlue extends LinearOpMode {
     double tileSide = 23.5;
     Drive drive;
     Robot robot;
-    org.firstinspires.ftc.teamcode.parts.decode.Intake intake;
-//    PositionSolver positionSolver;
-//    PositionTracker pt;
-//    Pinpoint odo;
+    Intake1 intake;
+    PositionSolver positionSolver;
+    PositionTracker pt;
+    Pinpoint odo;
     Vector3 fieldStartPos = new Vector3(-14.375,-62,90);  //for teleOp, this shouldn't be relevant
     boolean testModeReverse = false;
-//    public long hangTime=0;
 
     public void initTeleop(){
-        new DriveTeleop(drive, DriveTeleopSettings.makeForza(robot));
+        new DriveTeleop(drive, DriveTeleopSettings.makeArcade1(robot));
     }
 
     @Override
     public void runOpMode() {
         extraSettings();   // LK 20250602 Moved to top
-        org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings.setTeleOp();
+        DecodeSettings.setTeleOp();
         DecimalFormat df = new DecimalFormat("#0.0");
         long start;
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -84,19 +78,19 @@ public class DecodeTeleOp1 extends LinearOpMode {
 //        positionSolver = new PositionSolver(drive); // removed so it won't rotate 90deg clockwise
 //        positionSolver.setSettings(PositionSolverSettings.specimenAssistSettings);
 
-        intake = new org.firstinspires.ftc.teamcode.parts.decode.Intake(robot);
-        if (!org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings.isDemoMode) new org.firstinspires.ftc.teamcode.parts.decode.IntakeTeleop(intake);
+        intake = new Intake1(robot);
+        if (!DecodeSettings.isDemoMode) new Intake1Teleop(intake);
         robot.init();
-//        odo.setPosition(fieldStartPos);
+        odo.setPosition(fieldStartPos);
 
-//        long timer = System.currentTimeMillis() + 2500;
-//        while (odo.getValidPosition() == null && System.currentTimeMillis() <= timer) {
-//            telemetry.addLine("Waiting for Pinpoint...");
-//            telemetry.update();
-//            //todo: What to do if it doesn't initialize?
-//        }
+        long timer = System.currentTimeMillis() + 2500;
+        while (odo.getValidPosition() == null && System.currentTimeMillis() <= timer) {
+            telemetry.addLine("Waiting for Pinpoint...");
+            telemetry.update();
+            //todo: What to do if it doesn't initialize?
+        }
         try {
-//            odo.setPosition(org.firstinspires.ftc.teamcode.parts.decode.DecodeSettings.getRobotPosition());
+            odo.setPosition(org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings.getRobotPosition());
         } catch (Exception e) {
             telemetry.addLine("Exception while odo.setPosition; Ignoring");
             telemetry.update();
@@ -108,14 +102,14 @@ public class DecodeTeleOp1 extends LinearOpMode {
             robot.buttonMgr.runLoop();
             telemetry.addData("Not Started", "Not Started");
 
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasDoubleTapped)) {
-                drive.lkUpdateConfig(DriveSettings.makeDefault(), DriveHardware.lkTestChassis(robot.opMode.hardwareMap));
-                testModeReverse = true;
-            }
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasSingleTapped)) {
-                drive.lkUpdateConfig(DriveSettings.makeDefault(), DriveHardware.makeDefault(robot.opMode.hardwareMap));
-                testModeReverse = false;
-            }
+//            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasDoubleTapped)) {
+//                drive.lkUpdateConfig(DriveSettings.makeDefault(), DriveHardware.lkTestChassis(robot.opMode.hardwareMap));
+//                testModeReverse = true;
+//            }
+//            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasSingleTapped)) {
+//                drive.lkUpdateConfig(DriveSettings.makeDefault(), DriveHardware.makeDefault(robot.opMode.hardwareMap));
+//                testModeReverse = false;
+//            }
 //            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasTapped)) {
 //                odo.setPosition(fieldStartPos);
 
@@ -124,28 +118,22 @@ public class DecodeTeleOp1 extends LinearOpMode {
                 intake.initializeServos();
             }
             telemetry.addData("Drive motors", testModeReverse ? "Test Reverse (AndyMark Chassis)" : "Normal - Competition");
-//            Vector3 position = odo.getPosition();
-//            DecodeSettings.storeRobotPosition(position);
-//            telemetry.addData("Position", position);
+            Vector3 position = odo.getPosition();
+            DecodeSettings.storeRobotPosition(position);
+            telemetry.addData("Position", position);
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();
 
         }
 
-        //odo.setPosition(fieldStartPos);
+        odo.setPosition(fieldStartPos);
         robot.start();
-
-//        hangTime = System.currentTimeMillis() + 90000;
 
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
             robot.run();
             telemetry.addData("Motor RPM", intake.getLaunchMotorRPM());
-//            if (hangTime != 0 && System.currentTimeMillis() > hangTime) {
-//                hangTime = 0;
-//                intake.tasks.prepareToHangRobotTask.restart();
-//            }
-//            DecodeSettings.storeRobotPosition(pt.getCurrentPosition());
+            DecodeSettings.storeRobotPosition(pt.getCurrentPosition());
 
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();
@@ -161,7 +149,7 @@ public class DecodeTeleOp1 extends LinearOpMode {
     }
 
     public void moveRobot(Vector3 target){
-//        positionSolver.setNewTarget(target, false);
+        positionSolver.setNewTarget(target, false);
     }
     public Vector3 tiletoField(Vector3 p){
         return new Vector3(p.X * tileSide, p.Y * tileSide, p.Z);

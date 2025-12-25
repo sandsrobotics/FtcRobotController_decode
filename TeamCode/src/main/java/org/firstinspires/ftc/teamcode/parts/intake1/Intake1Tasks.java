@@ -1,16 +1,10 @@
-package org.firstinspires.ftc.teamcode.parts.decode;
-
-import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.teamcode.parts.decode.settings.IntakeSettings;
+package org.firstinspires.ftc.teamcode.parts.intake1;
 
 import om.self.ezftc.core.Robot;
 import om.self.task.core.Group;
 import om.self.task.other.TimedTask;
 
-public class IntakeTasks {
+public class Intake1Tasks {
     public final Group intakeTasksGroup;
     public final TimedTask intakeTask;
     public final TimedTask artifactIntakeStopTask;
@@ -26,12 +20,12 @@ public class IntakeTasks {
 
 
 
-    private final Intake intake;
+    private final Intake1 intake;
     private final Robot robot;
 
 
 
-    public IntakeTasks(Intake intake, Robot robot) {
+    public Intake1Tasks(Intake1 intake, Robot robot) {
         this.intake = intake;
         this.robot = robot;
         intakeTasksGroup = new Group("intake", intake.getTaskManager());

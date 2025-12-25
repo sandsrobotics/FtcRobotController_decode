@@ -1,9 +1,6 @@
-package org.firstinspires.ftc.teamcode.parts.decode.hardware;
+package org.firstinspires.ftc.teamcode.parts.intake1.hardware;
 
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigurationType;
@@ -11,9 +8,8 @@ import com.qualcomm.robotcore.hardware.configuration.typecontainers.MotorConfigu
 import org.firstinspires.ftc.teamcode.lib.ServoSSR;
 
 import om.self.ezftc.utils.hardware.motor.MotorSettings;
-import om.self.ezftc.utils.hardware.servo.ServoSettings;
 
-public class IntakeHardware {
+public class Intake1Hardware {
     public final DcMotorEx            intakeMotor;
     public final ServoSSR             pinkServo;
     public final ServoSSR             blueServo;
@@ -26,8 +22,8 @@ public class IntakeHardware {
 
 
 
-    public IntakeHardware(DcMotorEx intakeMotor, ServoSSR pinkServo, ServoSSR blueServo,
-                          ServoSSR greenServo, DcMotorEx launchMotorLeft, DcMotorEx launchMotorRight) {
+    public Intake1Hardware(DcMotorEx intakeMotor, ServoSSR pinkServo, ServoSSR blueServo,
+                           ServoSSR greenServo, DcMotorEx launchMotorLeft, DcMotorEx launchMotorRight) {
         this.intakeMotor = intakeMotor;
         this.pinkServo   = pinkServo;
         this.blueServo   = blueServo;
@@ -47,12 +43,12 @@ public class IntakeHardware {
         }
     }
 //beans
-    public static IntakeHardware makeDefault(HardwareMap hardwareMap)  {
+    public static Intake1Hardware makeDefault(HardwareMap hardwareMap)  {
         MotorSettings intakeMotorSettings = new MotorSettings(MotorSettings.Number.ZERO_B, DcMotorEx.Direction.FORWARD, DcMotorEx.ZeroPowerBehavior.BRAKE, DcMotorEx.RunMode.RUN_USING_ENCODER);
         MotorSettings launchMotorLeftSettings = new MotorSettings(MotorSettings.Number.ONE_B, DcMotorEx.Direction.FORWARD, DcMotorEx.ZeroPowerBehavior.FLOAT, DcMotorEx.RunMode.RUN_USING_ENCODER);
         MotorSettings launchMotorRightSettings = new MotorSettings(MotorSettings.Number.TWO_B, DcMotorEx.Direction.REVERSE, DcMotorEx.ZeroPowerBehavior.FLOAT, DcMotorEx.RunMode.RUN_USING_ENCODER);
 
-        return new IntakeHardware(
+        return new Intake1Hardware(
                 intakeMotorSettings.makeExMotor(hardwareMap),
                 new ServoSSR(hardwareMap.get(Servo.class,"servo1")), // pink seervo
                 new ServoSSR(hardwareMap.get(Servo.class,"servo2")),

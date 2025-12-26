@@ -30,13 +30,10 @@ public class T3_AutoBlueLaunch extends T3_AutoBase {
         Vector3 pickupBallBlue3move = new Vector3(34, -60, -88); // Blue: Ready to move on balls in third line Correct
         Vector3 blueLeverOpen = new Vector3(0, -55, -90); //Blue: Open Lever Position Correct
 
-
-
         /* *** setup Autonomous ****/
         autoTasks.addStep(() -> intake.stopAllIntakeTasks());
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
         autoTasks.addStep(() -> odo.setPosition(blueLaunchStart));
-
         MoveAndLaunch(autoTasks, intake.getSettings().launchPosiMap.get("blueshoot1"));
         autoTasks.addStep(() -> intake.stopAllIntakeTasks());
         autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
@@ -59,7 +56,7 @@ public class T3_AutoBlueLaunch extends T3_AutoBase {
         positionSolver.addMoveToTaskEx(blueLeverOpen, autoTasks);
         autoTasks.addDelay(3000);
         autoTasks.addStep(() -> intake.setIntakeRPM(0));
-        MoveAndLaunch(autoTasks, intake.getSettings().launchPosiMap.get("shootBlue1"));
+        MoveAndLaunch(autoTasks, intake.getSettings().launchPosiMap.get("blueshoot1"));
         positionSolver.addMoveToTaskEx(blueLaunchStart, autoTasks);
     }
 
@@ -71,7 +68,7 @@ public class T3_AutoBlueLaunch extends T3_AutoBase {
         autoTasks.addStep(() -> intake.setLaunchRPM(RPM));
         autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
         autoTasks.addStep(intake.tasks.ballLaunchTask::restart);
-        //autoTasks.addStep(intake.tasks.ballLaunchTask::isDone);
+        autoTasks.addStep(intake.tasks.ballLaunchTask::isDone);
         autoTasks.addDelay(1000);
         autoTasks.addStep(() -> intake.setLaunchRPM(0));
 //        positionSolver.addMoveToTaskEx(blueLaunchStart, autoTasks);

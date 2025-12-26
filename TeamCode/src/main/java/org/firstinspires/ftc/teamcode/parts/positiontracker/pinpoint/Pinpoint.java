@@ -19,11 +19,11 @@ public class Pinpoint extends LoopedPartImpl<PositionTracker, ObjectUtils.Null, 
     Boolean reset = true;
 
     String hwDeviceName = "odo";
-    double settingsXoffset = -80.0;
-    double settingsYoffset = 44.0;
-    float settingsResolution = 19.89436789f; //19.89436789f for 4-bar;  13.26291192f for swingarm
-    GoBildaPinpointDriver.EncoderDirection settingsXdirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
-    GoBildaPinpointDriver.EncoderDirection settingsYdirection = GoBildaPinpointDriver.EncoderDirection.FORWARD;
+    double settingsXoffset = -95.0; // was -80
+    double settingsYoffset = -5.0; // was -44
+    float settingsResolution = 13.26291192f; //19.89436789f for 4-bar;  13.26291192f for swingarm
+    GoBildaPinpointDriver.EncoderDirection settingsXdirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
+    GoBildaPinpointDriver.EncoderDirection settingsYdirection = GoBildaPinpointDriver.EncoderDirection.REVERSED;
 
     //    goBILDA_SWINGARM_POD = 13.26291192f; //ticks-per-mm for the goBILDA Swingarm Pod
     //    goBILDA_4_BAR_POD    = 19.89436789f; //ticks-per-mm for the goBILDA 4-Bar Pod

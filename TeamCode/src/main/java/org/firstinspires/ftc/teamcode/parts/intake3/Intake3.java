@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.parts.intake3;
 
+import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.intake3.hardware.IntakeHardware3;
 import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
@@ -21,6 +22,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     public int launchRPM;
     public int intakeRPM;
     public IntakeSettings3.LaunchData launchData;
+    public Artifacts artifacts;
 
     //***** Constructors *****
     public Intake3(Robot parent, String modeName) {
@@ -87,14 +89,13 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 
     @Override
     public void onInit() {
-        getHardware().pixel.setPosition(LEDColor.YELLOW.getLedPwm());
+        getHardware().pixel.setPosition(LEDColor.BLUE.getLedPwm());
         initializeServos();
         parent.opMode.sleep(1200);
         initializeServos();
         tasks = new Intake3Tasks(this, parent);
         tasks.constructAllIntakeTasks();
         getHardware().pixel.setPosition(LEDColor.GREEN.getLedPwm());
-        positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
     }
 
     public void stopAllIntakeTasks() {
@@ -103,7 +104,8 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     }
     @Override
     public void onBeanLoad() {
-//        positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
+        positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
+        artifacts = getBeanManager().getBestMatch(Artifacts.class, false);
         initializeServos();
     }
 

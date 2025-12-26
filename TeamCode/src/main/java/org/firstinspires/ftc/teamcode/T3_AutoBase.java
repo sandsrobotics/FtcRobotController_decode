@@ -29,8 +29,8 @@ import om.self.task.other.TimedTask;
 import static om.self.ezftc.utils.Constants.tileSide;
 
 //@Config
-//@Disabled
-@Autonomous(name="32859 Auto Base", group="32859")
+@Disabled
+@Autonomous(name="Base (Test only)", group="32859")
 public class T3_AutoBase extends LinearOpMode{
     public Function<Vector3, Vector3> transformFunc;
     public boolean shutdownps;

@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolv
 import om.self.ezftc.utils.Vector3;
 import om.self.task.other.TimedTask;
 
-@Autonomous(name="32859 Blue Launch", group="32859")
+@Autonomous(name="Blue", group="32859")
 public class T3_AutoBlueLaunch extends T3_AutoBase {
     Vector3 blueLaunchStart = new Vector3(-51, -51, -126); //Start Correct
     @Override

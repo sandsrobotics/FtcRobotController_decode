@@ -77,4 +77,8 @@ public class Artifacts extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             }
         } catch (OpenCvCameraException E) {}
     }
+
+    public ArtifactDetectionPipeline.Artifact[] getArtifactList() {
+        return pipeline.getArtifactList();
+    }
 }

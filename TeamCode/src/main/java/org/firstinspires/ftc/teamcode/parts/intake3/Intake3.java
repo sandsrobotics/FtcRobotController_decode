@@ -1,9 +1,11 @@
 package org.firstinspires.ftc.teamcode.parts.intake3;
 
+import org.firstinspires.ftc.teamcode.parts.artifact.ArtifactDetectionPipeline;
 import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.intake3.hardware.IntakeHardware3;
 import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
+import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
 import om.self.ezftc.core.Robot;
@@ -23,6 +25,9 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     public int intakeRPM;
     public IntakeSettings3.LaunchData launchData;
     public Artifacts artifacts;
+//    protected ArtifactDetectionPipeline artifactPipeline;
+    protected LimeLight limeLight;
+
 
     //***** Constructors *****
     public Intake3(Robot parent, String modeName) {
@@ -68,6 +73,37 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         return this.intakeRPM;
     }
 
+    public int[] computeLaunchOrder(ArtifactDetectionPipeline.ArtifactColor[] desiredOrder) {
+        ArtifactDetectionPipeline.Artifact[] current = artifacts.getArtifactList();
+
+        boolean[] used = new boolean[current.length];
+        int[] launchOrder = new int[desiredOrder.length];
+
+        for (int i = 0; i < desiredOrder.length; i++) {
+            ArtifactDetectionPipeline.ArtifactColor wanted = desiredOrder[i];
+
+            for (int j = 0; j < current.length; j++) {
+                if (!used[j] && current[j].color == wanted) {
+                    launchOrder[i] = j;
+                    used[j] = true;
+                    break;
+                }
+            }
+        }
+
+        // Print the launch order
+        StringBuilder sb = new StringBuilder("|");
+        for (int i = 0; i < launchOrder.length; i++) {
+            sb.append(Integer.toString(launchOrder[i]));
+            if (i < launchOrder.length - 1) sb.append(", ");
+        }
+        sb.append("|");
+        parent.opMode.telemetry.addData("Launch Order", sb.toString());
+
+        return launchOrder;
+    }
+
+
     public void eStop() {
         stopAllIntakeTasks();
         getHardware().pixel.stop();
@@ -106,7 +142,11 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     public void onBeanLoad() {
         positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
         artifacts = getBeanManager().getBestMatch(Artifacts.class, false);
+//        artifactPipeline = getBeanManager().getBestMatch(ArtifactDetectionPipeline.class, false);
+        limeLight = getBeanManager().getBestMatch(LimeLight.class, false);
+
         initializeServos();
+
     }
 
     @Override

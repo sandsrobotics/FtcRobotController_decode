@@ -68,9 +68,10 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
             REGION3_TOPLEFT_ANCHOR_POINT.y + tpREGION_HEIGHT);
 
     Artifact[] artifacts = new Artifact[]{
-            new Artifact(ArtifactColor.NONE, null, region1_pointA, region1_pointB, 0),
+            /* These are reversed to follow the camera. */
+            new Artifact(ArtifactColor.NONE, null, region3_pointA, region3_pointB, 0),
             new Artifact(ArtifactColor.NONE, null, region2_pointA, region2_pointB, 0),
-            new Artifact(ArtifactColor.NONE, null, region3_pointA, region3_pointB, 0)
+            new Artifact(ArtifactColor.NONE, null, region1_pointA, region1_pointB, 0)
     };
 
     /*
@@ -153,7 +154,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
                 rectangleColor = GREEN;
                 artifact.color = ArtifactColor.GREEN;
             }
-            else if (artifact.average > 120 && artifact.average < 155) {
+            else if (artifact.average > 100 && artifact.average < 155) {
                 rectangleColor = PURPLE;
                 artifact.color = ArtifactColor.PURPLE;
             } else {

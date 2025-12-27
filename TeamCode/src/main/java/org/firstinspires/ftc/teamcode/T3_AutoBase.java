@@ -9,9 +9,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.intake3.Intake3;
+import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
@@ -38,6 +40,9 @@ public class T3_AutoBase extends LinearOpMode{
     PositionTracker pt;
     Pinpoint odo;
     Intake3 intake;
+    Artifacts artifacts;
+    LimeLight limelight;
+
     //  DASHBOARD VARIABLES (static public)
     static public int shortDelay = 1000;
     static public int midDelay = 2000;
@@ -70,6 +75,8 @@ public class T3_AutoBase extends LinearOpMode{
         pt.positionSourceId = Pinpoint.class;
         positionSolver = new PositionSolver(drive); // removed so it won't rotate 90deg clockwise
         DecimalFormat df = new DecimalFormat("#0.0");
+        artifacts = new Artifacts(robot);
+        limelight = new LimeLight(robot);
         robot.init();
 
         while (!isStarted()) {

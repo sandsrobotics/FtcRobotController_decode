@@ -52,8 +52,8 @@ public class T3_Teleop extends LinearOpMode {
         robot = new Robot(this);
         new BulkRead(robot);
         drive = new Drive(robot);
-//        limelight = new LimeLight(robot);
         artifacts = new Artifacts(robot);
+        limelight = new LimeLight(robot);
         initTeleop();
 
         PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,

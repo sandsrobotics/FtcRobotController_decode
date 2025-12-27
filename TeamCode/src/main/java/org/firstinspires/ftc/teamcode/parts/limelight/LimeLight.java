@@ -6,6 +6,7 @@ import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
 import org.apache.commons.lang3.ObjectUtils;
 import org.firstinspires.ftc.robotcore.external.navigation.Pose3D;
+import org.firstinspires.ftc.teamcode.parts.artifact.ArtifactDetectionPipeline.ArtifactColor;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
 
 import java.util.List;
@@ -18,6 +19,11 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     public LimeLight(Robot parent) {
         super(parent, "limelight");
     }
+    private ArtifactColor[] classificationPattern = new ArtifactColor[]{
+            ArtifactColor.NONE,
+            ArtifactColor.NONE,
+            ArtifactColor.NONE
+    };
 
     @Override
     public void onRun() {
@@ -42,7 +48,30 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             // Access fiducial results
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
+                int id = fr.getFiducialId();
                 parent.opMode.telemetry.addData("April Tag", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
+
+                if (id == 21) {
+                    classificationPattern = new ArtifactColor[]{
+                            ArtifactColor.GREEN,
+                            ArtifactColor.PURPLE,
+                            ArtifactColor.PURPLE
+                    };
+                } else if (id == 22) {
+                    classificationPattern = new ArtifactColor[]{
+                            ArtifactColor.PURPLE,
+                            ArtifactColor.GREEN,
+                            ArtifactColor.PURPLE
+                    };
+                } else if (id == 23) {
+                    classificationPattern = new ArtifactColor[]{
+                            ArtifactColor.PURPLE,
+                            ArtifactColor.PURPLE,
+                            ArtifactColor.GREEN
+                    };
+                }
+
+
             }
             // Access color results
             List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
@@ -53,6 +82,12 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             parent.opMode.telemetry.addData("Limelight", "No data available");
         }
     }
+
+    public ArtifactColor[] getClassificationPattern() {
+        return classificationPattern;
+    }
+
+
     @Override
     public void onBeanLoad() {}
 

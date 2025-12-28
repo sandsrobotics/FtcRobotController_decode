@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
 import org.firstinspires.ftc.teamcode.parts.intake3.Intake3;
 import org.firstinspires.ftc.teamcode.parts.intake3.IntakeTeleop3;
+import org.firstinspires.ftc.teamcode.parts.led.Led;
 import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.XRelativeSolver;
@@ -54,6 +55,7 @@ public class T3_Teleop extends LinearOpMode {
         drive = new Drive(robot);
         artifacts = new Artifacts(robot);
         limelight = new LimeLight(robot);
+        Led led = new Led(robot);
         initTeleop();
 
         PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,
@@ -74,6 +76,7 @@ public class T3_Teleop extends LinearOpMode {
         /*  ******************************************************/
 
         while (!isStarted()) {
+            led.setMiddleGroup2(3); //set to purple
             telemetry.addData("position", odo.getPosition());
             telemetry.update();
         }

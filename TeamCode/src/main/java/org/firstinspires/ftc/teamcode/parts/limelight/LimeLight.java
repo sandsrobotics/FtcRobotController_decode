@@ -28,7 +28,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     @Override
     public void onRun() {
         LLStatus status = limelight.getStatus();
-        parent.opMode.telemetry.addData("Name", "%s", status.getName());
+//        parent.opMode.telemetry.addData("Name", "%s", status.getName());
 //        parent.opMode.telemetry.addData("LL", "Temp: %.1fC, CPU: %.1f%%, FPS: %d",
 //                status.getTemp(), status.getCpu(),(int)status.getFps());
 //        parent.opMode.telemetry.addData("Pipeline", "Index: %d, Type: %s",
@@ -44,13 +44,13 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             parent.opMode.telemetry.addData("txnc", result.getTxNC());
             parent.opMode.telemetry.addData("ty", result.getTy());
             parent.opMode.telemetry.addData("tync", result.getTyNC());
-            parent.opMode.telemetry.addData("Botpose", botpose.toString());
+//            parent.opMode.telemetry.addData("Botpose", botpose.toString());
             // Access fiducial results
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
                 int id = fr.getFiducialId();
-                parent.opMode.telemetry.addData("April Tag", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
-
+                parent.opMode.telemetry.addData("April Tag", "ID: %d", fr.getFiducialId());
+//                parent.opMode.telemetry.addData("April Tag", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
                 if (id == 21) {
                     classificationPattern = new ArtifactColor[]{
                             ArtifactColor.GREEN,
@@ -70,8 +70,6 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
                             ArtifactColor.GREEN
                     };
                 }
-
-
             }
             // Access color results
             List<LLResultTypes.ColorResult> colorResults = result.getColorResults();

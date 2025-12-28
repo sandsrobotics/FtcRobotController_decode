@@ -33,7 +33,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
     static final double leftTagLeftTopLeft = 50;
     static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,300);
     static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(550,400);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1080,300);
+    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(980,300); // was x=1080
     static final int tpREGION_WIDTH = 200;
     static final int tpREGION_HEIGHT = 300;
 
@@ -150,7 +150,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
         // Determine the color and status of artifacts in array
         for (Artifact  artifact : artifacts) {
             artifact.average = (int) Core.mean(artifact.submat).val[0];
-            if (artifact.average > 60 && artifact.average < 90) {
+            if (artifact.average > 60 && artifact.average < 80) {
                 rectangleColor = GREEN;
                 artifact.color = ArtifactColor.GREEN;
             }
@@ -202,5 +202,15 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
 
     public Artifact[] getArtifactList() {
         return artifacts;
+    }
+
+    public int getArtifactCount() {
+        int totalArtifacts = 0;
+        for (Artifact  artifact : artifacts) {
+            if (artifact.color != ArtifactColor.NONE) {
+                totalArtifacts++;
+            }
+        }
+        return totalArtifacts;
     }
 }

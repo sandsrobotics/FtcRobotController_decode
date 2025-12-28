@@ -81,4 +81,8 @@ public class Artifacts extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     public ArtifactDetectionPipeline.Artifact[] getArtifactList() {
         return pipeline.getArtifactList();
     }
+
+    public int getArtifactCount() {
+        return pipeline.getArtifactCount();
+    }
 }

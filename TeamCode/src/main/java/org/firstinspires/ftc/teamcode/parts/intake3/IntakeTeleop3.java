@@ -69,6 +69,11 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.eStop();
         }
 
+//        // reverse intake when 3 artifacts are in the launcher
+//        if(parent.artifacts.getArtifactCount() == 3 && parent.getTargetIntakeRPM() > 0) {
+//            parent.setIntakeRPM(-IntakeSettings3.intakeRPM);
+//        }
+
         // intake/launch stuff
         if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
             parent.setIntakeRPM(IntakeSettings3.intakeRPM);
@@ -106,6 +111,11 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
 
         if (buttonMgr.getState(1, Buttons.x, State.wasTapped)) {
             parent.launchData = IntakeSettings3.launchPosiMap.get("blueshoot1");
+            parent.tasks.moveAndLaunch.restart();
+        }
+
+        if (buttonMgr.getState(1, Buttons.left_stick_button, State.wasTapped)) {
+            parent.launchData = IntakeSettings3.launchPosiMap.get("bluefartriangle");
             parent.tasks.moveAndLaunch.restart();
         }
 

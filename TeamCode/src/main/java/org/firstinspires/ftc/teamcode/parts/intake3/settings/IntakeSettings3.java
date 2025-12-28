@@ -10,9 +10,9 @@ import om.self.ezftc.utils.Vector3;
 @Config
 public class IntakeSettings3 {
     public static double launchServo0Launch = 0.367;
-    public static double launchServo0Rest = 0.687;
+    public static double launchServo0Rest = 0.645; //0.687
     public static double launchServo1Launch = 0.5;
-    public static double launchServo1Rest = 0.267;
+    public static double launchServo1Rest = 0.35; //.267
     public static double launchServo2Launch = 0.5;
     public static double launchServo2Rest = 0.267;
     public static int launchServoDelay = 200;
@@ -31,7 +31,7 @@ public class IntakeSettings3 {
         launchPosiMap.put("blueshoot1", new LaunchData(3200,new Vector3(-12, -12, -139)));
         launchPosiMap.put("blueshoot2", new LaunchData(10,new Vector3(2,0,0)));
         launchPosiMap.put("blueshoot3", new LaunchData(10,new Vector3(3,0,0)));
-        launchPosiMap.put("blueshoot4", new LaunchData(10,new Vector3(4,0,0)));
+        launchPosiMap.put("bluefartriangle", new LaunchData(3400,new Vector3(49,16,157)));
         return new IntakeSettings3();
     }
 

@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.parts.intake3;
 
+import org.firstinspires.ftc.teamcode.Tools.DataTypes.Vector2D;
+import org.firstinspires.ftc.teamcode.Tools.Functions;
 import org.firstinspires.ftc.teamcode.parts.artifact.ArtifactDetectionPipeline;
 import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
@@ -10,6 +12,7 @@ import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.core.part.ControllablePart;
+import om.self.ezftc.utils.Vector3;
 import om.self.supplier.consumer.EdgeConsumer;
 import om.self.task.core.Group;
 
@@ -27,7 +30,8 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     public Artifacts artifacts;
 //    protected ArtifactDetectionPipeline artifactPipeline;
     protected LimeLight limeLight;
-
+    public Vector2D targetVector;
+    boolean launchArmed = true;
 
     //***** Constructors *****
     public Intake3(Robot parent, String modeName) {
@@ -103,6 +107,14 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         return launchOrder;
     }
 
+    public static double getSpinnerRPMfromDistance(double distance) {
+        return Functions.interpolate(distance, IntakeSettings3.nearTest, IntakeSettings3.farTest, IntakeSettings3.spinNear, IntakeSettings3.spinFar);
+    }
+
+    public Vector2D getTargetVector(Vector3 target) {
+        if (target==null || pt==null) return new Vector2D();
+        return new Vector2D(pt.getCurrentPosition(), target);
+    }
 
     public void eStop() {
         stopAllIntakeTasks();
@@ -154,10 +166,20 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         if (control.robotEStop) {
             eStop();
         }
+        // update internal target vector
+//        targetVector = getTargetVector(IntakeSettings3.targetRed);
+//
+//        // update launch RPM
+//        if (launchArmed) {
+//            int launchRPM = (int) getSpinnerRPMfromDistance(targetVector.distance);
+////            setLaunchRPM(launchRPM);
+//            parent.opMode.telemetry.addData("Launch RPM Interp", launchRPM);
+//        }
     }
 
     @Override
     public void onStart() {
+        getHardware().pixel.setPosition(LEDColor.OFF.getLedPwm());
     }
 
     @Override

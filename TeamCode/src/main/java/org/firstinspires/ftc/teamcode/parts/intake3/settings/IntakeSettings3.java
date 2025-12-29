@@ -25,6 +25,16 @@ public class IntakeSettings3 {
     public static double ticksPerRev = 28;
     public static double ticksPerRev1150 = 145.1;
 
+    public static final double spinNear                 = 3300;
+    public static final double spinMiddle               = 3900;
+    public static final double spinFar                  = 4500;
+
+    public static final double nearTest      = 48;  // 1 tile diagonally
+    public static final double midTest       = 98;
+    public static final double farTest       = 140;
+    public static final Vector3 targetRed              = new Vector3(-70.5, 70.5, 0.0);
+    public static final Vector3 targetBlue             = new Vector3(-70.5, -70.5, 0.0);
+
     public IntakeSettings3() {}
 
     public static IntakeSettings3 makeDefault(){

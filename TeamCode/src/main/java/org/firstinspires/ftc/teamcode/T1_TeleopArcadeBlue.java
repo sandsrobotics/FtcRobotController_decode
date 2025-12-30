@@ -139,14 +139,14 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
 
         }
 
-        odo.setPosition(fieldStartPos);
+//        odo.setPosition(fieldStartPos);
         robot.start();
 
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
             robot.run();
             telemetry.addData("Motor RPM", intake.getLaunchMotorRPM());
-            DecodeSettings.storeRobotPosition(pt.getCurrentPosition());
+//            DecodeSettings.storeRobotPosition(pt.getCurrentPosition());
 
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();

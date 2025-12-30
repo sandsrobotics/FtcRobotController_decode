@@ -95,9 +95,12 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
             parent.setLaunchRPM(0);
         }
-        if (buttonMgr.getState(1, Buttons.right_trigger, State.isHeld)) {
-            parent.computeLaunchOrder(parent.limeLight.getClassificationPattern());
+        if (buttonMgr.getState(1, Buttons.right_trigger, State.wasPressed)) {
+            parent.computeLaunchOrderAndLaunch(
+                    parent.limeLight.getClassificationPattern()
+            );
         }
+
 
         if (buttonMgr.getState(1, Buttons.b, State.wasTapped)) {
             parent.stopAllIntakeTasks();

@@ -29,7 +29,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     public void onRun() {
         LLStatus status = limelight.getStatus();
 //        parent.opMode.telemetry.addData("Name", "%s", status.getName());
-//        parent.opMode.telemetry.addData("LL", "Temp: %.1fC, CPU: %.1f%%, FPS: %d",
+//        parent.opMode.telemetry.addData("LL", "Temp:e %.1fC, CPU: %.1f%%, FPS: %d",
 //                status.getTemp(), status.getCpu(),(int)status.getFps());
 //        parent.opMode.telemetry.addData("Pipeline", "Index: %d, Type: %s",
 //                status.getPipelineIndex(), status.getPipelineType());
@@ -63,6 +63,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
                             ArtifactColor.GREEN,
                             ArtifactColor.PURPLE
                     };
+
                 } else if (id == 23) {
                     classificationPattern = new ArtifactColor[]{
                             ArtifactColor.PURPLE,

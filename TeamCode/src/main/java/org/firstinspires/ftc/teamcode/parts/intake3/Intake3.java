@@ -15,6 +15,9 @@ import om.self.ezftc.core.part.ControllablePart;
 import om.self.ezftc.utils.Vector3;
 import om.self.supplier.consumer.EdgeConsumer;
 import om.self.task.core.Group;
+import java.util.ArrayList;
+import java.util.List;
+
 
 //@Config
 public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHardware3, IntakeControl3> {
@@ -77,35 +80,112 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         return this.intakeRPM;
     }
 
-    public int[] computeLaunchOrder(ArtifactDetectionPipeline.ArtifactColor[] desiredOrder) {
+    public void computeLaunchOrderAndLaunch(ArtifactDetectionPipeline.ArtifactColor[] desiredOrder) {
         ArtifactDetectionPipeline.Artifact[] current = artifacts.getArtifactList();
 
+        // Snapshot: only consider detected artifacts (ignore NONE)
+        List<Integer> artifactIndices = new ArrayList<>();
+        for (int i = 0; i < current.length; i++) {
+            if (current[i].color != ArtifactDetectionPipeline.ArtifactColor.NONE) {
+                artifactIndices.add(i);
+            }
+        }
+
+        // If no valid artifacts, just return
+        if (artifactIndices.isEmpty()) return;
+
+        // Attempt color-matched launch using Limelight pattern (closest AprilTag)
+        boolean matched = attemptColorMatchedLaunch(artifactIndices, current, desiredOrder);
+
+        if (!matched) {
+            // Telemetry for fallback
+            parent.opMode.telemetry.addData("Launch", "Pattern not detected or mismatch, launching all artifacts as fallback");
+            parent.opMode.telemetry.update();
+
+            // Fallback: launch all remaining artifacts in any order
+            for (int idx : artifactIndices) {
+                fireServoForIndex(idx);
+                parent.opMode.sleep(IntakeSettings3.launchServoSweepTime);
+                parent.opMode.sleep(IntakeSettings3.launchServoDelay);
+                resetServoForIndex(idx);
+            }
+        } else {
+            // Telemetry for matched pattern
+            parent.opMode.telemetry.addData("Launch", "Pattern matched, launching in order");
+            parent.opMode.telemetry.update();
+        }
+    }
+
+    /**
+     * Tries to launch artifacts in color-matched order.
+     * Returns true if successful, false if not possible (fallback).
+     */
+    private boolean attemptColorMatchedLaunch(List<Integer> artifactIndices, ArtifactDetectionPipeline.Artifact[] current,
+                                              ArtifactDetectionPipeline.ArtifactColor[] desiredOrder) {
+        if (desiredOrder == null || artifactIndices.size() != desiredOrder.length) return false;
+
+        // Map desiredOrder to actual artifact indices
         boolean[] used = new boolean[current.length];
         int[] launchOrder = new int[desiredOrder.length];
 
         for (int i = 0; i < desiredOrder.length; i++) {
             ArtifactDetectionPipeline.ArtifactColor wanted = desiredOrder[i];
+            boolean found = false;
 
-            for (int j = 0; j < current.length; j++) {
+            for (int j : artifactIndices) {
                 if (!used[j] && current[j].color == wanted) {
                     launchOrder[i] = j;
                     used[j] = true;
+                    found = true;
                     break;
                 }
             }
+
+            if (!found) {
+                return false; // Could not match desired order → fallback
+            }
         }
 
-        // Print the launch order
-        StringBuilder sb = new StringBuilder("|");
-        for (int i = 0; i < launchOrder.length; i++) {
-            sb.append(Integer.toString(launchOrder[i]));
-            if (i < launchOrder.length - 1) sb.append(", ");
+        // Fire servos in order
+        for (int idx : launchOrder) {
+            fireServoForIndex(idx);
+            parent.opMode.sleep(IntakeSettings3.launchServoSweepTime);
+            parent.opMode.sleep(IntakeSettings3.launchServoDelay);
+            resetServoForIndex(idx);
         }
-        sb.append("|");
-        parent.opMode.telemetry.addData("Launch Order", sb.toString());
 
-        return launchOrder;
+        return true;
     }
+
+
+    private void fireServoForIndex(int index) {
+        switch (index) {
+            case 0:
+                getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
+                break;
+            case 1:
+                getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
+                break;
+            case 2:
+                getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
+                break;
+        }
+    }
+
+    private void resetServoForIndex(int index) {
+        switch (index) {
+            case 0:
+                getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
+                break;
+            case 1:
+                getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
+                break;
+            case 2:
+                getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
+                break;
+        }
+    }
+
 
     public static double getSpinnerRPMfromDistance(double distance) {
         return Functions.interpolate(distance, IntakeSettings3.nearTest, IntakeSettings3.farTest, IntakeSettings3.spinNear, IntakeSettings3.spinFar);

@@ -70,7 +70,7 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
         }
 
         //in telelop, disable positiontracker if Driver1 uses controls
-        if (FlipBotSettings.isTeleOp()) {
+        if (FlipbotSettings.isTeleOp()) {
             if (parent.parent.opMode.gamepad1.right_trigger+
                     parent.parent.opMode.gamepad1.left_trigger+
                     parent.parent.opMode.gamepad1.left_stick_x+
@@ -161,7 +161,7 @@ public class IntakeTeleop extends LoopedPartImpl<Intake, IntakeTeleopSettings, O
                 parent.tasks.startAutoHome();
             }
             if (buttonMgr.getState(2, Buttons.y, State.wasTapped)) {
-                FlipBotSettings.isYellowGood = !FlipBotSettings.isYellowGood;
+                FlipbotSettings.isYellowGood = !FlipbotSettings.isYellowGood;
             }
             // test out-take speed
             if (buttonMgr.getState(2, Buttons.left_bumper, State.wasTapped)) {

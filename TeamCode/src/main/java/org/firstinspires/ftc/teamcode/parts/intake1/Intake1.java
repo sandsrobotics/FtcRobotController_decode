@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.parts.intake1.hardware.Intake1Hardware;
 import org.firstinspires.ftc.teamcode.parts.intake1.settings.Intake1Settings;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.drive.DriveControl;
+import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
+import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
 
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.core.part.ControllablePart;
@@ -20,8 +22,8 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 
     public Intake1Tasks tasks;
     protected Drive drive;
-//    protected Pinpoint pinpoint;
-//    protected PositionSolver positionSolver;
+    protected Pinpoint pinpoint;
+    protected PositionSolver positionSolver;
 
     public int slideTargetPosition;
     public int liftTargetPosition;
@@ -95,17 +97,18 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         }
     }
 
-    public void initilaizeMotors() {
+    public void initializeMotors() {
         getHardware().intakeMotor.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        getHardware().launchMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
+
         getHardware().launchMotorLeft.setDirection(DcMotorEx.Direction.FORWARD);
-        getHardware().launchMotorRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
         getHardware().launchMotorLeft.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
-        getHardware().launchMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
         getHardware().launchMotorLeft.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
-        getHardware().launchMotorRight.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER,launchSpinPID);
         getHardware().launchMotorLeft.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER,launchSpinPID);
 
+        getHardware().launchMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
+        getHardware().launchMotorRight.setMode(DcMotorEx.RunMode.RUN_USING_ENCODER);
+        getHardware().launchMotorRight.setZeroPowerBehavior(DcMotorEx.ZeroPowerBehavior.FLOAT);
+        getHardware().launchMotorRight.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER,launchSpinPID);
     }
 
     public int getLaunchMotorRPM() {
@@ -168,7 +171,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         // stop all tasks in the intake group
         stopAllIntakeTasks();
         //stop the position solver?
-//        positionSolver.stopSolver();
+        positionSolver.stopSolver();
     }
 
     public void stopAllIntakeTasks() {
@@ -188,8 +191,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 
     @Override
     public void onInit() {
-        initilaizeMotors();
-        initializeServos();
+        initializeMotors();
         if (DecodeSettings.isAuto()) {
             initializeServos();
             if (DecodeSettings.firstRun) {
@@ -199,8 +201,8 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
                 initializeServos();
             }
         }
-//        pinpoint = getBeanManager().getBestMatch(Pinpoint.class, false);
-//        positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
+        pinpoint = getBeanManager().getBestMatch(Pinpoint.class, false);
+        positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
         tasks = new Intake1Tasks(this, parent);
         tasks.constructAllIntakeTasks();
     }
@@ -219,7 +221,15 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     public void onStart() {
         drive = getBeanManager().getBestMatch(Drive.class, false);
 //        drive.addController(Intake.ControllerNames.distanceController, this::strafeRobot);
-        if (DecodeSettings.isTeleOp()) initializeServos();
+        if (DecodeSettings.isTeleOp()) {
+            initializeServos();
+            if (DecodeSettings.firstRun) {
+                // the first time the servo controller comes online the positions set may be lost, so wait and try again
+                DecodeSettings.firstRun = false;
+                parent.opMode.sleep(1500);
+                initializeServos();
+            }
+        }
     }
 
     @Override

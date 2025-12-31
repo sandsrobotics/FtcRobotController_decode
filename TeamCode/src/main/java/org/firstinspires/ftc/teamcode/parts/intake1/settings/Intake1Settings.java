@@ -5,9 +5,9 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class Intake1Settings {
 
-    public double intakeIn =                                    -1;
-    public double intakeStop =                                   0;
-    public double intakeOut =                                    1;
+    public static double intakeIn =                                    -1;
+    public static double intakeStop =                                   0;
+    public static double intakeOut =                                    1;
     public double sorterStop =                                 0.5;
     public double sorterStart =                                  0;
     public double servoGreenDock =                           0.463;
@@ -18,10 +18,11 @@ public class Intake1Settings {
     public double servoBlueLaunch =                          0.671;
     public double ticksPerRevolution =                          28;
     public double secondsPerMinute =                            60;
-    public double launchMotorRPM =                            3200;
-    public double launchMotorVelocityStart =                 launchMotorRPM/secondsPerMinute*ticksPerRevolution;
+    public static double farLaunchMotorRPM =                         3200;
+    public static double goalLaunchMotorRPM =                        2500;
+    public double farLaunchMotorVelocityStart =                  farLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
+    public double goalLaunchMotorVelocityStart =                 goalLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
     public double launchMotorVelocityStop =                      0;
-
 
 
     public Intake1Settings() {

@@ -17,7 +17,7 @@ public class MotorSettings {
     public double power;
     public int targetPos;
 
-    public MotorSettings(Valuable number, DcMotorSimple.Direction forward, DcMotor.ZeroPowerBehavior brake, DcMotor.RunMode runUsingEncoder){
+    public MotorSettings(Valuable number){
         construct(number, DcMotorSimple.Direction.FORWARD, DcMotor.ZeroPowerBehavior.FLOAT, DcMotor.RunMode.RUN_WITHOUT_ENCODER, 0,0);
     }
 

@@ -13,16 +13,12 @@ public class Intake1Tasks {
     public final TimedTask blueServoTransfer;
     public final TimedTask greenServoTransfer;
     public final TimedTask allServoTransfer;
-    public final TimedTask startLaunch;
+    public final TimedTask startFarLaunch;
+    public final TimedTask startGoalLaunch;
     public final TimedTask stopLaunch;
-
-
-
-
 
     private final Intake1 intake;
     private final Robot robot;
-
 
 
     public Intake1Tasks(Intake1 intake, Robot robot) {
@@ -36,12 +32,9 @@ public class Intake1Tasks {
         blueServoTransfer = new TimedTask(TaskNames.blueServoTransfer, intakeTasksGroup);
         greenServoTransfer = new TimedTask(TaskNames.greenServoTransfer, intakeTasksGroup);
         allServoTransfer = new TimedTask(TaskNames.allServoTransfer, intakeTasksGroup);
-        startLaunch = new TimedTask(TaskNames.startLaunch, intakeTasksGroup);
+        startFarLaunch = new TimedTask(TaskNames.startFarLaunch, intakeTasksGroup);
+        startGoalLaunch = new TimedTask(TaskNames.startGoalLaunch, intakeTasksGroup);
         stopLaunch = new TimedTask(TaskNames.stopLaunch, intakeTasksGroup);
-
-
-
-
     }
 
     public void constructAllIntakeTasks() {
@@ -90,13 +83,18 @@ public class Intake1Tasks {
         allServoTransfer.addStep(() ->
             intake.getHardware().greenServo.isDone() && intake.getHardware().blueServo.isDone() && intake.getHardware().pinkServo.isDone()
         );
-        /*            Launch Tasks         */
+        /*    Launch Tasks         */
         //    start Launch
-        startLaunch.autoStart = false;
-        startLaunch.addStep(() -> {
-//            intake.getHardware().launchMotorRight.setDirection(DcMotorEx.Direction.REVERSE);
-            intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().launchMotorVelocityStart);
-            intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().launchMotorVelocityStart);
+        startFarLaunch.autoStart = false;
+        startFarLaunch.addStep(() -> {
+            intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().farLaunchMotorVelocityStart);
+            intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().farLaunchMotorVelocityStart);
+        });
+
+        startGoalLaunch.autoStart = false;
+        startGoalLaunch.addStep(() -> {
+            intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().goalLaunchMotorVelocityStart);
+            intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().goalLaunchMotorVelocityStart);
         });
         //     stop launch
         stopLaunch.autoStart = false;
@@ -105,30 +103,19 @@ public class Intake1Tasks {
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().launchMotorVelocityStop);
         });
 
-
-
-
-
-
-
-
     }
     /***********************************************************************************/
     public static final class TaskNames {
         public final static String intakeTask = "motor intake";
-       public final static String artifactIntakeStop = "artifact intake stop";
-       public final static String outtakeTask = "outtake Task";
+        public final static String artifactIntakeStop = "artifact intake stop";
+        public final static String outtakeTask = "outtake Task";
         public final static String pinkServoTransfer = "pink servo transfer";
         public final static String blueServoTransfer = "blue servo transfer";
         public final static String greenServoTransfer = "green servo transfer";
         public final static String allServoTransfer = "all servos transfer";
-        public final static String startLaunch = "start launch";
+        public final static String startFarLaunch = "start FarLaunch";
         public final static String stopLaunch = "stop Launch";
-
-
-
-
-
+        public final static String startGoalLaunch = "start GoalLaunch";
     }
 
     public static final class Events {

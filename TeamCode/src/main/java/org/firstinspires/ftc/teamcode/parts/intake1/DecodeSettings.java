@@ -23,6 +23,10 @@ public class DecodeSettings {
    public static double demoDriverDefaultMultiplier = 0.5;
    public static double demoDriverMultiplier = 0;
 
+   public static int pinpointSettingsXoffset = +105;
+   public static int pinpointSettingsYoffset = +150;
+   public static float pinpointSettingsResolution = 13.26291192f;
+
    public static void setTeleOp () { modeTeleOp = true; }
    public static void setAuto () { modeTeleOp = false; }
    public static boolean isTeleOp() { return modeTeleOp; }

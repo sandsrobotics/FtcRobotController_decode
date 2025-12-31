@@ -72,10 +72,10 @@ public class IntakeTeleopDemo extends LoopedPartImpl<Intake, IntakeTeleopSetting
         // Driver 1 right_bumper is a dead man switch for Driver 2
         if (buttonMgr.getState(1, Buttons.right_bumper, State.isPressed)) {
             enableDemoDriver = true;
-            FlipBotSettings.demoDriverMultiplier = FlipBotSettings.demoDriverDefaultMultiplier;
+            FlipbotSettings.demoDriverMultiplier = FlipbotSettings.demoDriverDefaultMultiplier;
         } else {
             enableDemoDriver = false;
-            FlipBotSettings.demoDriverMultiplier = 0;
+            FlipbotSettings.demoDriverMultiplier = 0;
         }
 
         // Slide control

@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
 import org.firstinspires.ftc.teamcode.parts.drive.hardware.DriveHardware;
 import org.firstinspires.ftc.teamcode.parts.drive.settings.DriveSettings;
 import org.firstinspires.ftc.teamcode.parts.drive.settings.DriveTeleopSettings;
-import org.firstinspires.ftc.teamcode.depricated.intake.FlipBotSettings;
+import org.firstinspires.ftc.teamcode.depricated.intake.FlipbotSettings;
 import org.firstinspires.ftc.teamcode.depricated.intake.Intake;
 import org.firstinspires.ftc.teamcode.depricated.intake.IntakeTeleop;
 import org.firstinspires.ftc.teamcode.depricated.intake.IntakeTeleopDemo;
@@ -51,7 +51,7 @@ public class FlipTeleopDive extends LinearOpMode {
     @Override
     public void runOpMode() {
         extraSettings();   // LK 20250602 Moved to top
-        FlipBotSettings.setTeleOp();
+        FlipbotSettings.setTeleOp();
         DecimalFormat df = new DecimalFormat("#0.0");
         long start;
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -63,15 +63,15 @@ public class FlipTeleopDive extends LinearOpMode {
         initTeleop();
 
         final Vector3 p_atObsZone = new Vector3(33.5, -56.5, 90); // p_12: Position near ObsZone for Pickup-Specimen.
-        Vector3 tempPosition = FlipBotSettings.getRobotPosition();
+        Vector3 tempPosition = FlipbotSettings.getRobotPosition();
 
         if (tempPosition.X == 0.0 && tempPosition.Y == 0.0 && tempPosition.Z == 0.0)  {
-            FlipBotSettings.storeRobotPosition(p_atObsZone);
+            FlipbotSettings.storeRobotPosition(p_atObsZone);
         }
 
         PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,
 //               100, new Vector3(2,2,2), fieldStartPos);
-                100, new Vector3(2,2,2), FlipBotSettings.getRobotPosition());
+                100, new Vector3(2,2,2), FlipbotSettings.getRobotPosition());
         pt = new PositionTracker(robot,pts, PositionTrackerHardware.makeDefault(robot));
      // XRelativeSolver solver = new XRelativeSolver(drive);
 
@@ -86,7 +86,7 @@ public class FlipTeleopDive extends LinearOpMode {
         positionSolver.setSettings(PositionSolverSettings.specimenAssistSettings);
 
         intake = new Intake(robot);
-        if (!FlipBotSettings.isDemoMode) new IntakeTeleop(intake);
+        if (!FlipbotSettings.isDemoMode) new IntakeTeleop(intake);
         else new IntakeTeleopDemo(intake);
 
         robot.init();
@@ -99,7 +99,7 @@ public class FlipTeleopDive extends LinearOpMode {
 //            //todo: What to do if it doesn't initialize?
 //        }
         try {
-            odo.setPosition(FlipBotSettings.getRobotPosition());
+            odo.setPosition(FlipbotSettings.getRobotPosition());
         } catch (Exception e) {
             telemetry.addLine("Exception while odo.setPosition; Ignoring");
             telemetry.update();
@@ -130,7 +130,7 @@ public class FlipTeleopDive extends LinearOpMode {
             }
             telemetry.addData("Drive motors", testModeReverse ? "Test Reverse (AndyMark Chassis)" : "Normal - Competition");
             Vector3 position = odo.getPosition();
-            FlipBotSettings.storeRobotPosition(position);
+            FlipbotSettings.storeRobotPosition(position);
             telemetry.addData("Position", position);
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();
@@ -155,7 +155,7 @@ public class FlipTeleopDive extends LinearOpMode {
 //                hangTime = 0;
 //                intake.tasks.prepareToHangRobotTask.restart();
 //            }
-            FlipBotSettings.storeRobotPosition(pt.getCurrentPosition());
+            FlipbotSettings.storeRobotPosition(pt.getCurrentPosition());
             telemetry.addData("position", pt.getCurrentPosition());
             telemetry.addData("tile position", fieldToTile(pt.getCurrentPosition()));
             telemetry.addData("relative position", pt.getRelativePosition());
@@ -168,7 +168,7 @@ public class FlipTeleopDive extends LinearOpMode {
             telemetry.addData("Last SampleDist", intake.lastSampleDistance);
             telemetry.addData("Last Hue", intake.lastHue);
             telemetry.addData("Last Sample", intake.lastSample);
-            telemetry.addData("Is Yellow good?", FlipBotSettings.isYellowGood);
+            telemetry.addData("Is Yellow good?", FlipbotSettings.isYellowGood);
             telemetry.addData("PIDF RUE",intake.pidf_rue);
             telemetry.addData("PIDF RTP",intake.pidf_rtp);
             telemetry.addData("SpinnerOut",intake.testSpinnerOut);
@@ -181,10 +181,10 @@ public class FlipTeleopDive extends LinearOpMode {
     }
 
     public void extraSettings() {
-        FlipBotSettings .isBlueGood = false;
-        FlipBotSettings.isYellowGood = true;
-        FlipBotSettings.isRedGood = true;
-        FlipBotSettings.isDemoMode = false;
+        FlipbotSettings.isBlueGood = false;
+        FlipbotSettings.isYellowGood = true;
+        FlipbotSettings.isRedGood = true;
+        FlipbotSettings.isDemoMode = false;
     }
 
     public void moveRobot(Vector3 target){

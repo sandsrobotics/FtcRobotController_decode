@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.depricated.intake;
 
 import om.self.ezftc.utils.Vector3;
 
-public class FlipBotSettings {
+public class FlipbotSettings {
 
    /* The purpose of this class is to store values accessible to all classes in FlipBot,
       and which can remain from run to run

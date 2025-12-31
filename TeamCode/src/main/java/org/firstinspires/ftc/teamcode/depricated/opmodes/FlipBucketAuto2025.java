@@ -14,9 +14,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
-import org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
-import org.firstinspires.ftc.teamcode.depricated.intake.FlipBotSettings;
+import org.firstinspires.ftc.teamcode.depricated.intake.FlipbotSettings;
 import org.firstinspires.ftc.teamcode.depricated.intake.Intake;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
@@ -75,7 +74,7 @@ public class FlipBucketAuto2025 extends LinearOpMode{
 
     @Override
     public void runOpMode() {
-        FlipBotSettings.setAuto();
+        FlipbotSettings.setAuto();
         long start;
         initAuto();
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -106,13 +105,13 @@ public class FlipBucketAuto2025 extends LinearOpMode{
             robot.buttonMgr.runLoop();
 
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
-                FlipBotSettings.isBlueGood = true;
-                FlipBotSettings.isRedGood = false;
+                FlipbotSettings.isBlueGood = true;
+                FlipbotSettings.isRedGood = false;
             }
 
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.b, ButtonMgr.State.wasTapped)) {
-                FlipBotSettings.isBlueGood = false;
-                FlipBotSettings.isRedGood = true;
+                FlipbotSettings.isBlueGood = false;
+                FlipbotSettings.isRedGood = true;
             }
 
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_left, ButtonMgr.State.wasTapped)) {
@@ -141,8 +140,8 @@ public class FlipBucketAuto2025 extends LinearOpMode{
 //            telemetry.addData("PARK POSITION:", parkPosition == 0 ? "Normal mid wall" : parkPosition == 1 ? "Park MID" : parkPosition == 2 ? "Park CORNER" : "Park BOARD");
 //            telemetry.addData("START DELAY:", startDelay / 1000);
             telemetry.addData("SamplePos", samplePosFish);
-            telemetry.addData("Red Side", DecodeSettings.isRedGood);
-            telemetry.addData("Blue Side", DecodeSettings.isBlueGood);
+            telemetry.addData("Red Side", FlipbotSettings.isRedGood);
+            telemetry.addData("Blue Side", FlipbotSettings.isBlueGood);
 
             StringBuilder tempString = new StringBuilder();
             for (int i=0; i< modelOfSub; i++) {
@@ -175,7 +174,7 @@ public class FlipBucketAuto2025 extends LinearOpMode{
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
             robot.run();
-            DecodeSettings.storeRobotPosition(pt.getCurrentPosition());
+            FlipbotSettings.storeRobotPosition(pt.getCurrentPosition());
             dashboardTelemetry.addData("position", pt.getCurrentPosition());
             telemetry.addData("position", pt.getCurrentPosition());
             telemetry.addData("tile position", fieldToTile(pt.getCurrentPosition()));

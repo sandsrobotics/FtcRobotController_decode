@@ -102,11 +102,19 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
             }
             /*      Launch Tasks          */
             if (buttonMgr.getState(2, Buttons.left_bumper, State.isPressed)) {
-                    parent.tasks.startLaunch.restart();
+                    parent.tasks.startFarLaunch.restart();
             }
-            if (buttonMgr.getState(2, Buttons.right_bumper, State.isPressed)) {
+            if (buttonMgr.getState(2, Buttons.left_trigger, State.isPressed)) {
                 parent.tasks.stopLaunch.restart();
             }
+            /*      Launch Tasks          */
+            if (buttonMgr.getState(2, Buttons.right_bumper, State.isPressed)) {
+                parent.tasks.startGoalLaunch.restart();
+            }
+            if (buttonMgr.getState(2, Buttons.right_trigger, State.isPressed)) {
+                parent.tasks.stopLaunch.restart();
+            }
+
         }
 
 

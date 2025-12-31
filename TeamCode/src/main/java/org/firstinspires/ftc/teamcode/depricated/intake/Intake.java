@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.depricated.intake;
 
 import android.graphics.Color;
 
+import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.MotorControlAlgorithm;
@@ -10,7 +11,6 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
-import org.firstinspires.ftc.teamcode.depricated.intake.FlipBotSettings;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.drive.DriveControl;
 import org.firstinspires.ftc.teamcode.depricated.intake.hardware.IntakeHardware;
@@ -111,7 +111,7 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
         getHardware().chute.setPosition(getSettings().chuteParked);
         getHardware().pinch.setPosition(getSettings().pinchFullOpen);
         getHardware().park.setPosition(getSettings().parkDown);
-        if (FlipBotSettings.isAuto()) {
+        if (FlipbotSettings.isAuto()) {
             getHardware().hang.setPosition(getSettings().hangServoDown); //
         }
         else {
@@ -321,10 +321,10 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
         return lastSample; // Nothing detected
     }
     public boolean isSampleGood(int sample) {
-        if (FlipBotSettings.isEverythingGood) return true;
-        if (sample == 1 && FlipBotSettings.isRedGood) return true;
-        if (sample == 2 && FlipBotSettings.isYellowGood) return true;
-        if (sample == 3 && FlipBotSettings.isBlueGood) return true;
+        if (FlipbotSettings.isEverythingGood) return true;
+        if (sample == 1 && FlipbotSettings.isRedGood) return true;
+        if (sample == 2 && FlipbotSettings.isYellowGood) return true;
+        if (sample == 3 && FlipbotSettings.isBlueGood) return true;
         return false;
     }
     public boolean isSampleGood() {
@@ -332,7 +332,7 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
     }
 
     public boolean debugDelay() {
-        if (!FlipBotSettings.autonomousDebugMode) return true;
+        if (!FlipbotSettings.autonomousDebugMode) return true;
         parent.opMode.telemetry.addLine("***** Debug delay... Tap X or hold Y to continue *****");
         return (parent.buttonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped) ||
                 parent.buttonMgr.getState(1, ButtonMgr.Buttons.y, ButtonMgr.State.isPressed));
@@ -356,7 +356,7 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
         int liftPMax = getSettings().positionLiftHangRelease;
         double liftMaxReduction = 0.67;
         double liftGov = 1 - liftMaxReduction*(clamp(currentLiftPos, liftPMin, liftPMax)-liftPMin)/(liftPMax-liftPMin);
-        FlipBotSettings.setControlGovernor(Math.min(slideGov,liftGov));
+        FlipbotSettings.setControlGovernor(Math.min(slideGov,liftGov));
     }
     private static int clamp(int val, int min, int max) {
         return Math.max(min, Math.min(val, max));
@@ -365,11 +365,11 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
     @Override
     public void onInit() {
         setMotorsToRunConfig();
-        if (FlipBotSettings.isAuto()) {
+        if (FlipbotSettings.isAuto()) {
             initializeServos();
-            if (FlipBotSettings.firstRun) {
+            if (FlipbotSettings.firstRun) {
                 // the first time the servo controller comes online the positions set may be lost, so wait and try again
-                FlipBotSettings.firstRun = false;
+                FlipbotSettings.firstRun = false;
                 parent.opMode.sleep(1500);
                 initializeServos();
             }
@@ -446,8 +446,8 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
         drive = getBeanManager().getBestMatch(Drive.class, false);
 //        drive.addController(Intake.ControllerNames.distanceController, this::strafeRobot);
         drive.addController(ControllerNames.distanceController, this::doRanging);
-        if (FlipBotSettings.isTeleOp()) initializeServos();
-        if (FlipBotSettings.isTeleOp())  tasks.startAutoHome();
+        if (FlipbotSettings.isTeleOp()) initializeServos();
+        if (FlipbotSettings.isTeleOp())  tasks.startAutoHome();
     }
 
     @Override

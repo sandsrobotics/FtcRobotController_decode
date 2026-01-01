@@ -19,7 +19,7 @@ public class Artifacts extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     public ArtifactDetectionPipeline pipeline;
     public ArtifactDetectionPipeline.Artifact[] artifactList;
     public Artifacts(Robot parent) {
-        super(parent, "team prop");
+        super(parent, "artifacts");
     }
 
     @Override
@@ -59,7 +59,11 @@ public class Artifacts extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     @Override
     public void onRun() {
         artifactList = pipeline.getArtifactList();
-        parent.opMode.telemetry.addData("Artifacts: ", Arrays.toString(artifactList));
+        StringBuilder articolors = new StringBuilder("|");
+        for( ArtifactDetectionPipeline.Artifact artifact : artifactList) {
+            articolors.append(artifact.color.name()).append("|");
+        }
+        parent.opMode.telemetry.addData("Artifacts: ", articolors.toString());
     }
 
     @Override

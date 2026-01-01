@@ -178,7 +178,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
                     4,                               // font scale
                     WHITE,             // Scalar object for color
                     4); // thickness
-            }
+        }
         /*
          * Render the 'input' buffer to the viewport. But note this is not
          * simply rendering the raw camera feed, because we called functions

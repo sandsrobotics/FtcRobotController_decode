@@ -34,6 +34,7 @@ public class IntakeSettings3 {
     public static final double farTest       = 140;
     public static final Vector3 targetRed              = new Vector3(-70.5, 70.5, 0.0);
     public static final Vector3 targetBlue             = new Vector3(-70.5, -70.5, 0.0);
+    public static boolean launchArmed = false;
 
     public IntakeSettings3() {}
 

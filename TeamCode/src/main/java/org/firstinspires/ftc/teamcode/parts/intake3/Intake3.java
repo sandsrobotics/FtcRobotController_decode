@@ -18,7 +18,6 @@ import om.self.task.core.Group;
 import java.util.ArrayList;
 import java.util.List;
 
-
 //@Config
 public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHardware3, IntakeControl3> {
     private final EdgeConsumer homingBucketZero = new EdgeConsumer();
@@ -233,12 +232,11 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     @Override
     public void onBeanLoad() {
         positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
+        pt = getBeanManager().getBestMatch(PositionTracker.class, false);
         artifacts = getBeanManager().getBestMatch(Artifacts.class, false);
 //        artifactPipeline = getBeanManager().getBestMatch(ArtifactDetectionPipeline.class, false);
         limeLight = getBeanManager().getBestMatch(LimeLight.class, false);
-
-        initializeServos();
-
+//        initializeServos();
     }
 
     @Override
@@ -247,14 +245,14 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
             eStop();
         }
         // update internal target vector
-//        targetVector = getTargetVector(IntakeSettings3.targetRed);
-//
-//        // update launch RPM
-//        if (launchArmed) {
-//            int launchRPM = (int) getSpinnerRPMfromDistance(targetVector.distance);
-////            setLaunchRPM(launchRPM);
-//            parent.opMode.telemetry.addData("Launch RPM Interp", launchRPM);
-//        }
+        targetVector = getTargetVector(IntakeSettings3.targetRed);
+
+        // update launch RPM
+        if (IntakeSettings3.launchArmed) {
+            int launchRPM = (int) getSpinnerRPMfromDistance(targetVector.distance);
+            setLaunchRPM(launchRPM);
+            parent.opMode.telemetry.addData("Launch RPM Interp", launchRPM);
+        }
     }
 
     @Override

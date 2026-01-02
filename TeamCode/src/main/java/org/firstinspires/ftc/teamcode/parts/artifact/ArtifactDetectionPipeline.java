@@ -37,6 +37,18 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
     static final int tpREGION_WIDTH = 200;
     static final int tpREGION_HEIGHT = 300;
 
+    // Define color ranges in HSV
+
+    // GREEN
+    Scalar lowerGreen = new Scalar(40, 70, 50);
+    Scalar upperGreen = new Scalar(90, 255, 255);
+
+    // PURPLE - note this is really blue
+    Scalar lowerPurple = new Scalar(130, 50, 10);
+    Scalar upperPurple = new Scalar(160, 255, 200);
+
+    int colorThreshold = 45000;
+
     Scalar rectangleColor = BLOCK;
 
     /* Points which actually define the sample region rectangles, derived from above values
@@ -79,6 +91,8 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
      */
     Mat inputConv = new Mat();
     Mat extracted = new Mat();
+    Mat maskGreen = new Mat();
+    Mat maskPurple = new Mat();
 
 //    Volatile since accessed by OpMode thread w/o synchronization
 //    public volatile TeamPropPosition position = TeamPropPosition.NONE;
@@ -139,6 +153,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
         //inputToCb(input);
 //        inputToSat(input);
         inputToHsv(input);
+
         /*
          * Compute the average pixel value of each submat region. We're
          * taking the average of a single channel buffer, so the value
@@ -148,18 +163,27 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
          */
 
         // Determine the color and status of artifacts in array
+
         for (Artifact  artifact : artifacts) {
-            artifact.average = (int) Core.mean(artifact.submat).val[0];
-            if (artifact.average > 60 && artifact.average < 80) {
-                rectangleColor = GREEN;
-                artifact.color = ArtifactColor.GREEN;
-            }
-            else if (artifact.average > 100 && artifact.average < 155) {
-                rectangleColor = PURPLE;
-                artifact.color = ArtifactColor.PURPLE;
-            } else {
-                rectangleColor = WHITE;
-                artifact.color = ArtifactColor.NONE;
+            Core.inRange(artifact.submat, lowerGreen, upperGreen, maskGreen);
+            Core.inRange(artifact.submat, lowerPurple, upperPurple, maskPurple);
+            int greenPixels = Core.countNonZero(maskGreen);
+            int purplePixels = Core.countNonZero(maskPurple);
+
+            rectangleColor = WHITE;
+            artifact.color = ArtifactColor.NONE;
+            artifact.average = 0;
+
+            if (greenPixels > colorThreshold || purplePixels > colorThreshold) {
+                if (greenPixels > purplePixels) {
+                    rectangleColor = GREEN;
+                    artifact.color = ArtifactColor.GREEN;
+                    artifact.average = greenPixels;
+                } else {
+                    rectangleColor = PURPLE;
+                    artifact.color = ArtifactColor.PURPLE;
+                    artifact.average = purplePixels;
+                }
             }
 
             Imgproc.rectangle(
@@ -172,7 +196,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
                     String.valueOf(artifact.average), // string
                     artifact.pta, // position point
                     Imgproc.FONT_HERSHEY_SIMPLEX,      // font face
-                    4,                               // font scale
+                    2,                               // font scale
                     WHITE,             // Scalar object for color
                     4); // thickness
             }

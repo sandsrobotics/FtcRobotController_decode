@@ -1,10 +1,13 @@
 package org.firstinspires.ftc.teamcode.parts.intake3;
 
+import com.qualcomm.robotcore.util.Range;
+
 import org.firstinspires.ftc.teamcode.Tools.DataTypes.Vector2D;
 import org.firstinspires.ftc.teamcode.Tools.Functions;
 import org.firstinspires.ftc.teamcode.parts.artifact.ArtifactDetectionPipeline;
 import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
+import org.firstinspires.ftc.teamcode.parts.drive.DriveControl;
 import org.firstinspires.ftc.teamcode.parts.intake3.hardware.IntakeHardware3;
 import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
 import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
@@ -45,11 +48,28 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         );
     }
 
-//    public void strafeRobot(DriveControl control) {
-//        if (abs(strafePower) > .01) {
-//            control.power = control.power.addX(strafePower / 3);
-//        }
-//    }
+    /**
+     * Main alignment method
+     */
+    private void alignToTarget(DriveControl control) {
+        // Check if target is visible
+        double turnPower = 0;
+        if(IntakeSettings3.alignTarget) {
+            if (limeLight.tv) {
+                boolean aligned = isAligned();
+
+                if (!aligned) {
+                    turnPower = calculateTurnPower(limeLight.tx);
+                    control.power = control.power.addZ(turnPower / 3);
+                }
+            }
+        }
+        displayTelemetry(turnPower);
+    }
+
+    private boolean isAligned() {
+        return Math.abs(limeLight.tx) < IntakeSettings3.HEADING_TOLERANCE;
+    }
 
     public void setLaunchRPM(int RPM) {
         this.launchRPM = RPM;
@@ -185,7 +205,6 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         }
     }
 
-
     public static double getSpinnerRPMfromDistance(double distance) {
         return Functions.interpolate(distance, IntakeSettings3.nearTest, IntakeSettings3.farTest, IntakeSettings3.spinNear, IntakeSettings3.spinFar);
     }
@@ -193,6 +212,25 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     public Vector2D getTargetVector(Vector3 target) {
         if (target==null || pt==null) return new Vector2D();
         return new Vector2D(pt.getCurrentPosition(), target);
+    }
+
+    private double calculateTurnPower(double tx) {
+        double power = tx * IntakeSettings3.P_TURN_GAIN;
+
+        // Apply min/max constraints
+        if (Math.abs(power) < IntakeSettings3.MIN_TURN_SPEED && Math.abs(limeLight.tx) > IntakeSettings3.HEADING_TOLERANCE) {
+            power = IntakeSettings3.MIN_TURN_SPEED * Math.signum(power);
+        }
+
+        return Range.clip(power, -IntakeSettings3.MAX_TURN_SPEED, IntakeSettings3.MAX_TURN_SPEED);
+    }
+
+    private void displayTelemetry(double turnPower) {
+        parent.opMode.telemetry.addData("Target Valid", limeLight.tv ? "YES" : "NO");
+        parent.opMode.telemetry.addData("Horizontal Offset (tx)", "%.2f degrees", limeLight.tx);
+//        parent.opMode.telemetry.addData("Target Area (ta)", "%.2f%%", limeLight.ta);
+        parent.opMode.telemetry.addData("Turn Power", "%.2f", turnPower);
+        parent.opMode.telemetry.addData("Aligned", isAligned() ? "YES" : "NO");
     }
 
     public void eStop() {
@@ -236,7 +274,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         artifacts = getBeanManager().getBestMatch(Artifacts.class, false);
 //        artifactPipeline = getBeanManager().getBestMatch(ArtifactDetectionPipeline.class, false);
         limeLight = getBeanManager().getBestMatch(LimeLight.class, false);
-//        initializeServos();
+        drive = getBeanManager().getBestMatch(Drive.class, false);
     }
 
     @Override
@@ -246,7 +284,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         }
         // update internal target vector
         targetVector = getTargetVector(IntakeSettings3.targetRed);
-
+        parent.opMode.telemetry.addData("Target Distance", targetVector.distance);
         // update launch RPM
         if (IntakeSettings3.launchArmed) {
             int launchRPM = (int) getSpinnerRPMfromDistance(targetVector.distance);
@@ -258,10 +296,16 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     @Override
     public void onStart() {
         getHardware().pixel.setPosition(LEDColor.OFF.getLedPwm());
+        drive.addController(Intake3.ControllerNames.alignController, this::alignToTarget);
     }
 
     @Override
     public void onStop() {
+        drive.removeController(Intake3.ControllerNames.alignController);
+    }
+
+    public static final class ControllerNames {
+        public static final String alignController = "align controller";
     }
 
     public enum LEDColor {

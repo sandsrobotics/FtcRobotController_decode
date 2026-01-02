@@ -64,6 +64,7 @@ public class Artifacts extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             articolors.append(artifact.color.name()).append("|");
         }
         parent.opMode.telemetry.addData("Artifacts: ", articolors.toString());
+
     }
 
     @Override

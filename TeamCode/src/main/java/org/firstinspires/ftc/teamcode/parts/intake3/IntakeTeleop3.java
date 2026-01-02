@@ -89,8 +89,8 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         }
 
         if (buttonMgr.getState(1, Buttons.y, State.wasTapped)) {
-//            parent.setLaunchRPM(IntakeSettings3.launchRPM);
-            IntakeSettings3.launchArmed = true;
+            parent.setLaunchRPM(IntakeSettings3.launchRPM);
+            IntakeSettings3.launchArmed = true; // comment this line to use a dashboard set launch speed
         }
 
         if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
@@ -102,7 +102,6 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
                     parent.limeLight.getClassificationPattern()
             );
         }
-
 
         if (buttonMgr.getState(1, Buttons.b, State.wasTapped)) {
             parent.stopAllIntakeTasks();
@@ -124,39 +123,45 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.tasks.moveAndLaunch.restart();
         }
 
-        // left bumper: cycle servo selection
-        if (buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
-            selectedServo = (selectedServo + 1) % 3;
+        if (buttonMgr.getState(1, Buttons.right_bumper, State.isHeld)) {
+            IntakeSettings3.alignTarget = true;
+        } else {
+            IntakeSettings3.alignTarget = false;
         }
 
-        // right bumper: activate selected servo
-        if (buttonMgr.getState(1, Buttons.right_bumper, State.wasTapped)) {
-            switch (selectedServo) {
-                case 0:
-                    parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
-                    break;
-                case 1:
-                    parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
-                    break;
-                case 2:
-                    parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
-                    break;
-            }
-        }
-
-        // right bumper double tap: return selected servo to rest
-        if (buttonMgr.getState(1, Buttons.right_bumper, State.wasDoubleTapped)) {
-            switch (selectedServo) {
-                case 0:
-                    parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
-                    break;
-                case 1:
-                    parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
-                    break;
-                case 2:
-                    parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
-                    break;
-            }
-        }
+//        // left bumper: cycle servo selection
+//        if (buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
+//            selectedServo = (selectedServo + 1) % 3;
+//        }r
+//
+//        // right bumper: activate selected servo
+//        if (buttonMgr.getState(1, Buttons.right_bumper, State.wasTapped)) {
+//            switch (selectedServo) {
+//                case 0:
+//                    parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
+//                    break;
+//                case 1:
+//                    parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
+//                    break;
+//                case 2:
+//                    parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
+//                    break;
+//            }
+//        }
+//
+//        // right bumper double tap: return selected servo to rest
+//        if (buttonMgr.getState(1, Buttons.right_bumper, State.wasDoubleTapped)) {
+//            switch (selectedServo) {
+//                case 0:
+//                    parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
+//                    break;
+//                case 1:
+//                    parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
+//                    break;
+//                case 2:
+//                    parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
+//                    break;
+//            }
+//        }
     }
 }

@@ -19,9 +19,18 @@ public class Intake1Settings {
     public double ticksPerRevolution =                          28;
     public double secondsPerMinute =                            60;
     public static double farLaunchMotorRPM =                         3200;
-    public static double goalLaunchMotorRPM =                        2500;
+    public static double goalLaunchMotorRPM =                        2900;
+    public static double aLaunchMotorRPM =                        500;
+    public static double bLaunchMotorRPM =                        1000;
+    public static double yLaunchMotorRPM =                        1500;
+    public static double xLaunchMotorRPM =                        2000;
     public double farLaunchMotorVelocityStart =                  farLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
     public double goalLaunchMotorVelocityStart =                 goalLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
+    public double aLaunchMotorVelocityStart =                    aLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
+    public double bLaunchMotorVelocityStart =                    bLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
+    public double yLaunchMotorVelocityStart =                    yLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
+    public double xLaunchMotorVelocityStart =                    xLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
+
     public double launchMotorVelocityStop =                      0;
 
 

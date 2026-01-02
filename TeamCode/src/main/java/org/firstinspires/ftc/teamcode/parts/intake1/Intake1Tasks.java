@@ -16,6 +16,10 @@ public class Intake1Tasks {
     public final TimedTask startFarLaunch;
     public final TimedTask startGoalLaunch;
     public final TimedTask stopLaunch;
+    public final TimedTask startALaunch;
+    public final TimedTask startBLaunch;
+    public final TimedTask startYLaunch;
+    public final TimedTask startXLaunch;
 
     private final Intake1 intake;
     private final Robot robot;
@@ -35,6 +39,11 @@ public class Intake1Tasks {
         startFarLaunch = new TimedTask(TaskNames.startFarLaunch, intakeTasksGroup);
         startGoalLaunch = new TimedTask(TaskNames.startGoalLaunch, intakeTasksGroup);
         stopLaunch = new TimedTask(TaskNames.stopLaunch, intakeTasksGroup);
+        startALaunch = new TimedTask(TaskNames.startALaunch, intakeTasksGroup);
+        startBLaunch = new TimedTask(TaskNames.startBLaunch, intakeTasksGroup);
+        startYLaunch = new TimedTask(TaskNames.startYLaunch, intakeTasksGroup);
+        startXLaunch = new TimedTask(TaskNames.startXLaunch, intakeTasksGroup);
+
     }
 
     public void constructAllIntakeTasks() {
@@ -76,9 +85,14 @@ public class Intake1Tasks {
         //           all
         allServoTransfer.autoStart = false;
         allServoTransfer.addStep(()->{
-            pinkServoTransfer.restart();
-            blueServoTransfer.restart();
+//            pinkServoTransfer.restart();
+//            allServoTransfer.addDelay(400);
+//            blueServoTransfer.restart();
+//            allServoTransfer.addDelay(400);
+//            greenServoTransfer.restart();
             greenServoTransfer.restart();
+            blueServoTransfer.restart();
+            pinkServoTransfer.restart();
         });
         allServoTransfer.addStep(() ->
             intake.getHardware().greenServo.isDone() && intake.getHardware().blueServo.isDone() && intake.getHardware().pinkServo.isDone()
@@ -96,6 +110,27 @@ public class Intake1Tasks {
             intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().goalLaunchMotorVelocityStart);
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().goalLaunchMotorVelocityStart);
         });
+        startALaunch.autoStart = false;
+        startALaunch.addStep(() -> {
+            intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().aLaunchMotorVelocityStart);
+            intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().aLaunchMotorVelocityStart);
+        });
+        startBLaunch.autoStart = false;
+        startBLaunch.addStep(() -> {
+            intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().bLaunchMotorVelocityStart);
+            intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().bLaunchMotorVelocityStart);
+        });
+        startYLaunch.autoStart = false;
+        startYLaunch.addStep(() -> {
+            intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().yLaunchMotorVelocityStart);
+            intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().yLaunchMotorVelocityStart);
+        });
+        startXLaunch.autoStart = false;
+        startXLaunch.addStep(() -> {
+            intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().xLaunchMotorVelocityStart);
+            intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().xLaunchMotorVelocityStart);
+        });
+
         //     stop launch
         stopLaunch.autoStart = false;
         stopLaunch.addStep(() -> {
@@ -116,6 +151,11 @@ public class Intake1Tasks {
         public final static String startFarLaunch = "start FarLaunch";
         public final static String stopLaunch = "stop Launch";
         public final static String startGoalLaunch = "start GoalLaunch";
+        public final static String startALaunch = "start A-Launch";
+        public final static String startBLaunch = "start B-Launch";
+        public final static String startYLaunch = "start Y-Launch";
+        public final static String startXLaunch = "start X-Launch";
+
     }
 
     public static final class Events {

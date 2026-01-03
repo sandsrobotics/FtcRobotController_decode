@@ -9,12 +9,12 @@ import om.self.ezftc.utils.Vector3;
 
 @Config
 public class IntakeSettings3 {
-    public static final double launchServo0Launch = 0.367;
-    public static final double launchServo0Rest = 0.645; //0.687
-    public static final double launchServo1Launch = 0.5;
-    public static final double launchServo1Rest = 0.35; //.267
-    public static final double launchServo2Launch = 0.5;
-    public static final double launchServo2Rest = 0.267;
+    public static  double launchServo0Launch = 0.5; //.367
+    public static  double launchServo0Rest = 0.625; //0.645
+    public static  double launchServo1Launch = 0.5;
+    public static  double launchServo1Rest = 0.36; //.35
+    public static  double launchServo2Launch = 0.417; //.5
+    public static  double launchServo2Rest = 0.278; //.267
     public static int launchServoDelay = 200;
     public static int launchServoSweepTime = 1000;
     public static int launchRPMTolerance = 100;
@@ -44,7 +44,7 @@ public class IntakeSettings3 {
     // Alignment constants
     public static final double HEADING_TOLERANCE = 1.0;  // degrees
     public static final double DISTANCE_TOLERANCE = 2.0; // inches or your unit
-    public static final double MAX_TURN_SPEED = 0.4;
+    public static double MAX_TURN_SPEED = 0.5;
     public static final double MIN_TURN_SPEED = 0.1;
     public static  double P_TURN_GAIN = 0.05;       // Proportional gain for turning
     public static final double P_DRIVE_GAIN = 0.01;      // Proportional gain for forward/back

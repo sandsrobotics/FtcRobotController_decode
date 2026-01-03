@@ -116,7 +116,7 @@ public class T3_AutoBlueLaunch extends T3_AutoBase {
         autoTasks.addDelay(1500);
         MoveAndLaunch(autoTasks, shootLaunchData);
         autoTasks.addDelay(1500);
-        autoTasks.addStep(() -> intake.setIntakeRPM(0);
+        autoTasks.addStep(() -> intake.setIntakeRPM(0));
 
 
 

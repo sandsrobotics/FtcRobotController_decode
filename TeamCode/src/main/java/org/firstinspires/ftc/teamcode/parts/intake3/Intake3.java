@@ -67,7 +67,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         displayTelemetry(turnPower);
     }
 
-    private boolean isAligned() {
+    public boolean isAligned() {
         return Math.abs(limeLight.tx) < IntakeSettings3.HEADING_TOLERANCE;
     }
 

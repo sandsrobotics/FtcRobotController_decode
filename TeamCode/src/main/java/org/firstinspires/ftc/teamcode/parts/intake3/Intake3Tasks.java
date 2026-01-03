@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.parts.intake3;
 
 //import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
 
+import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
+
 import om.self.ezftc.core.Robot;
 import om.self.task.core.Group;
 import om.self.task.other.TimedTask;
@@ -13,6 +15,7 @@ public class Intake3Tasks {
     public final TimedTask sameTimeBallLaunchTask;
     public final TimedTask moveAndLaunch;
     public final TimedTask resetLaunchServos;
+    public final TimedTask alignTarget;
     private final Intake3 intake;
     private final Robot robot;
 
@@ -25,6 +28,7 @@ public class Intake3Tasks {
         sameTimeBallLaunchTask = new TimedTask(TaskNames.sameTimeBallLaunch, movementTask);
         moveAndLaunch = new TimedTask(TaskNames.MoveAndLaunch, movementTask);
         resetLaunchServos = new TimedTask(TaskNames.ResetLaunch, movementTask);
+        alignTarget = new TimedTask(TaskNames.AlignTarget, movementTask);
     }
 
     public void constructAllIntakeTasks() {
@@ -32,6 +36,8 @@ public class Intake3Tasks {
 
         // launch all three balls one after the other
         ballLaunchTask.autoStart = false;
+//        ballLaunchTask.addStep(alignTarget::restart);
+//        ballLaunchTask.addStep(intake.tasks.alignTarget::isDone);
         ballLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.VIOLET.getLedPwm()));
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo0.setPosition(intake.getSettings().launchServo0Launch));
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo0.isDone());
@@ -72,6 +78,10 @@ public class Intake3Tasks {
         resetLaunchServos.addStep(()-> intake.getHardware().launchServo1.setPosition(intake.getSettings().launchServo1Rest));
         resetLaunchServos.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Rest));
         resetLaunchServos.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.GREEN.getLedPwm()));
+
+        alignTarget.autoStart = false;
+        alignTarget.addTimedStep(() -> IntakeSettings3.alignTarget = true, () -> intake.isAligned() || !intake.limeLight.tv, 2000);
+        alignTarget.addStep(()-> IntakeSettings3.alignTarget = false);
     }
 
     /***********************************************************************************/
@@ -82,5 +92,6 @@ public class Intake3Tasks {
         public final static String sameTimeBallLaunch = "auto same time ball launch task";
         public final static String MoveAndLaunch = "auto move and launch";
         public final static String ResetLaunch = "auto reset launch servos";
+        public final static String AlignTarget = "auto align to april tag";
     }
 }

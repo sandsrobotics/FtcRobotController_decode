@@ -123,7 +123,7 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.tasks.moveAndLaunch.restart();
         }
 
-        if (buttonMgr.getState(1, Buttons.right_bumper, State.isHeld)) {
+        if (buttonMgr.getState(1, Buttons.left_bumper, State.isHeld)) {
             IntakeSettings3.alignTarget = true;
         } else {
             IntakeSettings3.alignTarget = false;

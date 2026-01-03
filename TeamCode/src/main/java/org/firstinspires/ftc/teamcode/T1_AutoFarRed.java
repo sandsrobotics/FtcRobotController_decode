@@ -54,13 +54,13 @@ public class T1_AutoFarRed  extends LinearOpMode{
     Vector3 p_fieldStartPos             = new Vector3(64,16,180);
     Vector3 p_obeliskView               = new Vector3(56, 16, 180);  // FarRed: ObeliskView Position
     Vector3 p_LaunchPos                 = new Vector3(56,16,153);    // FarRed Launching Position.
-    Vector3 p_pre_IntakeRedArtifactRow1 = new Vector3(-13, 33, 92);  // Red: Ready to collect on Row1
-    Vector3 p_IntakeRedArtifactRow1     = new Vector3(-13, 55, 92);  // Red: Intake Artifacts in Row1
-    Vector3 p_pre_IntakeRedArtifactRow2 = new Vector3(13, 33, 92);   // Red: Ready to collect on Row2
-    Vector3 p_IntakeRedArtifactRow2     = new Vector3(13, 60, 92);   // Red: Intake Artifacts in Row2
-    Vector3 p_pre_IntakeRedArtifactRow3 = new Vector3(34, 34, 88);   // Red: Ready to collect in Row3
-    Vector3 p_IntakeRedArtifactRow3     = new Vector3(34, 60, 88);   // Red: Intake Artifacts in Row3
-    Vector3 p_LeverOpen                 = new Vector3(0, 55, 90);    // Red: Open Lever Position
+    Vector3 p_pre_IntakeRedArtifactRow1 = new Vector3(-12, 28, -90);  // Red: Ready to collect on Row1
+    Vector3 p_IntakeRedArtifactRow1     = new Vector3(-12, 48, -90);  // Red: Intake Artifacts in Row1
+    Vector3 p_pre_IntakeRedArtifactRow2 = new Vector3(12, 28, -90);   // Red: Ready to collect on Row2
+    Vector3 p_IntakeRedArtifactRow2     = new Vector3(12, 60, -90);   // Red: Intake Artifacts in Row2
+    Vector3 p_pre_IntakeRedArtifactRow3 = new Vector3(34.5, 28, -90);   // Red: Ready to collect in Row3
+    Vector3 p_IntakeRedArtifactRow3     = new Vector3(34.5, 60, -90);   // Red: Intake Artifacts in Row3
+    Vector3 p_LeverOpen                 = new Vector3(0, 55, 180);    // Red: Open Lever Position
 
     //  DASHBOARD VARIABLES (static public)
     static public int shortDelay = 1000;
@@ -222,8 +222,8 @@ public class T1_AutoFarRed  extends LinearOpMode{
                                     p_LaunchPos, launchRPM);
 
         // Intake from Row2 and Launch.
-        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow2, p_IntakeRedArtifactRow2,
-                                    p_LaunchPos, launchRPM);
+//        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow2, p_IntakeRedArtifactRow2,
+//                                    p_LaunchPos, launchRPM);
 
         // Intake from Row1 and Launch.
 //        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow1, p_IntakeRedArtifactRow1,

@@ -265,7 +265,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     public void onBeanLoad() {
         positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
         artifacts = getBeanManager().getBestMatch(Artifacts.class, false);
-        artifactPipeline = getBeanManager().getBestMatch(ArtifactDetectionPipeline.class, false);
+//        artifactPipeline = getBeanManager().getBestMatch(ArtifactDetectionPipeline.class, false);
         limeLight = getBeanManager().getBestMatch(LimeLight.class, false);
 
     }

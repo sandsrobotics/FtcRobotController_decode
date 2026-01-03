@@ -5,6 +5,9 @@ import static java.lang.Math.abs;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.teamcode.parts.artifact.ArtifactDetectionPipeline;
+import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
+import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.intake1.hardware.Intake1Hardware;
 import org.firstinspires.ftc.teamcode.parts.intake1.settings.Intake1Settings;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
@@ -24,21 +27,18 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     protected Drive drive;
     protected Pinpoint pinpoint;
     protected PositionSolver positionSolver;
+    public  int launchRPM;
 
-    public int slideTargetPosition;
-    public int liftTargetPosition;
-    private int currentSlidePos;
-    private int currentLiftPos;
-    public int lastSample = -1;
-    public double lastSampleDistance = 10;  // in cm
-    public double lastRearDistance = 323;  // in inches
+    public Artifacts artifacts;
+    protected ArtifactDetectionPipeline artifactPipeline;
+    protected LimeLight limeLight;
+
+    public static char[] classificationOrder21 = {'G', 'P', 'P'};
+    public static char[] classificationOrder22 = {'P', 'G', 'P'};
+    public static char[] classificationOrder23 = {'P', 'P', 'G'};
+
     private double spinnerSliderPower = 0.0;// what is this?
-    public double rangePower = 0.40; //todo: finalize
-    public boolean rangeIsDone = false;
-    public boolean rangeEnabled = false;
-    public Vector3 adjustedDestination = null;
     public int lastHue;
-    private boolean enableLiftLimit = true;
 
     // for testing PID
     public PIDFCoefficients pidf_rue = new PIDFCoefficients();
@@ -49,9 +49,6 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 //    public PIDFCoefficients sample_pidf_rtp = new PIDFCoefficients();
     public float pIncrement = 1;
 
-    // for testing outtake speed
-    public double testSpinnerOut = 0.0;
-    public double sIncrement = 0.05;
 
     public boolean slideIsUnderControl = false;
     public boolean preventUserControl = false;
@@ -87,14 +84,6 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         getHardware().pinkServo.setPosition(getSettings().servoPinkDock);
         getHardware().blueServo.setPosition(getSettings().servoBlueDock);
         getHardware().greenServo.setPosition(getSettings().servoGreenDock);
-        // apply settings
-        if (DecodeSettings.isAuto()) {
-//            getHardware().pinkServo.setPosition(getSettings().servoPinkDock);
-//            getHardware().blueServo.setPosition(getSettings().servoBlueDock);
-//            getHardware().greenServo.setPosition(getSettings().servoGreenDock);
-        }
-        else {
-        }
     }
 
     public void initializeMotors() {
@@ -112,62 +101,125 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     }
 
     public int getLaunchMotorRPM() {
-        int launchMotorVelocity = (int) getHardware().launchMotorRight.getVelocity();
-        return (launchMotorVelocity/28)*60;
+        int launchMotorVelocity = (int) getHardware().launchMotorLeft.getVelocity();
+        return (int) ((launchMotorVelocity/Intake1Settings.ticksPerRevolution)*60);
     }
 
+    public void setLaunchRPM (int launchRPM) {
+        this.launchRPM = launchRPM;
+    }
 
+    public int getLaunchRPM () {
+        return this.launchRPM;
+    }
 
+    public boolean launchRPMInTolerance() {
+        return ((getHardware().launchMotorLeft.getVelocity() * 60) / Intake1Settings.ticksPerRevolution) >= (this.launchRPM - Intake1Settings.launchRPMTolerance);
+    }
 
+    // Based on GameClassificationId, compute Launch Order and launch Current Artifacts.
+    public void computeLaunchOrderAndLaunch(Integer classificationId) {
 
+        // Setup "desiredOrder" based on classificationId.
+        char [] desiredOrder = (classificationId == 21) ? classificationOrder21 :
+                (classificationId == 22 ) ? classificationOrder22 :
+                (classificationId == 23 ) ? classificationOrder23 : classificationOrder21; // default is classificationOrder21.
 
+        int[] launchOrder = new int[3];
 
+        // Cleanse "current" artifact data.
+        ArtifactDetectionPipeline.Artifact[] current = artifacts.getArtifactList();
 
-    // ranging - This will not maintain angle.
-    // 2m distance sensor
-    //
+        char[] currentColors = new char[3];
+        for (int i  = 0; i < 3; i++) {
+           if (current[i].color.name().equalsIgnoreCase("purple")) {
+               currentColors[i] = 'P';
+           }
+           else if (current[i].color.name().equalsIgnoreCase("green")) {
+                currentColors[i] = 'G';
+           }
+           else if (current[i].color.name().equalsIgnoreCase("none")) {
+               currentColors[i] = 'P';     // Defaulting to 'P'.
+            }
+        }
 
+        // Need One-Green and Two-Purples to make a valid Pattern.
+        int countG = 0; int countP = 0;
+        for (int i = 0; i < 3; i++) {
+            if (currentColors[i] == 'P') countP++;
+            else if (currentColors[i] == 'G') countG++;
+        }
 
+        boolean validPattern =  (countG == 1 && countP == 2) ? true : false;
+        if (!validPattern) {            // Default Order (0,1,2).
+            for (int i = 0; i < 3; i++) {
+                launchOrder[i] = i;
+            }
+        } else {  // Compute Launch Order.
+            boolean[] used = new boolean[current.length];
+            for (int i = 0; i < desiredOrder.length; i++) {
+                char wanted = desiredOrder[i];
+                for (int j = 0; j < currentColors.length; j++) {
+                    if (!used[j] && currentColors[j] == wanted) {
+                        launchOrder[i] = j;
+                        used[j] = true;
+                        break;
+                    }
+                }
+            }
+        }
 
+        // Print the launch order
+        StringBuilder sb = new StringBuilder("|");
+        for (int i = 0; i < launchOrder.length; i++) {
+            sb.append(Integer.toString(launchOrder[i]));
+            if (i < launchOrder.length - 1) sb.append(", ");
+        }
+        sb.append("|");
+        parent.opMode.telemetry.addData("Launch Order", sb.toString());
 
-    //   method to get a modified target position based on the distance/range sensor.
-//    public Vector3 adjustTargetPositionByRangeY(Vector3 targetPosition, double targetDistance) {
-//        //Returns null if a suitable position is not found, otherwise a new target position based on current position
-//        //Reads the distance sensor and then gets a new current pinpoint position (to do: work with positiontracker instead)
-//        //The X and Z will be preserved, but Y will be changed to reflect best available position data
-//        if (targetPosition.Z != 90 && targetPosition.Z != -90) return null;  //only currently works for pure Y
-//        final double acceptableDiff = 5;  //how much farther away is OK for calculations?
-//        final double acceptableAngle = 5;  //how far can odo angle be from target angle for calculations?
-//        getRangeDistance();
-//        parent.opMode.telemetry.addData ("ranging:", lastRearDistance);
-//        if (lastRearDistance <= targetDistance + acceptableDiff) {   // if it's in acceptable range for calculations...
-//            Vector3 currentPosition = pinpoint.getValidPosition();   // get the current odo position
-//            if (currentPosition == null) return null;                // if not valid odo position, return null
-//            if (Math.abs(currentPosition.Z - targetPosition.Z) > acceptableAngle) return null;   // return null if angle too large
-//            double yAdjust = (lastRearDistance - targetDistance) * -1.0 * Math.signum(targetPosition.Z);  // distance + at 90°, - at -90°
-//            // new position has original X and Z, but Y is based on currentPosition, targetDistance, and range
-//            return new Vector3(targetPosition.X, currentPosition.Y + yAdjust, targetPosition.Z);
-//        }
-//        return null;
-//    }
+        // Fire servos in order
+        for (int idx : launchOrder) {
+            fireServoForIndex(idx);
+            parent.opMode.sleep(Intake1Settings.launchServoSweepTime);
+            parent.opMode.sleep(Intake1Settings.launchServoDelay);
+            resetServoForIndex(idx);
+        }
+    }
 
-//    public boolean adjustTarget(Vector3 targetPosition, double targetDistance) {
-//        adjustedDestination = adjustTargetPositionByRangeY(targetPosition, targetDistance);
-//        return adjustedDestination != null;
-//    }
-//    public void stopSlide() { getHardware().slideMotor.setPower(0); }
-//    public void stopLift() { getHardware().liftMotor.setPower(0); }
-//    public void setSlidePower (double m0) { getHardware().slideMotor.setPower(m0); }
-//    public void setLiftPower (double m1) { getHardware().liftMotor.setPower(m1); }
+    private void fireServoForIndex(int index) {
+        switch (index) {
+            case 0:
+                getHardware().greenServo.setPosition(Intake1Settings.servoGreenLaunch);
+                break;
+            case 1:
+                getHardware().blueServo.setPosition(Intake1Settings.servoBlueLaunch);
+                break;
+            case 2:
+                getHardware().pinkServo.setPosition(Intake1Settings.servoPinkLaunch);
+                break;
+        }
+    }
 
-
-
-
-
-
-
+    private void resetServoForIndex(int index) {
+        switch (index) {
+            case 0:
+                getHardware().greenServo.setPosition(Intake1Settings.servoGreenDock);
+                break;
+            case 1:
+                getHardware().blueServo.setPosition(Intake1Settings.servoBlueDock);
+                break;
+            case 2:
+                getHardware().pinkServo.setPosition(Intake1Settings.servoPinkDock);
+                break;
+        }
+    }
     public void eStop() {
         preventUserControl = false;
+        // TODO: Stop LaunchMotors?
+        this.getHardware().launchMotorLeft.setVelocity(0);
+        this.getHardware().launchMotorRight.setVelocity(0);
+
         // stop all tasks in the intake group
         stopAllIntakeTasks();
         //stop the position solver?
@@ -192,15 +244,16 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     @Override
     public void onInit() {
         initializeMotors();
-        if (DecodeSettings.isAuto()) {
-            initializeServos();
-            if (DecodeSettings.firstRun) {
-                // the first time the servo controller comes online the positions set may be lost, so wait and try again
-                DecodeSettings.firstRun = false;
-                parent.opMode.sleep(1500);
-                initializeServos();
-            }
-        }
+        // TODO: InitServos during "Start"?
+//        if (DecodeSettings.isAuto()) {
+//            initializeServos();
+//            if (DecodeSettings.firstRun) {
+//                // the first time the servo controller comes online the positions set may be lost, so wait and try again
+//                DecodeSettings.firstRun = false;
+//                parent.opMode.sleep(1500);
+//                initializeServos();
+//            }
+//        }
         pinpoint = getBeanManager().getBestMatch(Pinpoint.class, false);
         positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
         tasks = new Intake1Tasks(this, parent);
@@ -210,6 +263,11 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 
     @Override
     public void onBeanLoad() {
+        positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
+        artifacts = getBeanManager().getBestMatch(Artifacts.class, false);
+        artifactPipeline = getBeanManager().getBestMatch(ArtifactDetectionPipeline.class, false);
+        limeLight = getBeanManager().getBestMatch(LimeLight.class, false);
+
     }
 
     @Override
@@ -220,17 +278,14 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     @Override
     public void onStart() {
         drive = getBeanManager().getBestMatch(Drive.class, false);
-//        drive.addController(Intake.ControllerNames.distanceController, this::strafeRobot);
-        if (DecodeSettings.isTeleOp()) {
+        initializeServos();
+        if (DecodeSettings.firstRun) {
+            // the first time the servo controller comes online the positions set may be lost, so wait and try again
+            DecodeSettings.firstRun = false;
+            parent.opMode.sleep(1500);
             initializeServos();
-            if (DecodeSettings.firstRun) {
-                // the first time the servo controller comes online the positions set may be lost, so wait and try again
-                DecodeSettings.firstRun = false;
-                parent.opMode.sleep(1500);
-                initializeServos();
-            }
         }
-    }
+}
 
     @Override
     public void onStop() {

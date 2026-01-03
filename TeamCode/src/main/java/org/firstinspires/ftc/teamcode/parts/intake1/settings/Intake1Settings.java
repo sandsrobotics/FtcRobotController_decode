@@ -8,15 +8,22 @@ public class Intake1Settings {
     public static double intakeIn =                                    -1;
     public static double intakeStop =                                   0;
     public static double intakeOut =                                    1;
-    public double sorterStop =                                 0.5;
-    public double sorterStart =                                  0;
-    public double servoGreenDock =                           0.463;
-    public double servoGreenLaunch =                         0.235;
-    public double servoPinkDock =                            0.518;
-    public double servoPinkLaunch =                          0.719;
-    public double servoBlueDock =                            0.494;
-    public double servoBlueLaunch =                          0.671;
-    public double ticksPerRevolution =                          28;
+    public static int launchServoDelay                          = 200;
+    public static int launchServoSweepTime                      = 1000;
+    public static int launchRPMTolerance                        = 100;
+
+    public static double servoGreenDock =                           0.463;
+    public static double servoGreenLaunch =                         0.235;
+
+    public static double servoPinkDock =                            0.518;
+    public static double servoPinkLaunch =                          0.719;
+    public static double servoPinkLow =                             0.479;
+
+    public static double servoBlueDock =                            0.494;
+    public static double servoBlueLaunch =                          0.671;
+    public static double servoBlueLow =                             0.464;
+
+    public static double ticksPerRevolution =                          28;
     public double secondsPerMinute =                            60;
     public static double farLaunchMotorRPM =                         3200;
     public static double goalLaunchMotorRPM =                        2900;

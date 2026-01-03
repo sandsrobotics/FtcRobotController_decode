@@ -115,10 +115,6 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
                 parent.tasks.stopLaunch.restart();
             }
             /*      Launch Tasks          */
-            if (buttonMgr.getState(2, Buttons.a, State.isPressed)) {
-                parent.tasks.startALaunch.restart();
-            }
-            /*      Launch Tasks          */
             if (buttonMgr.getState(2, Buttons.b, State.isPressed)) {
                 parent.tasks.startBLaunch.restart();
             }
@@ -131,6 +127,10 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
                 parent.tasks.startXLaunch.restart();
             }
 
+            /*      Launch Tasks          */
+            if (buttonMgr.getState(2, Buttons.a, State.isPressed)) {
+                parent.tasks.computeAndLaunchInOrder.restart();
+            }
         }
 
 
@@ -153,6 +153,9 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
             }
             if (buttonMgr.getState(1, Buttons.a, State.isPressed)) {
                 parent.tasks.outtakeTask.restart();
+            }
+            if (buttonMgr.getState(1, Buttons.b, State.isPressed)) {
+                parent.tasks.viewObelisk.restart();
             }
 
                 // Driver 1

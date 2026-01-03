@@ -20,6 +20,8 @@ public class Intake1Tasks {
     public final TimedTask startBLaunch;
     public final TimedTask startYLaunch;
     public final TimedTask startXLaunch;
+    public final TimedTask viewObelisk;
+    public final TimedTask computeAndLaunchInOrder;
 
     private final Intake1 intake;
     private final Robot robot;
@@ -43,6 +45,8 @@ public class Intake1Tasks {
         startBLaunch = new TimedTask(TaskNames.startBLaunch, intakeTasksGroup);
         startYLaunch = new TimedTask(TaskNames.startYLaunch, intakeTasksGroup);
         startXLaunch = new TimedTask(TaskNames.startXLaunch, intakeTasksGroup);
+        viewObelisk = new TimedTask(TaskNames.viewObelisk, intakeTasksGroup);
+        computeAndLaunchInOrder = new TimedTask(TaskNames.computeAndLaunchInOrder, intakeTasksGroup);
 
     }
 
@@ -138,6 +142,15 @@ public class Intake1Tasks {
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().launchMotorVelocityStop);
         });
 
+        //     viewObelisk
+        viewObelisk.autoStart = false;
+        viewObelisk.addStep(() -> {
+            DecodeSettings.setClassificationId(intake.limeLight.getClassificationId());
+        });
+
+        //     computeAndLaunchInOrder
+        computeAndLaunchInOrder.autoStart = false;
+        computeAndLaunchInOrder.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
     }
     /***********************************************************************************/
     public static final class TaskNames {
@@ -155,6 +168,8 @@ public class Intake1Tasks {
         public final static String startBLaunch = "start B-Launch";
         public final static String startYLaunch = "start Y-Launch";
         public final static String startXLaunch = "start X-Launch";
+        public final static String viewObelisk = "view Obelisk";
+        public final static String computeAndLaunchInOrder = "compute and LaunchInOrder";
 
     }
 

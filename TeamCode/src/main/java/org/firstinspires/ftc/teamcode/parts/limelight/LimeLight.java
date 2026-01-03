@@ -19,6 +19,10 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         super(parent, "limelight");
     }
 
+    // classificationId Defaults to 21.
+    // Valid values are 21(GPP), 22(PGP), 23(PPG).
+    private static Integer classificationId = 21;
+
     @Override
     public void onRun() {
         LLStatus status = limelight.getStatus();
@@ -43,6 +47,10 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
                 parent.opMode.telemetry.addData("April Tag", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
+                int id = fr.getFiducialId();
+                if (id == 21 || id == 22 || id == 23) {
+                    classificationId = id;
+                }
             }
             // Access color results
             List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
@@ -53,6 +61,11 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             parent.opMode.telemetry.addData("Limelight", "No data available");
         }
     }
+
+    public Integer getClassificationId() {
+        return classificationId;
+    }
+
     @Override
     public void onBeanLoad() {}
 

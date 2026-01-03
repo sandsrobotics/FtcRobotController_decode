@@ -27,6 +27,11 @@ public class DecodeSettings {
    public static int pinpointSettingsYoffset = +150;
    public static float pinpointSettingsResolution = 13.26291192f;
 
+   static int classificationId = 21; // Defaults to 21.
+
+   public static void setClassificationId (int Id) { classificationId = Id; };
+   public static int getClassificationId () { return classificationId; };
+
    public static void setTeleOp () { modeTeleOp = true; }
    public static void setAuto () { modeTeleOp = false; }
    public static boolean isTeleOp() { return modeTeleOp; }

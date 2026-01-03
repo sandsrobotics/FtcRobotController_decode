@@ -17,11 +17,11 @@ public class IntakeSettings3 {
     public static final double launchServo2Rest = 0.267;
     public static int launchServoDelay = 200;
     public static int launchServoSweepTime = 1000;
-    public static int launchRPMTolerance = 200;
+    public static int launchRPMTolerance = 100;
     public static final Map<String, LaunchData> launchPosiMap = new HashMap<String, LaunchData>();
     public static PIDFCoefficients spinnerPID = new PIDFCoefficients(100,0,0,12.4);
     public static int launchRPM = 3150; // for teleop tests
-    public static final int intakeRPM = 600;
+    public static int intakeRPM = 950;
     public static final double ticksPerRev = 28;
     public static final double ticksPerRev1150 = 145.1;
 

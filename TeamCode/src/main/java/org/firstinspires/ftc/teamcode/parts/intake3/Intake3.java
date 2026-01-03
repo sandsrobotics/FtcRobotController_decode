@@ -36,7 +36,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 //    protected ArtifactDetectionPipeline artifactPipeline;
     protected LimeLight limeLight;
     public Vector2D targetVector;
-    boolean launchArmed = true;
+    boolean launchArmed = false;
 
     //***** Constructors *****
     public Intake3(Robot parent, String modeName) {

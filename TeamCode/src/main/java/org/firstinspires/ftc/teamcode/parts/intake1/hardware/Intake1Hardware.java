@@ -28,7 +28,9 @@ public class Intake1Hardware {
         this.launchMotorRight = launchMotorRight;
 
 
-        DcMotorEx[] motors = {this.intakeMotor, this.launchMotorLeft, this.launchMotorRight};
+//        DcMotorEx[] motors = {this.intakeMotor, this.launchMotorLeft, this.launchMotorRight};
+        DcMotorEx[] motors = {this.intakeMotor};
+
         for(DcMotorEx motor : motors){
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
             motorConfigurationType.setAchieveableMaxRPMFraction(1.0);

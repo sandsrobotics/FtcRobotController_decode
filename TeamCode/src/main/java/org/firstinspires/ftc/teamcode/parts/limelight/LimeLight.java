@@ -26,7 +26,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     @Override
     public void onRun() {
         LLStatus status = limelight.getStatus();
-        parent.opMode.telemetry.addData("Name", "%s", status.getName());
+//        parent.opMode.telemetry.addData("Name", "%s", status.getName());
 //        parent.opMode.telemetry.addData("LL", "Temp: %.1fC, CPU: %.1f%%, FPS: %d",
 //                status.getTemp(), status.getCpu(),(int)status.getFps());
 //        parent.opMode.telemetry.addData("Pipeline", "Index: %d, Type: %s",
@@ -34,29 +34,26 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         LLResult result = limelight.getLatestResult();
         if (result.isValid()) {
             // Access general information
-            Pose3D botpose = result.getBotpose();
-            double captureLatency = result.getCaptureLatency();
-            double targetingLatency = result.getTargetingLatency();
-            double parseLatency = result.getParseLatency();
-            parent.opMode.telemetry.addData("tx", result.getTx());
-            parent.opMode.telemetry.addData("txnc", result.getTxNC());
-            parent.opMode.telemetry.addData("ty", result.getTy());
-            parent.opMode.telemetry.addData("tync", result.getTyNC());
-            parent.opMode.telemetry.addData("Botpose", botpose.toString());
+//            Pose3D botpose = result.getBotpose();
+//            parent.opMode.telemetry.addData("tx", result.getTx());
+//            parent.opMode.telemetry.addData("txnc", result.getTxNC());
+//            parent.opMode.telemetry.addData("ty", result.getTy());
+//            parent.opMode.telemetry.addData("tync", result.getTyNC());
+//            parent.opMode.telemetry.addData("Botpose", botpose.toString());
             // Access fiducial results
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
-                parent.opMode.telemetry.addData("April Tag", "ID: %d, Family: %s, X: %.2f, Y: %.2f", fr.getFiducialId(), fr.getFamily(), fr.getTargetXDegrees(), fr.getTargetYDegrees());
+                parent.opMode.telemetry.addData("April Tag", "ID: %d", fr.getFiducialId());
                 int id = fr.getFiducialId();
                 if (id == 21 || id == 22 || id == 23) {
                     classificationId = id;
                 }
             }
             // Access color results
-            List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
-            for (LLResultTypes.ColorResult cr : colorResults) {
-                parent.opMode.telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
-            }
+//            List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
+//            for (LLResultTypes.ColorResult cr : colorResults) {
+//                parent.opMode.telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
+//            }
         } else {
             parent.opMode.telemetry.addData("Limelight", "No data available");
         }

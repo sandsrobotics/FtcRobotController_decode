@@ -130,9 +130,6 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
     }
 
     public void extraSettings() {
-        DecodeSettings.isBlueGood = false;
-        DecodeSettings.isYellowGood = true;
-        DecodeSettings.isRedGood = true;
         DecodeSettings.isDemoMode = false;
     }
 

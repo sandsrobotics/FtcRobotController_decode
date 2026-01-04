@@ -9,12 +9,14 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraException;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
+import org.openftc.easyopencv.OpenCvWebcam;
+
 import java.util.Arrays;
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.core.part.LoopedPartImpl;
 
 public class Artifacts extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUtils.Null> {
-    OpenCvCamera camera;
+    OpenCvWebcam camera;
     private VisionPortal visionPortal;
     public ArtifactDetectionPipeline pipeline;
     public ArtifactDetectionPipeline.Artifact[] artifactList;

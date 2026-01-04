@@ -22,6 +22,8 @@ public class Intake1Tasks {
     public final TimedTask startXLaunch;
     public final TimedTask viewObelisk;
     public final TimedTask computeAndLaunchInOrder;
+    public final TimedTask allServoStore;
+    public final TimedTask autoLaunchFar;
 
     private final Intake1 intake;
     private final Robot robot;
@@ -47,6 +49,8 @@ public class Intake1Tasks {
         startXLaunch = new TimedTask(TaskNames.startXLaunch, intakeTasksGroup);
         viewObelisk = new TimedTask(TaskNames.viewObelisk, intakeTasksGroup);
         computeAndLaunchInOrder = new TimedTask(TaskNames.computeAndLaunchInOrder, intakeTasksGroup);
+        allServoStore = new TimedTask(TaskNames.allServoStore, intakeTasksGroup);
+        autoLaunchFar= new TimedTask(TaskNames.autoLaunchFar, intakeTasksGroup);
 
     }
 
@@ -55,12 +59,16 @@ public class Intake1Tasks {
         intakeTask.autoStart = false;
         intakeTask.addStep(()->{
             intake.getHardware().intakeMotor.setPower(intake.getSettings().intakeIn);
+            intake.getHardware().pinkServo.setPosition(intake.getSettings().servoPinkDock);
+            intake.getHardware().blueServo.setPosition(intake.getSettings().servoBlueDock);
+
         });
 
         /*   Artifact Intake Stop Task   */
         artifactIntakeStopTask.autoStart = false;
         artifactIntakeStopTask.addStep(()-> {
             intake.getHardware().intakeMotor.setPower(intake.getSettings().intakeStop);
+            allServoStore.restart();
         });
 
         /*    Artifact Extake Task*/
@@ -94,9 +102,10 @@ public class Intake1Tasks {
 //            blueServoTransfer.restart();
 //            allServoTransfer.addDelay(400);
 //            greenServoTransfer.restart();
-            greenServoTransfer.restart();
-            blueServoTransfer.restart();
             pinkServoTransfer.restart();
+            blueServoTransfer.restart();
+            greenServoTransfer.restart();
+
         });
         allServoTransfer.addStep(() ->
             intake.getHardware().greenServo.isDone() && intake.getHardware().blueServo.isDone() && intake.getHardware().pinkServo.isDone()
@@ -151,6 +160,22 @@ public class Intake1Tasks {
         //     computeAndLaunchInOrder
         computeAndLaunchInOrder.autoStart = false;
         computeAndLaunchInOrder.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
+
+        //.         allServoStore
+        allServoStore.autoStart = false;
+        allServoStore.addStep(() ->{
+            intake.getHardware().pinkServo.setPosition(intake.getSettings().servoPinkLow);
+            intake.getHardware().blueServo.setPosition(intake.getSettings().servoBlueLow);
+        });
+        // auto launch 1 by 1
+        autoLaunchFar.autoStart = false;
+        autoLaunchFar.addStep(() -> pinkServoTransfer.restart());
+        autoLaunchFar.addDelay(600);
+        autoLaunchFar.addStep(() -> blueServoTransfer.restart());
+        autoLaunchFar.addDelay(600);
+        autoLaunchFar.addStep(() -> greenServoTransfer.restart());
+
+
     }
     /***********************************************************************************/
     public static final class TaskNames {
@@ -170,6 +195,8 @@ public class Intake1Tasks {
         public final static String startXLaunch = "start X-Launch";
         public final static String viewObelisk = "view Obelisk";
         public final static String computeAndLaunchInOrder = "compute and LaunchInOrder";
+        public final static String allServoStore = "all servos store";
+        public final static String autoLaunchFar = "auto launch 1 by 1 far";
 
     }
 

@@ -5,9 +5,9 @@ import com.acmerobotics.dashboard.config.Config;
 @Config
 public class Intake1Settings {
 
-    public static double intakeIn =                                    -1;
+    public static double intakeIn =                                    -.85;
     public static double intakeStop =                                   0;
-    public static double intakeOut =                                    1;
+    public static double intakeOut =                                    .85;
     public static int launchServoDelay                          = 200;
     public static int launchServoSweepTime                      = 1000;
     public static int launchRPMTolerance                        = 100;
@@ -17,11 +17,11 @@ public class Intake1Settings {
 
     public static double servoPinkDock =                            0.518;
     public static double servoPinkLaunch =                          0.719;
-    public static double servoPinkLow =                             0.479;
+    public static double servoPinkLow =                             0.434;
 
     public static double servoBlueDock =                            0.494;
     public static double servoBlueLaunch =                          0.671;
-    public static double servoBlueLow =                             0.464;
+    public static double servoBlueLow =                             0.390;
 
     public static double ticksPerRevolution =                          28;
     public double secondsPerMinute =                            60;

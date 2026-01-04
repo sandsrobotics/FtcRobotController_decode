@@ -75,7 +75,7 @@ public class DriveTeleopSettings {
                         gamepad.left_stick_x,
 //                        gamepad.left_trigger - gamepad.right_trigger,
                         gamepad.right_trigger - gamepad.left_trigger,
-                        gamepad.right_stick_x
+                        0.85*gamepad.right_stick_x
                 ),
                 () -> gamepad.x,
                 new LatchedModifier().toSupplier(() -> gamepad.x),

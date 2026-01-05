@@ -27,7 +27,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     protected Drive drive;
     protected Pinpoint pinpoint;
     protected PositionSolver positionSolver;
-    public  int launchRPM;
+    public int launchRPM;
 
     public Artifacts artifacts;
     protected ArtifactDetectionPipeline artifactPipeline;
@@ -49,17 +49,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 //    public PIDFCoefficients sample_pidf_rtp = new PIDFCoefficients();
     public float pIncrement = 1;
 
-
-    public boolean slideIsUnderControl = false;
     public boolean preventUserControl = false;
-
-    // this is part of the resets lift to 0 each time it hits the limit switch
-    private final EdgeConsumer homingLiftZero = new EdgeConsumer();
-    private final EdgeConsumer homingSlideZero = new EdgeConsumer();
-
-    public final Vector3 p_nearObsZone = new Vector3(33.5, -56.5, 90); // p_12: Position near ObsZone for Pickup-Specimen.
-    public final Vector3 p_atObsZone = new Vector3(33.5, -61.5, 90); // p_13: Position at ObsZone for Pickup-Specimen.
-    public final Vector3 p_beforeHighRung = new Vector3(2.75 - 6, -40.25 + 1 , -90); // Y: (-40.25 + 5); p_19: Position before High-Rung for Hang-Specimen.
 
     //***** Constructors *****
     public Intake1(Robot parent) {
@@ -231,11 +221,12 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         tasks.intakeTasksGroup.runCommand(Group.Command.PAUSE);
         tasks.intakeTasksGroup.getActiveRunnables().clear(); // this is the magic sauce... must be used after the PAUSE or it will stop working
     }
-    public void strafeRobot(DriveControl control) {
-        if (abs(spinnerSliderPower) > .01) {
-            control.power = control.power.addX(spinnerSliderPower / 3);
-        }
-    }
+
+//    public void strafeRobot(DriveControl control) {
+//        if (abs(spinnerSliderPower) > .01) {
+//            control.power = control.power.addX(spinnerSliderPower / 3);
+//        }
+//    }
 
     private static int clamp(int val, int min, int max) {
         return Math.max(min, Math.min(val, max));
@@ -245,15 +236,15 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     public void onInit() {
         initializeMotors();
         // TODO: InitServos during "Start"?
-//        if (DecodeSettings.isAuto()) {
-//            initializeServos();
-//            if (DecodeSettings.firstRun) {
-//                // the first time the servo controller comes online the positions set may be lost, so wait and try again
-//                DecodeSettings.firstRun = false;
-//                parent.opMode.sleep(1500);
-//                initializeServos();
-//            }
-//        }
+        if (DecodeSettings.isAuto()) {
+            initializeServos();
+            if (DecodeSettings.firstRun) {
+                // the first time the servo controller comes online the positions set may be lost, so wait and try again
+                DecodeSettings.firstRun = false;
+                parent.opMode.sleep(1500);
+                initializeServos();
+            }
+        }
         pinpoint = getBeanManager().getBestMatch(Pinpoint.class, false);
         positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
         tasks = new Intake1Tasks(this, parent);
@@ -278,12 +269,14 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     @Override
     public void onStart() {
         drive = getBeanManager().getBestMatch(Drive.class, false);
-        initializeServos();
-        if (DecodeSettings.firstRun) {
-            // the first time the servo controller comes online the positions set may be lost, so wait and try again
-            DecodeSettings.firstRun = false;
-            parent.opMode.sleep(1500);
+        if (DecodeSettings.isTeleOp()) {
             initializeServos();
+            if (DecodeSettings.firstRun) {
+                // the first time the servo controller comes online the positions set may be lost, so wait and try again
+                DecodeSettings.firstRun = false;
+                parent.opMode.sleep(1500);
+                initializeServos();
+            }
         }
 }
 

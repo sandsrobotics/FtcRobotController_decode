@@ -84,10 +84,9 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
             REGION3_TOPLEFT_ANCHOR_POINT.y + tpREGION_HEIGHT);
 
     Artifact[] artifacts = new Artifact[]{
-            /* These are reversed to follow the camera. */
-            new Artifact(ArtifactColor.NONE, null, region3_pointA, region3_pointB, 0),
+            new Artifact(ArtifactColor.NONE, null, region1_pointA, region1_pointB, 0),
             new Artifact(ArtifactColor.NONE, null, region2_pointA, region2_pointB, 0),
-            new Artifact(ArtifactColor.NONE, null, region1_pointA, region1_pointB, 0)
+            new Artifact(ArtifactColor.NONE, null, region3_pointA, region3_pointB, 0)
     };
 
     /*

@@ -52,8 +52,10 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
     // Positions to travel in AutoFarRed
     Vector3 p_fieldStartPos             = new Vector3(64,16,180);
-    Vector3 p_obeliskView               = new Vector3(56, 16, 180);  // FarRed: ObeliskView Position
-    Vector3 p_LaunchPos                 = new Vector3(56,16,153);    // FarRed Launching Position.
+    Vector3 p_parkAfterAuto             = new Vector3(32,16,157);
+
+    Vector3 p_obeliskView               = new Vector3(58, 16, 180);  // Was: 56, 16, 180; // FarRed: ObeliskView Position
+    Vector3 p_LaunchPos                 = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
     Vector3 p_pre_IntakeRedArtifactRow1 = new Vector3(-12, 28, -90);  // Red: Ready to collect on Row1
     Vector3 p_IntakeRedArtifactRow1     = new Vector3(-12, 48, -90);  // Red: Intake Artifacts in Row1
     Vector3 p_pre_IntakeRedArtifactRow2 = new Vector3(12, 28, -90);   // Red: Ready to collect on Row2
@@ -217,9 +219,9 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Launch Pre-loaded Artifacts.
         // Determine LaunchOrder and Launch.
-//        autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
-        autoTasks.addStep(() -> intake.tasks.autoLaunchFar.restart());
-        autoTasks.addStep(() -> intake.tasks.autoLaunchFar.isDone());
+        autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
+//        autoTasks.addStep(() -> intake.tasks.autoLaunchFar.restart());
+//        autoTasks.addStep(() -> intake.tasks.autoLaunchFar.isDone());
 
         // Intake from Row3 and Launch.
         artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow3, p_IntakeRedArtifactRow3,
@@ -234,7 +236,9 @@ public class T1_AutoFarRed  extends LinearOpMode{
 //        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow1, p_IntakeRedArtifactRow1,
 //                p_LaunchPos, launchRPM);
 
-        // TODO: Park.
+        // Move to ParkAfterAuto Position.
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
+        positionSolver.addMoveToTaskEx(p_parkAfterAuto, autoTasks);
     }
 
     // Artifact Intake and Launch.
@@ -255,7 +259,6 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Move to intake.
         positionSolver.addMoveToTaskEx(p_intake, autoTasks);
-        positionSolver.isDone();
         autoTasks.addDelay(2000);
 
         // StopIntake.
@@ -265,7 +268,6 @@ public class T1_AutoFarRed  extends LinearOpMode{
         // Move to launch.
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
         positionSolver.addMoveToTaskEx(p_Launch, autoTasks);
-        positionSolver.isDone();
 
         // Prep "Launch Motor".
         autoTasks.addStep(() -> intake.setLaunchRPM((int) Intake1Settings.farLaunchMotorRPM));

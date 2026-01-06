@@ -104,6 +104,11 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         }
 
         if (buttonMgr.getState(1, Buttons.b, State.wasTapped)) {
+//            if(parent.launchRPMInTolerance() & launchRPM > 0){
+//                parent.stopAllIntakeTasks();
+//                parent.tasks.ballLaunchTask.restart();
+//            }
+//            else {}
             parent.stopAllIntakeTasks();
             parent.tasks.ballLaunchTask.restart();
         }

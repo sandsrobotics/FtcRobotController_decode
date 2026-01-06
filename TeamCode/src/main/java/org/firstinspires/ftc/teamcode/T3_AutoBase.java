@@ -80,6 +80,9 @@ public class T3_AutoBase extends LinearOpMode{
         robot.init();
 
         while (!isStarted()) {
+            telemetry.addData("position", pt.getCurrentPosition());
+            limelight.onRun();
+            telemetry.update();
             sleep(50);
         }
         

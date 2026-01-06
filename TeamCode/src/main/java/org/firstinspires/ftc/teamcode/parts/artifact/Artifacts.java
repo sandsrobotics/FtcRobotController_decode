@@ -4,18 +4,15 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.apache.commons.lang3.ObjectUtils;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.vision.VisionPortal;
-import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraException;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-import java.util.Arrays;
+import org.openftc.easyopencv.OpenCvWebcam;
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.core.part.LoopedPartImpl;
 
 public class Artifacts extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUtils.Null> {
-    OpenCvCamera camera;
-    private VisionPortal visionPortal;
+    OpenCvWebcam camera;
     public ArtifactDetectionPipeline pipeline;
     public ArtifactDetectionPipeline.Artifact[] artifactList;
     public Artifacts(Robot parent) {
@@ -33,12 +30,12 @@ public class Artifacts extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         FtcDashboard.getInstance().startCameraStream(camera, 10);
         pipeline = new ArtifactDetectionPipeline();
         camera.setPipeline(pipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        camera.openCameraDeviceAsync(new OpenCvWebcam.AsyncCameraOpenListener()
         {
             @Override
             public void onOpened()
             {
-                camera.startStreaming(1280,720, OpenCvCameraRotation.SENSOR_NATIVE);
+                camera.startStreaming(1280,720, OpenCvCameraRotation.SENSOR_NATIVE, OpenCvWebcam.StreamFormat.YUY2);
             }
 
             @Override

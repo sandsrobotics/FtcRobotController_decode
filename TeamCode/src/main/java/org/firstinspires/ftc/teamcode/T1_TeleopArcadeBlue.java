@@ -39,7 +39,7 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
     PositionSolver positionSolver;
     PositionTracker pt;
     Pinpoint odo;
-    protected Vector3 fieldStartPos = new Vector3(64,-16,180);
+    protected Vector3 fieldStartPos = new Vector3(64,16,180);  // TODO: Y:-16
     boolean testModeReverse = false;
 
     public void initTeleop(){

@@ -236,6 +236,7 @@ public class Intake1Tasks {
         teleopFarLaunch.addStep(startFarLaunch::restart);
         teleopFarLaunch.addStep(startFarLaunch::isDone);
         teleopFarLaunch.addStep(pinkBlueGreenServoLaunch::restart);
+        teleopFarLaunch.addDelay(1500);
 
         // teleopNearLaunch
         teleopNearLaunch.autoStart = false;
@@ -249,6 +250,7 @@ public class Intake1Tasks {
         teleopNearLaunch.addStep(startThreeLaunch::restart);
         teleopNearLaunch.addStep(startThreeLaunch::isDone);
         teleopNearLaunch.addStep(pinkBlueGreenServoLaunch::restart);
+        teleopNearLaunch.addDelay(1500);
 
         // teleopGoalLaunch
         teleopGoalLaunch.autoStart = false;
@@ -262,6 +264,7 @@ public class Intake1Tasks {
         teleopGoalLaunch.addStep(startGoalLaunch::restart);
         teleopGoalLaunch.addStep(startGoalLaunch::isDone);
         teleopGoalLaunch.addStep(pinkBlueGreenServoLaunch::restart);
+        teleopGoalLaunch.addDelay(1500);
 
         // teleopThreeLaunch
         teleopThreeLaunch.autoStart = false;
@@ -275,6 +278,7 @@ public class Intake1Tasks {
         teleopThreeLaunch.addStep(startThreeLaunch::restart);
         teleopThreeLaunch.addStep(startThreeLaunch::isDone);
         teleopThreeLaunch.addStep(allServoLaunch::restart);
+        teleopThreeLaunch.addDelay(500);
     }
 
     /***********************************************************************************/

@@ -199,6 +199,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
         autoTasks.addStep(() -> intake.stopAllIntakeTasks());
         autoTasks.addStep(() -> odo.setPosition(p_fieldStartPos));
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
+        autoTasks.addStep(() -> intake.tasks.allServoStore.restart());
         autoTasks.addDelay(200);
 
         //Move to ObeliskView position.
@@ -220,13 +221,14 @@ public class T1_AutoFarRed  extends LinearOpMode{
         // Launch Pre-loaded Artifacts.
         // Determine LaunchOrder and Launch.
         autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
+        autoTasks.addDelay(1000);
 //        autoTasks.addStep(() -> intake.tasks.autoLaunchFar.restart());
 //        autoTasks.addStep(() -> intake.tasks.autoLaunchFar.isDone());
 
         // Intake from Row3 and Launch.
         artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow3, p_IntakeRedArtifactRow3,
                     p_LaunchPos, launchRPM);
-
+        autoTasks.addDelay(1000);
 
         // Intake from Row2 and Launch.
 //        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow2, p_IntakeRedArtifactRow2,
@@ -264,6 +266,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
         // StopIntake.
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
+        autoTasks.addStep(() -> intake.tasks.allServoStore.restart());
 
         // Move to launch.
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
@@ -275,8 +278,8 @@ public class T1_AutoFarRed  extends LinearOpMode{
         autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
 
         // Compute LaunchOrder and Launch Artifacts.
-//        autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
-        autoTasks.addStep(() -> intake.tasks.autoLaunchFar.restart());
+        autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
+//        autoTasks.addStep(() -> intake.tasks.autoLaunchFar.restart());
 
     }
 

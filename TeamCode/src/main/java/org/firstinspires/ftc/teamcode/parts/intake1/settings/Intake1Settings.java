@@ -25,7 +25,7 @@ public class Intake1Settings {
 
     public static double ticksPerRevolution =                          28;
     public double secondsPerMinute =                            60;
-    public static double farLaunchMotorRPM =                         3200;
+    public static double farLaunchMotorRPM =                         3100; // 3200
     public static double goalLaunchMotorRPM =                        2900;
     public static double aLaunchMotorRPM =                        500;
     public static double bLaunchMotorRPM =                        1000;

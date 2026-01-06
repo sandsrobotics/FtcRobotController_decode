@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode.parts.intake1.settings;
 
 import com.acmerobotics.dashboard.config.Config;
 
+import om.self.ezftc.utils.Vector3;
+
 @Config
 public class Intake1Settings {
 
@@ -26,12 +28,15 @@ public class Intake1Settings {
     public static double ticksPerRevolution =                          28;
     public double secondsPerMinute =                            60;
     public static double farLaunchMotorRPM =                         3100; // 3200
-    public static double goalLaunchMotorRPM =                        2900;
+    public static double threeLaunchMotorRPM =                       2900;
+    public static double goalLaunchMotorRPM =                        2500;
+
     public static double aLaunchMotorRPM =                        500;
     public static double bLaunchMotorRPM =                        1000;
     public static double yLaunchMotorRPM =                        1500;
     public static double xLaunchMotorRPM =                        2000;
     public double farLaunchMotorVelocityStart =                  farLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
+    public double threeLaunchMotorVelocityStart =                threeLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
     public double goalLaunchMotorVelocityStart =                 goalLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
     public double aLaunchMotorVelocityStart =                    aLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
     public double bLaunchMotorVelocityStart =                    bLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
@@ -40,6 +45,16 @@ public class Intake1Settings {
 
     public double launchMotorVelocityStop =                      0;
 
+
+    public Vector3 p_teleopFarRedLaunch = new Vector3(58, -16, 145);
+    public Vector3 p_teleopNearRedLaunch = new Vector3(-32, -32, 111);
+    public Vector3 p_teleopThreeRedLaunch = new Vector3(-24, 24, 135);
+    public Vector3 p_teleopGoalRedLaunch = new Vector3(-24, 24, 135);
+
+    public Vector3 p_teleopFarBlueLaunch = new Vector3(58, 16, -145);
+    public Vector3 p_teleopNearBlueLaunch = new Vector3(-32, 32, -111);
+    public Vector3 p_teleopThreeBlueLaunch = new Vector3(-24, -24, -135);
+    public Vector3 p_teleopGoalBlueLaunch = new Vector3(-24, -24, -135);
 
     public Intake1Settings() {
     }

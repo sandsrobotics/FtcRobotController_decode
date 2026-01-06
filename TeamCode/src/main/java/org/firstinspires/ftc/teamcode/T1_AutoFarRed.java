@@ -101,10 +101,12 @@ public class T1_AutoFarRed  extends LinearOpMode{
         limelight = new LimeLight(robot);
         artifacts = new Artifacts(robot);
 
-        Vector3 tempPosition = DecodeSettings.getRobotPosition();
-        if (tempPosition.X == 0.0 && tempPosition.Y == 0.0 && tempPosition.Z == 0.0)  {
-            DecodeSettings.storeRobotPosition(p_fieldStartPos);
-        }
+//        Vector3 tempPosition = DecodeSettings.getRobotPosition();
+//        if (tempPosition.X == 0.0 && tempPosition.Y == 0.0 && tempPosition.Z == 0.0)  {
+//            DecodeSettings.storeRobotPosition(p_fieldStartPos);
+//        }
+
+        DecodeSettings.storeRobotPosition(p_fieldStartPos);
 
         PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,
                 100, new Vector3(2,2,2), DecodeSettings.getRobotPosition());
@@ -135,14 +137,13 @@ public class T1_AutoFarRed  extends LinearOpMode{
             telemetry.update();
         }
 
-
         while (!isStarted()) {
             robot.buttonMgr.runLoop();
             telemetry.addData("AUTO: ", "Not Started");
             // example configuration capability during init
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped)) {
-                DecodeSettings.autonomousDebugMode = !DecodeSettings.autonomousDebugMode;   //todo: disable this before competition!
-            }
+//            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped)) {
+//                DecodeSettings.autonomousDebugMode = !DecodeSettings.autonomousDebugMode;   //todo: disable this before competition!
+//            }
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.right_bumper, ButtonMgr.State.wasTapped)) {
                 startDelay += 1000;
             }
@@ -153,13 +154,12 @@ public class T1_AutoFarRed  extends LinearOpMode{
             if(startDelay > maxDelay) startDelay = maxDelay;
 
             telemetry.addData("DEBUG?:", DecodeSettings.autonomousDebugMode ? "***** YES *****" : "No, normal");
-            telemetry.addData("START POSITION:", p_fieldStartPos);
+            telemetry.addData("START POSITION:", odo.getPosition());
             telemetry.addData("START DELAY:", startDelay / 1000);
             telemetry.update();
             sleep(50);
         }
 
-        odo.setPosition(p_fieldStartPos);
         robot.start();
 
         if(shutdownps) positionSolver.triggerEvent(Robot.Events.STOP);
@@ -180,6 +180,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
             DecodeSettings.storeRobotPosition(pt.getCurrentPosition());
             telemetry.addData("Position", odo.getPosition());
             telemetry.addData("Launch Motor RPM", intake.getLaunchMotorRPM());
+            telemetry.addData("ClassificationId", DecodeSettings.getClassificationId());
             telemetry.addData("time", System.currentTimeMillis() - startTime);
             telemetry.update();
         }
@@ -197,10 +198,10 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Reset and Get Ready.
         autoTasks.addStep(() -> intake.stopAllIntakeTasks());
-        autoTasks.addStep(() -> odo.setPosition(p_fieldStartPos));
+        autoTasks.addDelay(250);
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
         autoTasks.addStep(() -> intake.tasks.allServoStore.restart());
-        autoTasks.addDelay(200);
+        autoTasks.addTimedStep(() -> {}, () -> intake.tasks.allServoStore.isDone(), 250);
 
         //Move to ObeliskView position.
         positionSolver.addMoveToTaskEx(p_obeliskView, autoTasks);
@@ -215,20 +216,15 @@ public class T1_AutoFarRed  extends LinearOpMode{
         // Move to Launch Position.
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
         positionSolver.addMoveToTaskEx(p_LaunchPos, autoTasks);
-        positionSolver.isDone();
-
 
         // Launch Pre-loaded Artifacts.
         // Determine LaunchOrder and Launch.
         autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
         autoTasks.addDelay(1000);
-//        autoTasks.addStep(() -> intake.tasks.autoLaunchFar.restart());
-//        autoTasks.addStep(() -> intake.tasks.autoLaunchFar.isDone());
 
         // Intake from Row3 and Launch.
         artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow3, p_IntakeRedArtifactRow3,
                     p_LaunchPos, launchRPM);
-        autoTasks.addDelay(1000);
 
         // Intake from Row2 and Launch.
 //        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow2, p_IntakeRedArtifactRow2,
@@ -261,26 +257,20 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Move to intake.
         positionSolver.addMoveToTaskEx(p_intake, autoTasks);
-        autoTasks.addDelay(2000);
+        autoTasks.addDelay(2000); // Test with 1000.
 
         // StopIntake.
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
-        autoTasks.addStep(() -> intake.tasks.allServoStore.restart());
 
         // Move to launch.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
         positionSolver.addMoveToTaskEx(p_Launch, autoTasks);
-
-        // Prep "Launch Motor".
-        autoTasks.addStep(() -> intake.setLaunchRPM((int) Intake1Settings.farLaunchMotorRPM));
-        autoTasks.addStep(() -> intake.tasks.startFarLaunch.restart());
-        autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
 
         // Compute LaunchOrder and Launch Artifacts.
         autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
-//        autoTasks.addStep(() -> intake.tasks.autoLaunchFar.restart());
-
+//        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.restart());
+        autoTasks.addDelay(1000);
     }
 
     public void extraSettings() {

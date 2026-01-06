@@ -10,6 +10,8 @@ public class DecodeSettings {
 
    static boolean modeTeleOp = true;
 
+   static boolean allianceBlue = true;
+
    static Vector3 robotPosition = new Vector3();   //starts with all zeroes
    public static boolean autonomousDebugMode = false;
    public static boolean firstRun = true;
@@ -31,6 +33,11 @@ public class DecodeSettings {
    public static void setAuto () { modeTeleOp = false; }
    public static boolean isTeleOp() { return modeTeleOp; }
    public static boolean isAuto() { return !modeTeleOp; }
+
+   public static void setAllianceBlue () { allianceBlue = true; }
+   public static void setAllianceRed() { allianceBlue = false; }
+   public static boolean isAllianceBlue() { return allianceBlue; }
+   public static boolean isAllianceRed() { return !allianceBlue; }
 
    public static void setControlGovernor(Vector3 multiplier) {
       controlGovernor = new Vector3(clamp(multiplier.X), clamp(multiplier.Y), clamp(multiplier.Z));

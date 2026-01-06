@@ -39,7 +39,7 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
     PositionSolver positionSolver;
     PositionTracker pt;
     Pinpoint odo;
-    Vector3 fieldStartPos = new Vector3(64,16,180);  //for teleOp, this shouldn't be relevant
+    protected Vector3 fieldStartPos = new Vector3(64,-16,180);
     boolean testModeReverse = false;
 
     public void initTeleop(){
@@ -49,7 +49,7 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
     @Override
     public void runOpMode() {
         extraSettings();
-        DecodeSettings.setTeleOp();
+
         DecimalFormat df = new DecimalFormat("#0.0");
         long start;
         FtcDashboard dashboard = FtcDashboard.getInstance();
@@ -115,7 +115,6 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
             telemetry.update();
         }
 
-//        odo.setPosition(fieldStartPos);
         robot.start();
 
         while (opModeIsActive()) {
@@ -129,17 +128,9 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         robot.stop();
     }
 
-    public void extraSettings() {
+    protected void extraSettings() {
         DecodeSettings.isDemoMode = false;
-    }
-
-    public void moveRobot(Vector3 target){
-        positionSolver.setNewTarget(target, false);
-    }
-    public Vector3 tiletoField(Vector3 p){
-        return new Vector3(p.X * tileSide, p.Y * tileSide, p.Z);
-    }
-    public Vector3 fieldToTile(Vector3 p){
-        return new Vector3(p.X / tileSide, p.Y / tileSide, p.Z);
+        DecodeSettings.setTeleOp();
+        DecodeSettings.setAllianceBlue();
     }
 }

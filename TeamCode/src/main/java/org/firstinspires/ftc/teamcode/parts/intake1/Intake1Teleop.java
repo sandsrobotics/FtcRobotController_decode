@@ -83,52 +83,59 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
         // Driver 2 - start button is a "shift" key; anything below is if start is not pushed
         if (!buttonMgr.getState(2, Buttons.start, State.isPressed)) {
             // Driver 2
-            /*      Transfer Tasks     */
-            //        all
+            /*      Teleop Pre-selected Launch Tasks     */
+            //        pre-selected-teleopFar
             if (buttonMgr.getState(2, Buttons.dpad_down, State.isPressed)) {
-                parent.tasks.allServoTransfer.restart();
+                parent.tasks.teleopFarLaunch.restart();
             }
-            //       pink
-            if (buttonMgr.getState(2, Buttons.dpad_right, State.isPressed)) {
-                parent.tasks.pinkServoTransfer.restart();
-            }
-            //        blue
-            if (buttonMgr.getState(2, Buttons.dpad_up, State.isPressed)) {
-                parent.tasks.blueServoTransfer.restart();
-            }
-            //         green
+            //       pre-selected-teleopNear
             if (buttonMgr.getState(2, Buttons.dpad_left, State.isPressed)) {
-                parent.tasks.greenServoTransfer.restart();
+                parent.tasks.teleopNearLaunch.restart();
             }
-            /*      Launch Tasks          */
+            //       pre-selected-teleopGoal
+            if (buttonMgr.getState(2, Buttons.dpad_up, State.isPressed)) {
+                parent.tasks.teleopGoalLaunch.restart();
+            }
+            //       pre-selected-teleopThree
+            if (buttonMgr.getState(2, Buttons.dpad_right, State.isPressed)) {
+                parent.tasks.teleopThreeLaunch.restart();
+            }
+
+            /*      Manual FarLaunch Tasks          */
             if (buttonMgr.getState(2, Buttons.left_bumper, State.isPressed)) {
                     parent.tasks.startFarLaunch.restart();
             }
+            // StopLaunch
             if (buttonMgr.getState(2, Buttons.left_trigger, State.isPressed)) {
                 parent.tasks.stopLaunch.restart();
             }
-            /*      Launch Tasks          */
+            /*      Manual GoalLaunch Tasks          */
             if (buttonMgr.getState(2, Buttons.right_bumper, State.isPressed)) {
                 parent.tasks.startGoalLaunch.restart();
             }
+            // Manual ThreeLaunch
             if (buttonMgr.getState(2, Buttons.right_trigger, State.isPressed)) {
-                parent.tasks.stopLaunch.restart();
+                parent.tasks.startThreeLaunch.restart();
             }
             /*      Launch Tasks          */
             if (buttonMgr.getState(2, Buttons.b, State.isPressed)) {
-                parent.tasks.startBLaunch.restart();
+                parent.tasks.pinkServoLaunch.restart();
             }
             /*      Launch Tasks          */
             if (buttonMgr.getState(2, Buttons.y, State.isPressed)) {
-                parent.tasks.startYLaunch.restart();
+                parent.tasks.blueServoLaunch.restart();
             }
             /*      Launch Tasks          */
             if (buttonMgr.getState(2, Buttons.x, State.isPressed)) {
-                parent.tasks.startXLaunch.restart();
+                parent.tasks.greenServoLaunch.restart();
             }
 
             /*      Launch Tasks          */
             if (buttonMgr.getState(2, Buttons.a, State.isPressed)) {
+                parent.tasks.pinkBlueGreenServoLaunch.restart();
+            }
+            /*      Launch ALL Servos Tasks          */
+            if (buttonMgr.getState(2, Buttons.a, State.isHeld)) {
                 parent.tasks.computeAndLaunchInOrder.restart();
             }
         }

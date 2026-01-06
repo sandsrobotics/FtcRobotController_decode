@@ -11,14 +11,13 @@ import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.intake1.hardware.Intake1Hardware;
 import org.firstinspires.ftc.teamcode.parts.intake1.settings.Intake1Settings;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
-import org.firstinspires.ftc.teamcode.parts.drive.DriveControl;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
 
+import java.util.Arrays;
+
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.core.part.ControllablePart;
-import om.self.ezftc.utils.Vector3;
-import om.self.supplier.consumer.EdgeConsumer;
 import om.self.task.core.Group;
 
 public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Hardware, Intake1Control> {
@@ -159,51 +158,33 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
             }
         }
 
-        // Print the launch order
-        StringBuilder sb = new StringBuilder("|");
-        for (int i = 0; i < launchOrder.length; i++) {
-            sb.append(Integer.toString(launchOrder[i]));
-            if (i < launchOrder.length - 1) sb.append(", ");
-        }
-        sb.append("|");
-        parent.opMode.telemetry.addData("Launch Order", sb.toString());
+        parent.opMode.telemetry.addData("Current Colors", Arrays.toString(currentColors));
+        parent.opMode.telemetry.addData("Launch Order", Arrays.toString(launchOrder));
 
-        // Fire servos in order
-        for (int idx : launchOrder) {
-            fireServoForIndex(idx);
-            parent.opMode.sleep(Intake1Settings.launchServoSweepTime);
-            parent.opMode.sleep(Intake1Settings.launchServoDelay);
-            resetServoForIndex(idx);
-        }
+        // launchServos in defaultOrder.
+        this.tasks.pinkBlueGreenServoLaunch.restart();
+
+//        // launch Servos in DesiredOrder.
+//        for (int idx : launchOrder) {
+//            launchServoForIndex(idx);
+//            parent.opMode.sleep(300);
+//        }
     }
 
-    private void fireServoForIndex(int index) {
+    private void launchServoForIndex(int index) {
         switch (index) {
             case 0:
-                getHardware().greenServo.setPosition(Intake1Settings.servoGreenLaunch);
+                this.tasks.greenServoLaunch.restart();
                 break;
             case 1:
-                getHardware().blueServo.setPosition(Intake1Settings.servoBlueLaunch);
+                this.tasks.blueServoLaunch.restart();
                 break;
             case 2:
-                getHardware().pinkServo.setPosition(Intake1Settings.servoPinkLaunch);
+                this.tasks.pinkServoLaunch.restart();
                 break;
         }
     }
 
-    private void resetServoForIndex(int index) {
-        switch (index) {
-            case 0:
-                getHardware().greenServo.setPosition(Intake1Settings.servoGreenDock);
-                break;
-            case 1:
-                getHardware().blueServo.setPosition(Intake1Settings.servoBlueDock);
-                break;
-            case 2:
-                getHardware().pinkServo.setPosition(Intake1Settings.servoPinkDock);
-                break;
-        }
-    }
     public void eStop() {
         preventUserControl = false;
         // TODO: Stop LaunchMotors?
@@ -221,12 +202,6 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         tasks.intakeTasksGroup.runCommand(Group.Command.PAUSE);
         tasks.intakeTasksGroup.getActiveRunnables().clear(); // this is the magic sauce... must be used after the PAUSE or it will stop working
     }
-
-//    public void strafeRobot(DriveControl control) {
-//        if (abs(spinnerSliderPower) > .01) {
-//            control.power = control.power.addX(spinnerSliderPower / 3);
-//        }
-//    }
 
     private static int clamp(int val, int min, int max) {
         return Math.max(min, Math.min(val, max));

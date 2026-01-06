@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.parts.intake1;
 
+import org.firstinspires.ftc.teamcode.parts.intake1.settings.Intake1Settings;
+
 import om.self.ezftc.core.Robot;
 import om.self.task.core.Group;
 import om.self.task.other.TimedTask;
@@ -9,12 +11,13 @@ public class Intake1Tasks {
     public final TimedTask intakeTask;
     public final TimedTask artifactIntakeStopTask;
     public final TimedTask outtakeTask;
-    public final TimedTask pinkServoTransfer;
-    public final TimedTask blueServoTransfer;
-    public final TimedTask greenServoTransfer;
-    public final TimedTask allServoTransfer;
+    public final TimedTask pinkServoLaunch;
+    public final TimedTask blueServoLaunch;
+    public final TimedTask greenServoLaunch;
+    public final TimedTask allServoLaunch;
     public final TimedTask startFarLaunch;
     public final TimedTask startGoalLaunch;
+    public final TimedTask startThreeLaunch;
     public final TimedTask stopLaunch;
     public final TimedTask startALaunch;
     public final TimedTask startBLaunch;
@@ -23,7 +26,13 @@ public class Intake1Tasks {
     public final TimedTask viewObelisk;
     public final TimedTask computeAndLaunchInOrder;
     public final TimedTask allServoStore;
-    public final TimedTask autoLaunchFar;
+    public final TimedTask allServoDock;
+    public final TimedTask pinkBlueGreenServoLaunch;
+
+    public final TimedTask teleopFarLaunch;
+    public final TimedTask teleopNearLaunch;
+    public final TimedTask teleopGoalLaunch;
+    public final TimedTask teleopThreeLaunch;
 
     private final Intake1 intake;
     private final Robot robot;
@@ -36,12 +45,14 @@ public class Intake1Tasks {
         intakeTask = new TimedTask(TaskNames.intakeTask, intakeTasksGroup);
         artifactIntakeStopTask = new TimedTask(TaskNames.artifactIntakeStop, intakeTasksGroup);
         outtakeTask = new TimedTask(TaskNames.outtakeTask, intakeTasksGroup);
-        pinkServoTransfer = new TimedTask(TaskNames.pinkServoTransfer, intakeTasksGroup);
-        blueServoTransfer = new TimedTask(TaskNames.blueServoTransfer, intakeTasksGroup);
-        greenServoTransfer = new TimedTask(TaskNames.greenServoTransfer, intakeTasksGroup);
-        allServoTransfer = new TimedTask(TaskNames.allServoTransfer, intakeTasksGroup);
+        pinkServoLaunch = new TimedTask(TaskNames.pinkServoLaunch, intakeTasksGroup);
+        blueServoLaunch = new TimedTask(TaskNames.blueServoLaunch, intakeTasksGroup);
+        greenServoLaunch = new TimedTask(TaskNames.greenServoLaunch, intakeTasksGroup);
+        allServoLaunch = new TimedTask(TaskNames.allServoLaunch, intakeTasksGroup);
+        pinkBlueGreenServoLaunch = new TimedTask(TaskNames.pinkBlueGreenLaunch, intakeTasksGroup);
         startFarLaunch = new TimedTask(TaskNames.startFarLaunch, intakeTasksGroup);
         startGoalLaunch = new TimedTask(TaskNames.startGoalLaunch, intakeTasksGroup);
+        startThreeLaunch = new TimedTask(TaskNames.startThreeLaunch, intakeTasksGroup);
         stopLaunch = new TimedTask(TaskNames.stopLaunch, intakeTasksGroup);
         startALaunch = new TimedTask(TaskNames.startALaunch, intakeTasksGroup);
         startBLaunch = new TimedTask(TaskNames.startBLaunch, intakeTasksGroup);
@@ -50,69 +61,84 @@ public class Intake1Tasks {
         viewObelisk = new TimedTask(TaskNames.viewObelisk, intakeTasksGroup);
         computeAndLaunchInOrder = new TimedTask(TaskNames.computeAndLaunchInOrder, intakeTasksGroup);
         allServoStore = new TimedTask(TaskNames.allServoStore, intakeTasksGroup);
-        autoLaunchFar= new TimedTask(TaskNames.autoLaunchFar, intakeTasksGroup);
-
+        allServoDock = new TimedTask(TaskNames.allServoDock, intakeTasksGroup);
+        teleopFarLaunch = new TimedTask(TaskNames.teleopFarLaunch, intakeTasksGroup);
+        teleopNearLaunch = new TimedTask(TaskNames.teleopNearLaunch, intakeTasksGroup);
+        teleopGoalLaunch = new TimedTask(TaskNames.teleopGoalLaunch, intakeTasksGroup);
+        teleopThreeLaunch = new TimedTask(TaskNames.teleopThreeLaunch, intakeTasksGroup);
     }
 
     public void constructAllIntakeTasks() {
         /*     Motor Intake Task  */
         intakeTask.autoStart = false;
         intakeTask.addStep(()->{
-            intake.getHardware().intakeMotor.setPower(intake.getSettings().intakeIn);
-            intake.getHardware().pinkServo.setPosition(intake.getSettings().servoPinkDock);
-            intake.getHardware().blueServo.setPosition(intake.getSettings().servoBlueDock);
-
+            artifactIntakeStopTask.addStep(allServoDock::restart);
+            artifactIntakeStopTask.addStep(allServoDock::isDone);
+            intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeIn);
         });
 
         /*   Artifact Intake Stop Task   */
         artifactIntakeStopTask.autoStart = false;
         artifactIntakeStopTask.addStep(()-> {
-            intake.getHardware().intakeMotor.setPower(intake.getSettings().intakeStop);
-            allServoStore.restart();
+            intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeStop);
         });
+        artifactIntakeStopTask.addStep(allServoStore::restart);
+        artifactIntakeStopTask.addStep(allServoStore::isDone);
 
-        /*    Artifact Extake Task*/
+         /*    Artifact outtake Task*/
         outtakeTask.autoStart = false;
-        outtakeTask.addStep(() -> intake.getHardware().intakeMotor.setPower(intake.getSettings().intakeOut));
+        outtakeTask.addStep(() -> intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeOut));
 
         /*    Servo Transfer Tasks      */
         //         pink
-        pinkServoTransfer.autoStart = false;
-        pinkServoTransfer.addStep(() -> intake.getHardware().pinkServo.setPosition(intake.getSettings().servoPinkLaunch));
-        pinkServoTransfer.addStep(() -> intake.getHardware().pinkServo.isDone());
-        pinkServoTransfer.addDelay(250);
-        pinkServoTransfer.addStep(() -> intake.getHardware().pinkServo.setPosition(intake.getSettings().servoPinkDock));
+        pinkServoLaunch.autoStart = false;
+        pinkServoLaunch.addStep(() -> intake.getHardware().pinkServo.setPosition(Intake1Settings.servoPinkLaunch));
+        pinkServoLaunch.addStep(() -> intake.getHardware().pinkServo.isDone());
+        pinkServoLaunch.addStep(() -> intake.getHardware().pinkServo.setPosition(Intake1Settings.servoPinkLow));
         //          blue
-        blueServoTransfer.autoStart = false;
-        blueServoTransfer.addStep(() -> intake.getHardware().blueServo.setPosition(intake.getSettings().servoBlueLaunch));
-        blueServoTransfer.addStep(() -> intake.getHardware().blueServo.isDone());
-        blueServoTransfer.addDelay(250);
-        blueServoTransfer.addStep(() -> intake.getHardware().blueServo.setPosition(intake.getSettings().servoBlueDock));
+        blueServoLaunch.autoStart = false;
+        blueServoLaunch.addStep(() -> intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueLaunch));
+        blueServoLaunch.addStep(() -> intake.getHardware().blueServo.isDone());
+        blueServoLaunch.addStep(() -> intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueLow));
         //        green
-        greenServoTransfer.autoStart = false;
-        greenServoTransfer.addStep(() -> intake.getHardware().greenServo.setPosition(intake.getSettings().servoGreenLaunch));
-        greenServoTransfer.addStep(() -> intake.getHardware().greenServo.isDone());
-        greenServoTransfer.addDelay(250);
-        greenServoTransfer.addStep(() -> intake.getHardware().greenServo.setPosition(intake.getSettings().servoGreenDock));
-        //           all
-        allServoTransfer.autoStart = false;
-        allServoTransfer.addStep(()->{
-//            pinkServoTransfer.restart();
-//            allServoTransfer.addDelay(400);
-//            blueServoTransfer.restart();
-//            allServoTransfer.addDelay(400);
-//            greenServoTransfer.restart();
-            pinkServoTransfer.restart();
-            blueServoTransfer.restart();
-            greenServoTransfer.restart();
+        greenServoLaunch.autoStart = false;
+        greenServoLaunch.addStep(() -> intake.getHardware().greenServo.setPosition(Intake1Settings.servoGreenLaunch));
+        greenServoLaunch.addStep(() -> intake.getHardware().greenServo.isDone());
+        greenServoLaunch.addStep(() -> intake.getHardware().greenServo.setPosition(Intake1Settings.servoGreenDock));
+
+        // all at once
+        allServoLaunch.autoStart = false;
+        allServoLaunch.addStep(()->{
+            pinkServoLaunch.restart();
+            blueServoLaunch.restart();
+            greenServoLaunch.restart();
 
         });
-        allServoTransfer.addStep(() ->
+        allServoLaunch.addStep(() ->
             intake.getHardware().greenServo.isDone() && intake.getHardware().blueServo.isDone() && intake.getHardware().pinkServo.isDone()
         );
+
+        // pink, blue, green, with 300 delay.
+        pinkBlueGreenServoLaunch.autoStart = false;
+        pinkBlueGreenServoLaunch.addStep(pinkServoLaunch::restart);
+        pinkBlueGreenServoLaunch.addStep(pinkServoLaunch::isDone);
+        pinkBlueGreenServoLaunch.addDelay(300);
+        pinkBlueGreenServoLaunch.addStep(blueServoLaunch::restart);
+        pinkBlueGreenServoLaunch.addStep(blueServoLaunch::isDone);
+        pinkBlueGreenServoLaunch.addDelay(300);
+        pinkBlueGreenServoLaunch.addStep(greenServoLaunch::restart);
+
         /*    Launch Tasks         */
         //    start Launch
         startFarLaunch.autoStart = false;
+        startFarLaunch.addStep(() -> {
+            if (intake.getLaunchMotorRPM() < Intake1Settings.yLaunchMotorRPM) intake.tasks.startYLaunch.restart();
+        });
+        startFarLaunch.addTimedStep(()->{}, startYLaunch::isDone, 1000);
+        startFarLaunch.addStep(() -> {
+            if (intake.getLaunchMotorRPM() < Intake1Settings.xLaunchMotorRPM) intake.tasks.startXLaunch.restart();
+        });
+        startFarLaunch.addTimedStep(()->{}, startXLaunch::isDone, 1000);
         startFarLaunch.addStep(() -> {
             intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().farLaunchMotorVelocityStart);
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().farLaunchMotorVelocityStart);
@@ -120,9 +146,32 @@ public class Intake1Tasks {
 
         startGoalLaunch.autoStart = false;
         startGoalLaunch.addStep(() -> {
+            if (intake.getLaunchMotorRPM() < Intake1Settings.yLaunchMotorRPM) intake.tasks.startYLaunch.restart();
+        });
+        startGoalLaunch.addTimedStep(()->{}, startYLaunch::isDone, 1000);
+        startGoalLaunch.addStep(() -> {
+            if (intake.getLaunchMotorRPM() < Intake1Settings.xLaunchMotorRPM) intake.tasks.startXLaunch.restart();
+        });
+        startGoalLaunch.addTimedStep(()->{}, startXLaunch::isDone, 1000);
+        startGoalLaunch.addStep(() -> {
             intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().goalLaunchMotorVelocityStart);
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().goalLaunchMotorVelocityStart);
         });
+
+        startThreeLaunch.autoStart = false;
+        startThreeLaunch.addStep(() -> {
+            if (intake.getLaunchMotorRPM() < Intake1Settings.yLaunchMotorRPM) intake.tasks.startYLaunch.restart();
+        });
+        startThreeLaunch.addTimedStep(()->{}, startYLaunch::isDone, 1000);
+        startThreeLaunch.addStep(() -> {
+            if (intake.getLaunchMotorRPM() < Intake1Settings.xLaunchMotorRPM) intake.tasks.startXLaunch.restart();
+        });
+        startThreeLaunch.addTimedStep(()->{}, startXLaunch::isDone, 1000);
+        startThreeLaunch.addStep(() -> {
+            intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().threeLaunchMotorVelocityStart);
+            intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().threeLaunchMotorVelocityStart);
+        });
+
         startALaunch.autoStart = false;
         startALaunch.addStep(() -> {
             intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().aLaunchMotorVelocityStart);
@@ -164,31 +213,83 @@ public class Intake1Tasks {
         //.         allServoStore
         allServoStore.autoStart = false;
         allServoStore.addStep(() ->{
-            intake.getHardware().pinkServo.setPosition(intake.getSettings().servoPinkLow);
-            intake.getHardware().blueServo.setPosition(intake.getSettings().servoBlueLow);
+            intake.getHardware().pinkServo.setPosition(Intake1Settings.servoPinkLow);
+            intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueLow);
         });
-        // auto launch 1 by 1
-        autoLaunchFar.autoStart = false;
-        autoLaunchFar.addStep(() -> pinkServoTransfer.restart());
-        autoLaunchFar.addDelay(600);
-        autoLaunchFar.addStep(() -> blueServoTransfer.restart());
-        autoLaunchFar.addDelay(600);
-        autoLaunchFar.addStep(() -> greenServoTransfer.restart());
+        //.         allServoDock
+        allServoDock.autoStart = false;
+        allServoDock.addStep(() ->{
+            intake.getHardware().pinkServo.setPosition(Intake1Settings.servoPinkDock);
+            intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueDock);
+            intake.getHardware().blueServo.setPosition(Intake1Settings.servoGreenDock);
+        });
 
+        // teleopFarLaunch
+        teleopFarLaunch.autoStart = false;
+        teleopFarLaunch.addStep(() -> {
+            intake.positionSolver.addMoveToTaskEx(
+                    DecodeSettings.isAllianceBlue() ?
+                            intake.getSettings().p_teleopFarBlueLaunch :
+                            intake.getSettings().p_teleopFarRedLaunch,
+                    teleopFarLaunch);
+              });
+        teleopFarLaunch.addStep(startFarLaunch::restart);
+        teleopFarLaunch.addStep(startFarLaunch::isDone);
+        teleopFarLaunch.addStep(pinkBlueGreenServoLaunch::restart);
 
+        // teleopNearLaunch
+        teleopNearLaunch.autoStart = false;
+        teleopNearLaunch.addStep(() -> {
+            intake.positionSolver.addMoveToTaskEx(
+                    DecodeSettings.isAllianceBlue() ?
+                            intake.getSettings().p_teleopNearBlueLaunch :
+                            intake.getSettings().p_teleopNearRedLaunch,
+                    teleopNearLaunch);
+        });
+        teleopNearLaunch.addStep(startThreeLaunch::restart);
+        teleopNearLaunch.addStep(startThreeLaunch::isDone);
+        teleopNearLaunch.addStep(pinkBlueGreenServoLaunch::restart);
+
+        // teleopGoalLaunch
+        teleopGoalLaunch.autoStart = false;
+        teleopGoalLaunch.addStep(() -> {
+            intake.positionSolver.addMoveToTaskEx(
+                    DecodeSettings.isAllianceBlue() ?
+                            intake.getSettings().p_teleopGoalBlueLaunch :
+                            intake.getSettings().p_teleopGoalRedLaunch,
+                    teleopGoalLaunch);
+        });
+        teleopGoalLaunch.addStep(startGoalLaunch::restart);
+        teleopGoalLaunch.addStep(startGoalLaunch::isDone);
+        teleopGoalLaunch.addStep(pinkBlueGreenServoLaunch::restart);
+
+        // teleopThreeLaunch
+        teleopThreeLaunch.autoStart = false;
+        teleopThreeLaunch.addStep(() -> {
+            intake.positionSolver.addMoveToTaskEx(
+                    DecodeSettings.isAllianceBlue() ?
+                            intake.getSettings().p_teleopThreeBlueLaunch :
+                            intake.getSettings().p_teleopThreeRedLaunch,
+                    teleopThreeLaunch);
+        });
+        teleopThreeLaunch.addStep(startThreeLaunch::restart);
+        teleopThreeLaunch.addStep(startThreeLaunch::isDone);
+        teleopThreeLaunch.addStep(allServoLaunch::restart);
     }
+
     /***********************************************************************************/
     public static final class TaskNames {
         public final static String intakeTask = "motor intake";
         public final static String artifactIntakeStop = "artifact intake stop";
         public final static String outtakeTask = "outtake Task";
-        public final static String pinkServoTransfer = "pink servo transfer";
-        public final static String blueServoTransfer = "blue servo transfer";
-        public final static String greenServoTransfer = "green servo transfer";
-        public final static String allServoTransfer = "all servos transfer";
+        public final static String pinkServoLaunch = "pink servo Launch";
+        public final static String blueServoLaunch = "blue servo Launch";
+        public final static String greenServoLaunch = "green servo Launch";
+        public final static String allServoLaunch = "all servos Launch";
         public final static String startFarLaunch = "start FarLaunch";
-        public final static String stopLaunch = "stop Launch";
         public final static String startGoalLaunch = "start GoalLaunch";
+        public final static String startThreeLaunch = "start ThreeLaunch";
+        public final static String stopLaunch = "stop Launch";
         public final static String startALaunch = "start A-Launch";
         public final static String startBLaunch = "start B-Launch";
         public final static String startYLaunch = "start Y-Launch";
@@ -196,7 +297,12 @@ public class Intake1Tasks {
         public final static String viewObelisk = "view Obelisk";
         public final static String computeAndLaunchInOrder = "compute and LaunchInOrder";
         public final static String allServoStore = "all servos store";
-        public final static String autoLaunchFar = "auto launch 1 by 1 far";
+        public final static String allServoDock = "all servos Dock";
+        public final static String pinkBlueGreenLaunch = "pink green blue servo Launch";
+        public final static String teleopFarLaunch = "teleop FarLaunch";
+        public final static String teleopNearLaunch = "teleop NearLaunch";
+        public final static String teleopGoalLaunch = "teleop GoalLaunch";
+        public final static String teleopThreeLaunch = "teleop ThreeLaunch";
 
     }
 

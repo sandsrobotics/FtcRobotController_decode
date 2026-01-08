@@ -39,7 +39,7 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
     PositionSolver positionSolver;
     PositionTracker pt;
     Pinpoint odo;
-    protected Vector3 fieldStartPos = new Vector3(64,16,180);  // TODO: Y:-16
+    protected Vector3 fieldStartPos = new Vector3(64,-16,180);
     boolean testModeReverse = false;
 
     public void initTeleop(){
@@ -62,11 +62,6 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         artifacts = new Artifacts(robot);
 
         initTeleop();
-
-        Vector3 tempPosition = DecodeSettings.getRobotPosition();
-        if (tempPosition.X == 0.0 && tempPosition.Y == 0.0 && tempPosition.Z == 0.0)  {
-            DecodeSettings.storeRobotPosition(fieldStartPos);
-        }
 
         PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,
                 100, new Vector3(2,2,2), DecodeSettings.getRobotPosition());
@@ -103,7 +98,7 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
 
         while (!isStarted()) {
             robot.buttonMgr.runLoop();
-            telemetry.addData("Not Started", "Not Started");
+            telemetry.addData("TELEOP BLUE", "Not Started");
 
 //            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped) ||
 //                    robot.buttonMgr.getState(2, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
@@ -132,5 +127,6 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         DecodeSettings.isDemoMode = false;
         DecodeSettings.setTeleOp();
         DecodeSettings.setAllianceBlue();
+        DecodeSettings.storeRobotPosition(fieldStartPos); // TODO: Do this only if the currentPosition is (0,0,0)?
     }
 }

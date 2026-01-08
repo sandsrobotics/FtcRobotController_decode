@@ -3,7 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import om.self.ezftc.utils.Vector3;
 
-@Autonomous(name="Red", group="32859")
+@Autonomous(name="Red Goal", group="32859")
 public class T3_AutoRedLaunch extends T3_AutoBlueLaunch {
     @Override
     public void initAuto() {

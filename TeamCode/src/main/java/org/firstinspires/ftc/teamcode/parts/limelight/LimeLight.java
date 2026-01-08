@@ -28,6 +28,8 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     // ===== AprilTag latch state =====
     private Integer lastSeenAprilTagId = null;
     private boolean hasLatchedAprilTag = false;
+    private Integer focusedAprilTagId = null;
+
 
     private void updatePatternFromTag(int id) {
         if (id == 21) {
@@ -53,34 +55,33 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
 
     @Override
     public void onRun() {
-        LLStatus status = limelight.getStatus();
         LLResult result = limelight.getLatestResult();
+
+        boolean sawTrackingTag = false;
+        boolean sawFocusTag = false;
+
         if (result.isValid()) {
-            // Access general information
-//            Pose3D botpose = result.getBotpose();
-//            parent.opMode.telemetry.addData("tx", result.getTx());
-//            parent.opMode.telemetry.addData("txnc", result.getTxNC());
-//            parent.opMode.telemetry.addData("ty", result.getTy());
-//            parent.opMode.telemetry.addData("tync", result.getTyNC());
-//            parent.opMode.telemetry.addData("Botpose", botpose.toString());
-            // Access fiducial results
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
-            boolean sawTrackingTag = false;
 
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
                 int id = fr.getFiducialId();
-                parent.opMode.telemetry.addData("April Tag", "ID: %d", id);
+                parent.opMode.telemetry.addData("AprilTag Seen", id);
 
-                // Latched tags
+                // ===============================
+                // FOCUSED TAGS (21 / 22 / 23)
+                // ===============================
                 if (id == 21 || id == 22 || id == 23) {
-                    if (!hasLatchedAprilTag || id != lastSeenAprilTagId) {
+                    sawFocusTag = true;
+
+                    if (focusedAprilTagId == null || focusedAprilTagId != id) {
+                        focusedAprilTagId = id;
                         updatePatternFromTag(id);
-                        lastSeenAprilTagId = id;
-                        hasLatchedAprilTag = true;
                     }
                 }
 
-                // Non-Latched tags.
+                // ===============================
+                // TRACKING TAGS (20 / 24)
+                // ===============================
                 if (id == 20 || id == 24) {
                     tv = true;
                     tx = result.getTx();
@@ -89,20 +90,24 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
                     sawTrackingTag = true;
                 }
             }
-
-            if (!sawTrackingTag) {
-                tv = false;
-            }
-
-            // Access color results
-//            List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
-//            for (LLResultTypes.ColorResult cr : colorResults) {
-//                parent.opMode.telemetry.addData("Color", "X: %.2f, Y: %.2f", cr.getTargetXDegrees(), cr.getTargetYDegrees());
-//            }
-        } else {
-            parent.opMode.telemetry.addData("Limelight", "No data available");
         }
+
+        // ===============================
+        // TRACKING FALLBACK
+        // ===============================
+        if (!sawTrackingTag) {
+            tv = false; // Only affects aiming, NOT focus
+        }
+
+        // ===============================
+        // TELEMETRY (DEBUG)
+        // ===============================
+        parent.opMode.telemetry.addData(
+                "Focused AprilTag",
+                focusedAprilTagId != null ? focusedAprilTagId : "NONE"
+        );
     }
+
 
     public ArtifactColor[] getClassificationPattern() {
         return classificationPattern;

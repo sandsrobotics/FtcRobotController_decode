@@ -10,15 +10,15 @@ import om.self.ezftc.utils.Vector3;
 @Config
 public class IntakeSettings3 {
     public static  double launchServo0Launch = 0.441; //.367
-    public static  double launchServo0Rest = 0.643; //0.610, 0.643
+    public static  double launchServo0Rest = 0.62; //0.610, 0.643
     public static  double launchServo1Launch = 0.54;
-    public static  double launchServo1Rest = 0.3; //.36, 0.30
+    public static  double launchServo1Rest = 0.35; //.36, 0.30
     public static  double launchServo2Launch = 0.45; //.5
-    public static  double launchServo2Rest = 0.245; //.278, 0.245
+    public static  double launchServo2Rest = 0.265; //.278, 0.245
 
     //TODO - Get Values
-    public static  double lockServo0Lock = 0;
-    public static  double lockServo0Unlock = 0.48;
+    public static  double lockServo0Lock = 0.36; // 0
+    public static  double lockServo0Unlock = 0.48; //0.48
     public static  double lockServo1Lock = 0.48;
     public static  double lockServo1Unlock = 0.76; 
     public static  double lockServo2Lock = 0;  //not avail

@@ -124,8 +124,8 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
             // Fallback: launch all remaining artifacts in any order
             for (int idx : artifactIndices) {
                 fireServoForIndex(idx);
-                parent.opMode.sleep(IntakeSettings3.launchServoSweepTime);
-                parent.opMode.sleep(IntakeSettings3.launchServoDelay);
+//                parent.opMode.sleep(IntakeSettings3.launchServoSweepTime);
+//                parent.opMode.sleep(IntakeSettings3.launchServoDelay);
                 resetServoForIndex(idx);
             }
         } else {
@@ -176,8 +176,32 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         return true;
     }
 
+    /**
+     * Waits until launcher RPM is within tolerance or timeout expires.
+     * This will NEVER block forever.
+     */
+    private void waitForLauncherToleranceOrTimeout() {
+        long startTime = System.currentTimeMillis();
+
+        while (!launchRPMInTolerance()) {
+            // Timeout check
+            if (System.currentTimeMillis() - startTime >= IntakeSettings3.launchRPMToleranceTime) {
+                parent.opMode.telemetry.addData(
+                        "Launcher",
+                        "RPM tolerance timeout — continuing anyway"
+                );
+                parent.opMode.telemetry.update();
+                break;
+            }
+        }
+    }
 
     private void fireServoForIndex(int index) {
+
+        //Wait for RPM tolerance OR timeout
+        waitForLauncherToleranceOrTimeout();
+        getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Unlock);
+        // Fire the correct servo
         switch (index) {
             case 0:
                 getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
@@ -190,6 +214,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
                 break;
         }
     }
+
 
     private void resetServoForIndex(int index) {
         switch (index) {
@@ -235,12 +260,13 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 
     public void eStop() {
         stopAllIntakeTasks();
+        setLaunchRPM(0);
+        setIntakeRPM(0);
         getHardware().pixel.stop();
-        getHardware().intakeMotor.setVelocity(0);
-        getHardware().launchMotor.setVelocity(0);
         getHardware().launchServo0.stop();
         getHardware().launchServo1.stop();
         getHardware().launchServo2.stop();
+        getHardware().lockServo0.stop();
     }
 
     public void initializeServos() {

@@ -247,9 +247,11 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         getHardware().launchServo0.setSweepTime(IntakeSettings3.launchServoSweepTime);
         getHardware().launchServo1.setSweepTime(IntakeSettings3.launchServoSweepTime);
         getHardware().launchServo2.setSweepTime(IntakeSettings3.launchServoSweepTime);
+        getHardware().lockServo0.setPosition(IntakeSettings3.lockServoSweepTime); //maybe not launch servo sweep time
         getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
         getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
         getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
+        getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Unlock);
     }
 
     @Override

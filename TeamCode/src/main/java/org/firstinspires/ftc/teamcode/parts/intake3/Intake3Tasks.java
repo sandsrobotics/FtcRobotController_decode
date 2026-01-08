@@ -38,20 +38,21 @@ public class Intake3Tasks {
 
         // launch all three balls one after the other
         ballLaunchTask.autoStart = false;
-        ballLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.VIOLET.getLedPwm()));
+//        ballLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.VIOLET.getLedPwm()));
 
         //unlock all
         ballLaunchTask.addStep(()-> intake.getHardware().lockServo0.setPosition(intake.getSettings().lockServo0Unlock));
-        ballLaunchTask.addStep(()-> intake.getHardware().lockServo1.setPosition(intake.getSettings().lockServo1Unlock));
-        ballLaunchTask.addStep(()-> intake.getHardware().lockServo2.setPosition(intake.getSettings().lockServo2Unlock));
-        ballLaunchTask.addStep(()-> intake.getHardware().lockServo2.isDone());
+        ballLaunchTask.addStep(()-> intake.getHardware().lockServo0.isDone());
 
         //launch
+        ballLaunchTask.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), intake.getSettings().launchRPMToleranceTime);
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo0.setPosition(intake.getSettings().launchServo0Launch));
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo0.isDone());
+        ballLaunchTask.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), intake.getSettings().launchRPMToleranceTime);
         ballLaunchTask.addDelay(intake.getSettings().launchServoDelay);
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo1.setPosition(intake.getSettings().launchServo1Launch));
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo1.isDone());
+        ballLaunchTask.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), intake.getSettings().launchRPMToleranceTime);
         ballLaunchTask.addDelay(intake.getSettings().launchServoDelay);
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Launch));
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo2.isDone());
@@ -66,13 +67,13 @@ public class Intake3Tasks {
 
         // all three ball task at the same time
         sameTimeBallLaunchTask.autoStart = false;
-        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.VIOLET.getLedPwm()));
+//        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.VIOLET.getLedPwm()));
 
         //unlock all
         sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo0.setPosition(intake.getSettings().lockServo0Unlock));
-        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo1.setPosition(intake.getSettings().lockServo1Unlock));
-        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo2.setPosition(intake.getSettings().lockServo2Unlock));
-        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo2.isDone());
+//        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo1.setPosition(intake.getSettings().lockServo1Unlock));
+//        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo2.setPosition(intake.getSettings().lockServo2Unlock));
+        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo0.isDone());
 
         //launch
         sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo0.setPosition(intake.getSettings().launchServo0Launch));
@@ -111,7 +112,7 @@ public class Intake3Tasks {
         resetLaunchServos.addStep(()-> intake.getHardware().lockServo0.setPosition(intake.getSettings().lockServo0Lock));
         resetLaunchServos.addStep(()-> intake.getHardware().lockServo1.setPosition(intake.getSettings().lockServo1Lock));
         resetLaunchServos.addStep(()-> intake.getHardware().lockServo2.setPosition(intake.getSettings().lockServo2Lock));
-        resetLaunchServos.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.GREEN.getLedPwm()));
+//        resetLaunchServos.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.GREEN.getLedPwm()));
 
         /* End */
 

@@ -25,6 +25,31 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     public double ty = 0;  // Vertical offset from crosshair
     public double ta = 0;  // Target area (0-100% of image)
     public boolean tv = false;  // Valid target flag
+    // ===== AprilTag latch state =====
+    private Integer lastSeenAprilTagId = null;
+    private boolean hasLatchedAprilTag = false;
+
+    private void updatePatternFromTag(int id) {
+        if (id == 21) {
+            classificationPattern = new ArtifactColor[]{
+                    ArtifactColor.GREEN,
+                    ArtifactColor.PURPLE,
+                    ArtifactColor.PURPLE
+            };
+        } else if (id == 22) {
+            classificationPattern = new ArtifactColor[]{
+                    ArtifactColor.PURPLE,
+                    ArtifactColor.GREEN,
+                    ArtifactColor.PURPLE
+            };
+        } else if (id == 23) {
+            classificationPattern = new ArtifactColor[]{
+                    ArtifactColor.PURPLE,
+                    ArtifactColor.PURPLE,
+                    ArtifactColor.GREEN
+            };
+        }
+    }
 
     @Override
     public void onRun() {
@@ -40,40 +65,35 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
 //            parent.opMode.telemetry.addData("Botpose", botpose.toString());
             // Access fiducial results
             List<LLResultTypes.FiducialResult> fiducialResults = result.getFiducialResults();
+            boolean sawTrackingTag = false;
+
             for (LLResultTypes.FiducialResult fr : fiducialResults) {
                 int id = fr.getFiducialId();
-                parent.opMode.telemetry.addData("April Tag", "ID: %d", fr.getFiducialId());
-                if (id == 21) {
-                    classificationPattern = new ArtifactColor[]{
-                            ArtifactColor.GREEN,
-                            ArtifactColor.PURPLE,
-                            ArtifactColor.PURPLE
-                    };
-                } else if (id == 22) {
-                    classificationPattern = new ArtifactColor[]{
-                            ArtifactColor.PURPLE,
-                            ArtifactColor.GREEN,
-                            ArtifactColor.PURPLE
-                    };
-                } else if (id == 23) {
-                    classificationPattern = new ArtifactColor[]{
-                            ArtifactColor.PURPLE,
-                            ArtifactColor.PURPLE,
-                            ArtifactColor.GREEN
-                    };
-                } else if (id == 20 || id == 24) {
-                    // update tracking data
-                    tv = result.isValid();
-                    tx = result.getTx();  // Horizontal offset
-                    ty = result.getTy();  // Vertical offset
-                    ta = result.getTa();  // Target area
-                } else {
-                    tv = false;
-                    tx = 0;
-                    ty = 0;
-                    ta = 0;
+                parent.opMode.telemetry.addData("April Tag", "ID: %d", id);
+
+                // Latched tags
+                if (id == 21 || id == 22 || id == 23) {
+                    if (!hasLatchedAprilTag || id != lastSeenAprilTagId) {
+                        updatePatternFromTag(id);
+                        lastSeenAprilTagId = id;
+                        hasLatchedAprilTag = true;
+                    }
+                }
+
+                // Non-Latched tags.
+                if (id == 20 || id == 24) {
+                    tv = true;
+                    tx = result.getTx();
+                    ty = result.getTy();
+                    ta = result.getTa();
+                    sawTrackingTag = true;
                 }
             }
+
+            if (!sawTrackingTag) {
+                tv = false;
+            }
+
             // Access color results
 //            List<LLResultTypes.ColorResult> colorResults = result.getColorResults();
 //            for (LLResultTypes.ColorResult cr : colorResults) {

@@ -220,7 +220,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
         // Launch Pre-loaded Artifacts.
         // Determine LaunchOrder and Launch.
         autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
-        autoTasks.addDelay(2000);
+        autoTasks.addDelay(2500);
 
         // Intake from Row3 and Launch.
         artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow3, p_IntakeRedArtifactRow3,
@@ -257,7 +257,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Move to intake.
         positionSolver.addMoveToTaskEx(p_intake, autoTasks);
-        autoTasks.addDelay(2000); // Test with 1000.
+        autoTasks.addDelay(2500); // Test with 1000.
 
         // StopIntake.
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());

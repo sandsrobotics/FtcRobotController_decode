@@ -72,8 +72,8 @@ public class Intake1Tasks {
         /*     Motor Intake Task  */
         intakeTask.autoStart = false;
         intakeTask.addStep(()->{
-            artifactIntakeStopTask.addStep(allServoDock::restart);
-            artifactIntakeStopTask.addStep(allServoDock::isDone);
+            intakeTask.addStep(allServoDock::restart);
+            intakeTask.addStep(allServoDock::isDone);
             intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeIn);
         });
 

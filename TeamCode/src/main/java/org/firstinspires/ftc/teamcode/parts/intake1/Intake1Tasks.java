@@ -96,12 +96,12 @@ public class Intake1Tasks {
         pinkServoLaunch.autoStart = false;
         pinkServoLaunch.addStep(() -> intake.getHardware().pinkServo.setPosition(Intake1Settings.servoPinkLaunch));
         pinkServoLaunch.addStep(() -> intake.getHardware().pinkServo.isDone());
-        pinkServoLaunch.addStep(() -> intake.getHardware().pinkServo.setPosition(Intake1Settings.servoPinkLow));
+        pinkServoLaunch.addStep(() -> intake.getHardware().pinkServo.setPosition(Intake1Settings.servoPinkDock));
         //          blue
         blueServoLaunch.autoStart = false;
         blueServoLaunch.addStep(() -> intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueLaunch));
         blueServoLaunch.addStep(() -> intake.getHardware().blueServo.isDone());
-        blueServoLaunch.addStep(() -> intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueLow));
+        blueServoLaunch.addStep(() -> intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueDock));
         //        green
         greenServoLaunch.autoStart = false;
         greenServoLaunch.addStep(() -> intake.getHardware().greenServo.setPosition(Intake1Settings.servoGreenLaunch));

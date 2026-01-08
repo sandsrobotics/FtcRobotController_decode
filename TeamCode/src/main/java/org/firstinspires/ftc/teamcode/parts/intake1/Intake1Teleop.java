@@ -135,7 +135,7 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
                 parent.tasks.pinkBlueGreenServoLaunch.restart();
             }
             /*      Launch ALL Servos Tasks          */
-            if (buttonMgr.getState(2, Buttons.a, State.isHeld)) {
+            if (buttonMgr.getState(2, Buttons.a, State.wasDoubleTapped)) {
                 parent.tasks.computeAndLaunchInOrder.restart();
             }
         }
@@ -161,8 +161,14 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
             if (buttonMgr.getState(1, Buttons.a, State.isPressed)) {
                 parent.tasks.outtakeTask.restart();
             }
-            if (buttonMgr.getState(1, Buttons.b, State.isPressed)) {
+            if (buttonMgr.getState(1, Buttons.x, State.isPressed)) {
                 parent.tasks.viewObelisk.restart();
+            }
+            if (buttonMgr.getState(1, Buttons.y, State.isPressed)) {
+                parent.tasks.allServoDock.restart();
+            }
+            if (buttonMgr.getState(1, Buttons.b, State.isPressed)) {
+                parent.tasks.allServoStore.restart();
             }
 
                 // Driver 1

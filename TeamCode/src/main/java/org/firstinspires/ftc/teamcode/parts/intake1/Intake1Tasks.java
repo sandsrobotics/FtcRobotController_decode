@@ -225,7 +225,27 @@ public class Intake1Tasks {
 
         //     computeAndLaunchInOrder
         computeAndLaunchInOrder.autoStart = false;
-        computeAndLaunchInOrder.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
+        computeAndLaunchInOrder.addStep( () -> {
+            int[] currLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
+
+            for (int i = 0; i < 3; i++) {
+                int currLaunch = currLaunchOrder[i];
+
+                if (currLaunch == 0) {
+                    intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), computeAndLaunchInOrder);
+                    computeAndLaunchInOrder.addStep(() -> intake.tasks.greenServoLaunch.restart());
+                    computeAndLaunchInOrder.addDelay(300);
+                } else if (currLaunch == 1) {
+                    intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), computeAndLaunchInOrder);
+                    computeAndLaunchInOrder.addStep(() -> intake.tasks.blueServoLaunch.restart());
+                    computeAndLaunchInOrder.addDelay(300);
+                } else if (currLaunch == 2) {
+                    intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), computeAndLaunchInOrder);
+                    computeAndLaunchInOrder.addStep(() -> intake.tasks.pinkServoLaunch.restart());
+                    computeAndLaunchInOrder.addDelay(300);
+                }
+            }
+        });
 
         //.         allServoStore
         allServoStore.autoStart = false;

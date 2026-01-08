@@ -26,6 +26,7 @@ import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.settings.PositionTrackerSettings;
 
 import java.text.DecimalFormat;
+import java.util.Objects;
 import java.util.function.Function;
 
 import om.self.ezftc.core.Robot;
@@ -269,7 +270,8 @@ public class T1_AutoFarRed  extends LinearOpMode{
 //        positionSolver.addMoveToTaskEx(p_Launch, autoTasks);
 //
 //        // Compute LaunchOrder and Launch Artifacts.
-//        autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
+//        // autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
+//        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
 ////        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.restart());
 //        autoTasks.addDelay(2000);
 

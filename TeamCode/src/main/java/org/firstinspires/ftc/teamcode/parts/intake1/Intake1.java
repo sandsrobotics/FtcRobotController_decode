@@ -106,8 +106,8 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         return ((getHardware().launchMotorLeft.getVelocity() * 60) / Intake1Settings.ticksPerRevolution) >= (this.launchRPM - Intake1Settings.launchRPMTolerance);
     }
 
-    // Based on GameClassificationId, compute Launch Order and launch Current Artifacts.
-    public void computeLaunchOrderAndLaunch(Integer classificationId) {
+    // Based on GameClassificationId, compute Launch Order.
+    public int[] computeLaunchOrder(Integer classificationId) {
 
         // Setup "desiredOrder" based on classificationId.
         char [] desiredOrder = (classificationId == 21) ? classificationOrder21 :
@@ -161,8 +161,10 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         parent.opMode.telemetry.addData("Current Colors", Arrays.toString(currentColors));
         parent.opMode.telemetry.addData("Launch Order", Arrays.toString(launchOrder));
 
+        return launchOrder;
+
         // launchServos in defaultOrder.
-        this.tasks.pinkBlueGreenServoLaunch.restart();
+//        this.tasks.pinkBlueGreenServoLaunch.restart();
 
 //        // launch Servos in DesiredOrder.
 //        for (int idx : launchOrder) {

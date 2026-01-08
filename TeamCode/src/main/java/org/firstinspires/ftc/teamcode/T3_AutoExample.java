@@ -28,7 +28,7 @@ import om.self.task.core.Group;
 import om.self.task.other.TimedTask;
 import static om.self.ezftc.utils.Constants.tileSide;
 
-@Config
+@Disabled
 @Autonomous(name="32859 Auto Example ", group="32859")
 public class T3_AutoExample extends LinearOpMode{
     public Function<Vector3, Vector3> transformFunc;

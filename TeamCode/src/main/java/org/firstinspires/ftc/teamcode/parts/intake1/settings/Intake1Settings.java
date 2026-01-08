@@ -26,8 +26,9 @@ public class Intake1Settings {
     public static double servoBlueLow =                             0.390;
 
     public static double ticksPerRevolution =                          28;
-    public double secondsPerMinute =                            60;
-    public static double farLaunchMotorRPM =                         3000; // 3100; 3200
+    public double secondsPerMinute =                                 60;
+    public static double autoFarLaunchMotorRPM =                     3000; // 3100; 3200
+    public static double farLaunchMotorRPM =                         3100; // 3100; 3200
     public static double threeLaunchMotorRPM =                       2700; // 2900.
     public static double goalLaunchMotorRPM =                        2500;
 
@@ -35,6 +36,7 @@ public class Intake1Settings {
     public static double bLaunchMotorRPM =                        1000;
     public static double yLaunchMotorRPM =                        1500;
     public static double xLaunchMotorRPM =                        2000;
+    public double autoFarLaunchMotorVelocityStart =              autoFarLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
     public double farLaunchMotorVelocityStart =                  farLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
     public double threeLaunchMotorVelocityStart =                threeLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;
     public double goalLaunchMotorVelocityStart =                 goalLaunchMotorRPM/secondsPerMinute*ticksPerRevolution;

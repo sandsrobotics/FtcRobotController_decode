@@ -15,6 +15,7 @@ public class Intake1Tasks {
     public final TimedTask blueServoLaunch;
     public final TimedTask greenServoLaunch;
     public final TimedTask allServoLaunch;
+    public final TimedTask startAutoFarLaunch;
     public final TimedTask startFarLaunch;
     public final TimedTask startGoalLaunch;
     public final TimedTask startThreeLaunch;
@@ -50,6 +51,7 @@ public class Intake1Tasks {
         greenServoLaunch = new TimedTask(TaskNames.greenServoLaunch, intakeTasksGroup);
         allServoLaunch = new TimedTask(TaskNames.allServoLaunch, intakeTasksGroup);
         pinkBlueGreenServoLaunch = new TimedTask(TaskNames.pinkBlueGreenLaunch, intakeTasksGroup);
+        startAutoFarLaunch = new TimedTask(TaskNames.startAutoFarLaunch, intakeTasksGroup);
         startFarLaunch = new TimedTask(TaskNames.startFarLaunch, intakeTasksGroup);
         startGoalLaunch = new TimedTask(TaskNames.startGoalLaunch, intakeTasksGroup);
         startThreeLaunch = new TimedTask(TaskNames.startThreeLaunch, intakeTasksGroup);
@@ -129,6 +131,21 @@ public class Intake1Tasks {
         pinkBlueGreenServoLaunch.addStep(greenServoLaunch::restart);
 
         /*    Launch Tasks         */
+        //    start Launch
+        startAutoFarLaunch.autoStart = false;
+        startAutoFarLaunch.addStep(() -> {
+            if (intake.getLaunchMotorRPM() < Intake1Settings.yLaunchMotorRPM) intake.tasks.startYLaunch.restart();
+        });
+        startAutoFarLaunch.addTimedStep(()->{}, startYLaunch::isDone, 1000);
+        startAutoFarLaunch.addStep(() -> {
+            if (intake.getLaunchMotorRPM() < Intake1Settings.xLaunchMotorRPM) intake.tasks.startXLaunch.restart();
+        });
+        startAutoFarLaunch.addTimedStep(()->{}, startXLaunch::isDone, 1000);
+        startAutoFarLaunch.addStep(() -> {
+            intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().autoFarLaunchMotorVelocityStart);
+            intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().autoFarLaunchMotorVelocityStart);
+        });
+
         //    start Launch
         startFarLaunch.autoStart = false;
         startFarLaunch.addStep(() -> {
@@ -290,6 +307,7 @@ public class Intake1Tasks {
         public final static String blueServoLaunch = "blue servo Launch";
         public final static String greenServoLaunch = "green servo Launch";
         public final static String allServoLaunch = "all servos Launch";
+        public final static String startAutoFarLaunch = "start AutoFarLaunch";
         public final static String startFarLaunch = "start FarLaunch";
         public final static String startGoalLaunch = "start GoalLaunch";
         public final static String startThreeLaunch = "start ThreeLaunch";

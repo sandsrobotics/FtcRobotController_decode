@@ -12,7 +12,11 @@ public class DecodeSettings {
 
    static boolean allianceBlue = true;
 
-   static Vector3 robotPosition = new Vector3();   //starts with all zeroes
+   static Vector3 robotPosition = new Vector3();
+   static Vector3 currentLaunchPosZero = new Vector3(); // Each Mode is supposed to set this value before calling computeAndLaunchInOrder.
+   static Vector3 currentLaunchPosOne = new Vector3(); // Each Mode is supposed to set this value before calling computeAndLaunchInOrder.
+   static Vector3 currentLaunchPosTwo = new Vector3(); // Each Mode is supposed to set this value before calling computeAndLaunchInOrder.
+
    public static boolean autonomousDebugMode = false;
    public static boolean firstRun = true;
    static Vector3 controlGovernor = new Vector3(1,1,1);
@@ -57,6 +61,30 @@ public class DecodeSettings {
 
    public static Vector3 getRobotPosition() {
       return robotPosition;
+   }
+
+   public static void storeLaunchPositionZero(Vector3 launchPosition) {
+      if (launchPosition.X == 0 && launchPosition.Y == 0 && launchPosition.Z == 0) return;
+      currentLaunchPosZero = launchPosition;
+   }
+   public static Vector3 getLaunchPositionZero() {
+      return currentLaunchPosZero;
+   }
+
+   public static void storeLaunchPositionOne(Vector3 launchPosition) {
+      if (launchPosition.X == 0 && launchPosition.Y == 0 && launchPosition.Z == 0) return;
+      currentLaunchPosOne = launchPosition;
+   }
+   public static Vector3 getLaunchPositionOne() {
+      return currentLaunchPosOne;
+   }
+
+   public static void storeLaunchPositionTwo(Vector3 launchPosition) {
+      if (launchPosition.X == 0 && launchPosition.Y == 0 && launchPosition.Z == 0) return;
+      currentLaunchPosTwo = launchPosition;
+   }
+   public static Vector3 getLaunchPositionTwo() {
+      return currentLaunchPosTwo;
    }
 
    private static double clamp(double pos) {

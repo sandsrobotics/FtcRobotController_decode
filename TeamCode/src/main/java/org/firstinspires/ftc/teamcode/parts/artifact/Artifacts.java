@@ -35,12 +35,12 @@ public class Artifacts extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         FtcDashboard.getInstance().startCameraStream(camera, 10);
         pipeline = new ArtifactDetectionPipeline();
         camera.setPipeline(pipeline);
-        camera.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener()
+        camera.openCameraDeviceAsync(new OpenCvWebcam.AsyncCameraOpenListener()
         {
             @Override
             public void onOpened()
             {
-                camera.startStreaming(1280,720, OpenCvCameraRotation.SENSOR_NATIVE);
+                camera.startStreaming(1280,720, OpenCvCameraRotation.SENSOR_NATIVE, OpenCvWebcam.StreamFormat.YUY2);
             }
 
             @Override

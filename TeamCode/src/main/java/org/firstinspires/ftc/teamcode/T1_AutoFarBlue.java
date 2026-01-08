@@ -7,7 +7,6 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.GoBildaPinpointDriver;
@@ -25,7 +24,6 @@ import org.firstinspires.ftc.teamcode.parts.positiontracker.hardware.PositionTra
 import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.settings.PositionTrackerSettings;
 
-import java.text.DecimalFormat;
 import java.util.function.Function;
 
 import om.self.ezftc.core.Robot;
@@ -35,8 +33,9 @@ import om.self.task.core.Group;
 import om.self.task.other.TimedTask;
 
 @Config
-@Autonomous (name="14273 AutoFarRed", group="14273")
-public class T1_AutoFarRed  extends LinearOpMode{
+@Autonomous(name="14273 AutoFarBlue", group="14273")
+public class T1_AutoFarBlue  extends LinearOpMode {
+
     public Function<Vector3, Vector3> transformFunc;
     public Vector3 customStartPos;
     public boolean shutdownps;
@@ -50,23 +49,23 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
     Integer launchRPM = 3200;
 
-    // Positions to travel in AutoFarRed
-    Vector3 p_fieldStartPos             = new Vector3(64,16,180);
-    Vector3 p_parkAfterAuto             = new Vector3(32,16,157);
+    // Positions to travel in AutoFarBlue
+    Vector3 p_fieldStartPos             = new Vector3(64,-16,-180);
+    Vector3 p_parkAfterAuto             = new Vector3(32,-16,-157);
 
-    Vector3 p_obeliskView               = new Vector3(58, 16, 180);  // Was: 56, 16, 180; // FarRed: ObeliskView Position
-    Vector3 p_LaunchPos                 = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_LaunchPosZero             = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_LaunchPosOne              = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_LaunchPosTwo              = new Vector3(58,16,160);    // FarRed Launching Position for pinkServo. Z:160.
+    Vector3 p_obeliskView               = new Vector3(58, -16, -180);  // Was: 56, 16, 180; // FarBlue: ObeliskView Position
+    Vector3 p_LaunchPos                 = new Vector3(58,-16,-157);    // Was: 56, 16, 153; // FarBlue Launching Position.
+    Vector3 p_LaunchPosZero             = new Vector3(58,-16,-157);    // Was: 56, 16, 153; // FarBlue Launching Position.
+    Vector3 p_LaunchPosOne              = new Vector3(58,-16,-157);    // Was: 56, 16, 153; // FarBlue Launching Position.
+    Vector3 p_LaunchPosTwo              = new Vector3(58,-16,-160);    // FarBlue Launching Position for pinkServo. Z:160.
 
-    Vector3 p_pre_IntakeRedArtifactRow1 = new Vector3(-12, 28, -90);  // Red: Ready to collect on Row1
-    Vector3 p_IntakeRedArtifactRow1     = new Vector3(-12, 48, -90);  // Red: Intake Artifacts in Row1
-    Vector3 p_pre_IntakeRedArtifactRow2 = new Vector3(12, 28, -90);   // Red: Ready to collect on Row2
-    Vector3 p_IntakeRedArtifactRow2     = new Vector3(12, 60, -90);   // Red: Intake Artifacts in Row2
-    Vector3 p_pre_IntakeRedArtifactRow3 = new Vector3(34.5, 28, -90);   // Red: Ready to collect in Row3
-    Vector3 p_IntakeRedArtifactRow3     = new Vector3(34.5, 60, -90);   // Red: Intake Artifacts in Row3
-    Vector3 p_LeverOpen                 = new Vector3(0, 55, 180);    // Red: Open Lever Position
+    Vector3 p_pre_IntakeBlueArtifactRow1    = new Vector3(-12, -28, 90);  // Blue: Ready to collect on Row1
+    Vector3 p_IntakeBlueArtifactRow1        = new Vector3(-12, -48, 90);  // Blue: Intake Artifacts in Row1
+    Vector3 p_pre_IntakeBlueArtifactRow2    = new Vector3(12, -28, 90);   // Blue: Ready to collect on Row2
+    Vector3 p_IntakeBlueArtifactRow2        = new Vector3(12, -60, 90);   // Blue: Intake Artifacts in Row2
+    Vector3 p_pre_IntakeBlueArtifactRow3    = new Vector3(34.5, -28, 90);   // Blue: Ready to collect in Row3
+    Vector3 p_IntakeBlueArtifactRow3        = new Vector3(34.5, -60, 90);   // Blue: Intake Artifacts in Row3
+    Vector3 p_LeverOpen                      = new Vector3(0, -55, -180);    // Blue: Open Lever Position
 
     //  DASHBOARD VARIABLES (static public)
     static public int shortDelay = 1000;
@@ -135,7 +134,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         while (!isStarted()) {
             robot.buttonMgr.runLoop();
-            telemetry.addData("AUTO RED: ", "Not Started");
+            telemetry.addData("AUTO BLUE: ", "Not Started");
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.right_bumper, ButtonMgr.State.wasTapped)) {
                 startDelay += 1000;
             }
@@ -224,8 +223,8 @@ public class T1_AutoFarRed  extends LinearOpMode{
         autoTasks.addDelay(300);
 
         // Intake from Row3 and Launch.
-        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow3, p_IntakeRedArtifactRow3,
-                    p_LaunchPos, launchRPM);
+        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeBlueArtifactRow3, p_IntakeBlueArtifactRow3,
+                p_LaunchPos, launchRPM);
 
         // Intake from Row2 and Launch.
 //        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow2, p_IntakeRedArtifactRow2,
@@ -289,7 +288,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
     public void extraSettings() {
         DecodeSettings.isDemoMode = false;
         DecodeSettings.setAuto();
-        DecodeSettings.setAllianceRed();
+        DecodeSettings.setAllianceBlue();
 
         DecodeSettings.storeRobotPosition(p_fieldStartPos);
         DecodeSettings.storeLaunchPositionZero(p_LaunchPosZero);

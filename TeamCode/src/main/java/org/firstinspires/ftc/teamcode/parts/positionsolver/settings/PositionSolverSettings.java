@@ -56,6 +56,12 @@ public class PositionSolverSettings {
             new SolverSettings(2.5, 2, true, 10000, new PIDCoefficients(0.0125, 0, 0), .5)
     );
 
+    public static PositionSolverSettings defaultTwiceExtraSlowSettings = new PositionSolverSettings(
+            new SolverSettings(1, 2, true, 10000, new PIDCoefficients(0.05, 0, 0), .35),
+            new SolverSettings(1, 2, true, 10000, new PIDCoefficients(0.05, 0, 0), .35),
+            new SolverSettings(2.5, 2, true, 10000, new PIDCoefficients(0.0125, 0, 0), .35)
+    );
+
     public static PositionSolverSettings defaultTwiceNoAlwaysRunSettings = new PositionSolverSettings(
             new SolverSettings(1, 2, false, 10000, new PIDCoefficients(0.05, 0, 0), 1),
             new SolverSettings(1, 2, false, 10000, new PIDCoefficients(0.05, 0, 0), 1),

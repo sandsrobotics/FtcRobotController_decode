@@ -60,11 +60,11 @@ public class T1_AutoFarBlue  extends LinearOpMode {
     Vector3 p_LaunchPosTwo              = new Vector3(58,-16,-160);    // FarBlue Launching Position for pinkServo. Z:160.
 
     Vector3 p_pre_IntakeBlueArtifactRow1    = new Vector3(-12, -28, 90);  // Blue: Ready to collect on Row1
-    Vector3 p_IntakeBlueArtifactRow1        = new Vector3(-12, -48, 90);  // Blue: Intake Artifacts in Row1
+    Vector3 p_IntakeBlueArtifactRow1        = new Vector3(-12, -53, 90);  // Blue: Intake Artifacts in Row1
     Vector3 p_pre_IntakeBlueArtifactRow2    = new Vector3(12, -28, 90);   // Blue: Ready to collect on Row2
     Vector3 p_IntakeBlueArtifactRow2        = new Vector3(12, -60, 90);   // Blue: Intake Artifacts in Row2
-    Vector3 p_pre_IntakeBlueArtifactRow3    = new Vector3(34.5, -28, 90);   // Blue: Ready to collect in Row3
-    Vector3 p_IntakeBlueArtifactRow3        = new Vector3(34.5, -60, 90);   // Blue: Intake Artifacts in Row3
+    Vector3 p_pre_IntakeBlueArtifactRow3    = new Vector3(35.5, -28, 90);   // Blue: Ready to collect in Row3
+    Vector3 p_IntakeBlueArtifactRow3        = new Vector3(35.5, -60, 90);   // Blue: Intake Artifacts in Row3
     Vector3 p_LeverOpen                      = new Vector3(0, -55, -180);    // Blue: Open Lever Position
 
     //  DASHBOARD VARIABLES (static public)
@@ -253,7 +253,9 @@ public class T1_AutoFarBlue  extends LinearOpMode {
         autoTasks.addStep(() -> intake.tasks.intakeTask.isDone());
 
         // Set positionSolver to "Slow" to allow intake slowly.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+//        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceExtraSlowSettings));
+
 
         // Move to intake.
         positionSolver.addMoveToTaskEx(p_intake, autoTasks);
@@ -262,17 +264,20 @@ public class T1_AutoFarBlue  extends LinearOpMode {
         // StopIntake.
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
+//        autoTasks.addStep(() -> intake.tasks.allServoStore.restart());
 
 //        // Move to launch.
 //        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
 //        positionSolver.addMoveToTaskEx(p_Launch, autoTasks);
 //
 //        // Compute LaunchOrder and Launch Artifacts.
+//        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
 //        autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
 ////        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.restart());
 //        autoTasks.addDelay(2000);
 
         // Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
         positionSolver.addMoveToTaskEx(p_LaunchPosTwo, autoTasks);
         autoTasks.addStep(() -> intake.tasks.pinkServoLaunch.restart());
         autoTasks.addDelay(300);
@@ -282,6 +287,7 @@ public class T1_AutoFarBlue  extends LinearOpMode {
         positionSolver.addMoveToTaskEx(p_LaunchPosZero, autoTasks);
         autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
         autoTasks.addDelay(300);
+//        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
 
     }
 

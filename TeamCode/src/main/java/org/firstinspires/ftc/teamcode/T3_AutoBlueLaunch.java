@@ -14,6 +14,7 @@ public class T3_AutoBlueLaunch extends T3_AutoBase {
     Vector3 blueLaunchStart = new Vector3(-58.8,-45,143);; //-51, -50, 140
     @Override
     public void initAuto(){
+        isRedSide = false;
         transformFunc = (v) -> v;
         fieldStartPos = blueLaunchStart;
     }

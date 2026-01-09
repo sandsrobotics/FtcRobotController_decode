@@ -2,16 +2,16 @@ package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
-import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3.*;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
 import om.self.ezftc.utils.Vector3;
 import om.self.task.other.TimedTask;
 
 @Autonomous(name="Blue TinyTriangle", group="32859")
 public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
-    Vector3 blueLaunchStart = new Vector3(64, -6, 180);; //to do make new start pos
+    Vector3 blueLaunchStart = new Vector3(64, -6, 180); //to do make new start pos
     @Override
     public void initAuto(){
+        isRedSide = false;
         transformFunc = (v) -> v;
         fieldStartPos = blueLaunchStart;
     }

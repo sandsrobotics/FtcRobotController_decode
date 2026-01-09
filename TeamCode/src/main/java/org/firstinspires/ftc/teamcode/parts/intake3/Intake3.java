@@ -36,7 +36,6 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 //    protected ArtifactDetectionPipeline artifactPipeline;
     protected LimeLight limeLight;
     public Vector2D targetVector;
-    boolean launchArmed = false;
 
     //***** Constructors *****
     public Intake3(Robot parent, String modeName) {
@@ -282,7 +281,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 
     @Override
     public void onInit() {
-        getHardware().pixel.setPosition(LEDColor.BLUE.getLedPwm());
+        getHardware().pixel.setPosition(LEDColor.ORANGE.getLedPwm());
         initializeServos();
         parent.opMode.sleep(1200);
         initializeServos();
@@ -300,7 +299,6 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
         pt = getBeanManager().getBestMatch(PositionTracker.class, false);
         artifacts = getBeanManager().getBestMatch(Artifacts.class, false);
-//        artifactPipeline = getBeanManager().getBestMatch(ArtifactDetectionPipeline.class, false);
         limeLight = getBeanManager().getBestMatch(LimeLight.class, false);
         drive = getBeanManager().getBestMatch(Drive.class, false);
     }
@@ -310,14 +308,17 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         if (control.robotEStop) {
             eStop();
         }
-        // update internal target vector
-        targetVector = getTargetVector(IntakeSettings3.targetRed);
+        if (IntakeSettings3.isRedSide) {
+            targetVector = getTargetVector(IntakeSettings3.targetRed);
+        } else {
+            targetVector = getTargetVector(IntakeSettings3.targetBlue);
+        }
         parent.opMode.telemetry.addData("Target Distance", targetVector.distance);
         // update launch RPM
         if (IntakeSettings3.launchArmed) {
             int launchRPM = (int) getSpinnerRPMfromDistance(targetVector.distance);
             setLaunchRPM(launchRPM);
-            parent.opMode.telemetry.addData("Launch RPM Interp", launchRPM);
+            parent.opMode.telemetry.addData("Calc launch RPM", launchRPM);
         }
     }
 
@@ -352,7 +353,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         private final String name;
         private final Double ledPwm;
 
-        Double getLedPwm(){
+        public Double getLedPwm(){
             return ledPwm;
         }
 

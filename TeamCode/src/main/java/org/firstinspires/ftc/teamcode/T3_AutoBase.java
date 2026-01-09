@@ -13,6 +13,7 @@ import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.intake3.Intake3;
+import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
 import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
@@ -36,6 +37,7 @@ import static om.self.ezftc.utils.Constants.tileSide;
 public class T3_AutoBase extends LinearOpMode{
     public Function<Vector3, Vector3> transformFunc;
     public boolean shutdownps;
+    public boolean isRedSide;
     PositionSolver positionSolver;
     PositionTracker pt;
     Pinpoint odo;
@@ -52,6 +54,7 @@ public class T3_AutoBase extends LinearOpMode{
     Vector3 fieldStartPos;
 
     public void initAuto(){
+        isRedSide = false;
         transformFunc = (v) -> v;
         fieldStartPos = new Vector3(-51, 51, 143);
     }
@@ -78,6 +81,7 @@ public class T3_AutoBase extends LinearOpMode{
         artifacts = new Artifacts(robot);
         limelight = new LimeLight(robot);
         robot.init();
+        IntakeSettings3.isRedSide = this.isRedSide;  // set side from auto start in permanent settings
 
         while (!isStarted()) {
             telemetry.addData("position", pt.getCurrentPosition());

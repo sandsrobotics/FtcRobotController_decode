@@ -47,6 +47,7 @@ public class IntakeSettings3 {
 
     public static final Vector3 targetRed              = new Vector3(-70.5, 70.5, 0.0);
     public static final Vector3 targetBlue             = new Vector3(-70.5, -70.5, 0.0);
+    public static boolean isRedSide = false;
 
     public static final int redTagId = 24;
     public static final int blueTagId = 20;

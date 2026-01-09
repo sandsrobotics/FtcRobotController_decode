@@ -7,6 +7,7 @@ import om.self.ezftc.utils.Vector3;
 public class T3_AutoRedTinyTriangle extends T3_AutoBlueTinyTriangle {
     @Override
     public void initAuto() {
+        isRedSide = true;
         transformFunc = (v) -> new Vector3(v.X, -v.Y, -v.Z);
         fieldStartPos = transformFunc.apply(blueLaunchStart);
     }

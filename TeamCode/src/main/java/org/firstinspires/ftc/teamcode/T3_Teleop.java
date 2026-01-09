@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.depricated.intake.FlipbotSettings;
+import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.parts.artifact.ArtifactDetectionPipeline;
 import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
@@ -14,6 +15,7 @@ import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
 import org.firstinspires.ftc.teamcode.parts.intake3.Intake3;
 import org.firstinspires.ftc.teamcode.parts.intake3.IntakeTeleop3;
+import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
 import org.firstinspires.ftc.teamcode.parts.led.Led;
 import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
@@ -76,8 +78,19 @@ public class T3_Teleop extends LinearOpMode {
         /*  ******************************************************/
 
         while (!isStarted()) {
-            led.setMiddleGroup2(3); //set to purple
+            robot.buttonMgr.runLoop();
+//            led.setMiddleGroup2(3); //set to purple
             telemetry.addData("position", odo.getPosition());
+            telemetry.addData ("Press Red or Blue button to select alliance","");
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
+                intake.getHardware().pixel.setPosition(Intake3.LEDColor.BLUE.getLedPwm());
+                IntakeSettings3.isRedSide = false;
+            }
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.b, ButtonMgr.State.wasTapped)) {
+                intake.getHardware().pixel.setPosition(Intake3.LEDColor.RED.getLedPwm());
+                IntakeSettings3.isRedSide = true;
+            }
+            telemetry.addData("Alliance Color:",(IntakeSettings3.isRedSide?"Red":"Blue"));
             telemetry.update();
         }
         robot.start();

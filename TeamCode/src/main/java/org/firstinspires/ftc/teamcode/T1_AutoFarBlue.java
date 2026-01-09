@@ -227,8 +227,8 @@ public class T1_AutoFarBlue  extends LinearOpMode {
                 p_LaunchPos, launchRPM);
 
         // Intake from Row2 and Launch.
-//        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow2, p_IntakeRedArtifactRow2,
-//                                    p_LaunchPos, launchRPM);
+        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeBlueArtifactRow2, p_IntakeBlueArtifactRow2,
+                                    p_LaunchPos, launchRPM);
 
         // Intake from Row1 and Launch.
 //        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow1, p_IntakeRedArtifactRow1,

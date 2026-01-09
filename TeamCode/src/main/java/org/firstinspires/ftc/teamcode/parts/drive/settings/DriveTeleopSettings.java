@@ -89,27 +89,30 @@ public class DriveTeleopSettings {
     public static DriveTeleopSettings makeForza1(Robot robot){
         Gamepad gamepad = robot.opMode.gamepad1;
         Gamepad gamepad2 = robot.opMode.gamepad2;
-        double driver2mult = 0.25;
+//        double driver2mult = 0.25;
 
         return new DriveTeleopSettings(
                 () -> new Vector3(    // power supplier
 //                        gamepad.left_stick_x,
 //                        gamepad.right_trigger - gamepad.left_trigger,
 //                        gamepad.right_stick_x
-                        gamepad.left_stick_x + driver2mult * gamepad2.left_stick_x,
-                        gamepad.right_trigger - gamepad.left_trigger,
-                        gamepad.right_stick_x + driver2mult * gamepad2.right_stick_x
-//                        FlipbotSettings.getControlGovernor().X * gamepad.left_stick_x + driver2mult * gamepad2.left_stick_x,
+                        -gamepad.left_stick_x + gamepad2.right_stick_x, // strafe
+                        -gamepad.right_trigger + gamepad.left_trigger + gamepad2.right_trigger - gamepad2.left_trigger, // forward/backward
+                        0.85*gamepad.right_stick_x + 0.2* gamepad2.left_stick_x
+                ),
+                () -> gamepad.x,
+                new LatchedModifier().toSupplier(() -> gamepad.x),
+                1.0,
+                //new LatchedModifier().toSupplier(() -> gamepad.b),
+                () -> false,
+                 0.5
 //                        FlipbotSettings.getControlGovernor().Y * (gamepad.right_trigger - gamepad.left_trigger),
 //                        FlipbotSettings.getControlGovernor().Z * gamepad.right_stick_x + driver2mult * gamepad2.right_stick_x
-                ),
-                () -> gamepad.left_bumper,     //stop supplier
-                new LatchedModifier().toSupplier(() -> gamepad.right_stick_button), // mid mode supplier
-                0.5,
-                new LatchedModifier().toSupplier(() -> gamepad.left_stick_button), // slow mode supplier
+                        //stop supplier
+                        // mid mode supplier
+                        // slow mode supplier
 //                () -> false,
-                0.25
-        );
+                );
     }
 
     public static DriveTeleopSettings makeDemo1(Robot robot){

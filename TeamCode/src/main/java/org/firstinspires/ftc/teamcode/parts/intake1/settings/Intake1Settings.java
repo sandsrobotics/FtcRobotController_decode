@@ -15,10 +15,10 @@ public class Intake1Settings {
     public static int launchRPMTolerance                        = 100;
 
     public static double servoGreenDock =                           0.463;
-    public static double servoGreenLaunch =                         0.235;
+    public static double servoGreenLaunch =                         0.183; //.243
 
     public static double servoPinkDock =                            0.518;
-    public static double servoPinkLaunch =                          0.719;
+    public static double servoPinkLaunch =                          0.680; // .732
     public static double servoPinkLow =                             0.434;
 
     public static double servoBlueDock =                            0.494;
@@ -29,7 +29,7 @@ public class Intake1Settings {
     public double secondsPerMinute =                                 60;
     public static double autoFarLaunchMotorRPM =                     3000; // 3100; 3200
     public static double farLaunchMotorRPM =                         3100; // 3100; 3200
-    public static double threeLaunchMotorRPM =                       2700; // 2900.
+    public static double threeLaunchMotorRPM =                       2800; // 2700.; 2900
     public static double goalLaunchMotorRPM =                        2500;
 
     public static double aLaunchMotorRPM =                        500;

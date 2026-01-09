@@ -229,8 +229,8 @@ public class T1_AutoFarRed  extends LinearOpMode{
                     p_LaunchPos, launchRPM);
 
         // Intake from Row2 and Launch.
-//        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow2, p_IntakeRedArtifactRow2,
-//                                    p_LaunchPos, launchRPM);
+        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow2, p_IntakeRedArtifactRow2,
+                                    p_LaunchPos, launchRPM);
 
         // Intake from Row1 and Launch.
 //        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow1, p_IntakeRedArtifactRow1,
@@ -262,8 +262,9 @@ public class T1_AutoFarRed  extends LinearOpMode{
         autoTasks.addDelay(2500); // Test with 1000.
 
         // StopIntake.
-        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
-        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
+//        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
+//        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
+        autoTasks.addStep(() -> intake.tasks.allServoStore.restart());
 
 //        // Move to launch.
 //        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
@@ -285,7 +286,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
         positionSolver.addMoveToTaskEx(p_LaunchPosZero, autoTasks);
         autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
         autoTasks.addDelay(300);
-
+        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
     }
 
     public void extraSettings() {

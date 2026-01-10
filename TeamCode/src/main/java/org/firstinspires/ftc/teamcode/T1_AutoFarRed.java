@@ -61,12 +61,21 @@ public class T1_AutoFarRed  extends LinearOpMode{
     Vector3 p_LaunchPosOne              = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
     Vector3 p_LaunchPosTwo              = new Vector3(58,16,160);    // FarRed Launching Position for pinkServo. Z:160.
 
-    Vector3 p_pre_IntakeRedArtifactRow1 = new Vector3(-12, 28, -90);  // Red: Ready to collect on Row1
-    Vector3 p_IntakeRedArtifactRow1     = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
-    Vector3 p_pre_IntakeRedArtifactRow2 = new Vector3(12, 28, -90);   // Red: Ready to collect on Row2
-    Vector3 p_IntakeRedArtifactRow2     = new Vector3(12, 60, -90);   // Red: Intake Artifacts in Row2
-    Vector3 p_pre_IntakeRedArtifactRow3 = new Vector3(35.5, 28, -90);   // Red: Ready to collect in Row3
-    Vector3 p_IntakeRedArtifactRow3     = new Vector3(35.5, 60, -90);   // Red: Intake Artifacts in Row3
+    Vector3 p_pre_IntakeRedArtifactRow1 = new Vector3(-12, 28, -90);  // Was Y: 28; Red: Ready to collect on Row1
+    Vector3 p_IntakeRedArtifactRow1_1     = new Vector3(-12, 36, -90);  // Red: Intake Artifacts in Row1
+    Vector3 p_IntakeRedArtifactRow1_2     = new Vector3(-12, 41, -90);  // Red: Intake Artifacts in Row1
+    Vector3 p_IntakeRedArtifactRow1_3     = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
+
+    Vector3 p_pre_IntakeRedArtifactRow2 = new Vector3(12, 28, -90);   // Was Y:28; Red: Ready to collect on Row2
+    Vector3 p_IntakeRedArtifactRow2_1     = new Vector3(12, 36, -90);   // Red: Intake Artifacts in Row2
+    Vector3 p_IntakeRedArtifactRow2_2     = new Vector3(12, 41, -90);   // Red: Intake Artifacts in Row2
+    Vector3 p_IntakeRedArtifactRow2_3     = new Vector3(12, 60, -90);   // Red: Intake Artifacts in Row2
+
+    Vector3 p_pre_IntakeRedArtifactRow3 = new Vector3(35.5, 28, -90);   // Was Y:28; Red: Ready to collect in Row3
+    Vector3 p_IntakeRedArtifactRow3_1     = new Vector3(35.5, 36, -90);   // Red: Intake Artifacts in Row3
+    Vector3 p_IntakeRedArtifactRow3_2     = new Vector3(35.5, 41, -90);   // Red: Intake Artifacts in Row3
+    Vector3 p_IntakeRedArtifactRow3_3     = new Vector3(35.5, 60, -90);   // Red: Intake Artifacts in Row3
+
     Vector3 p_LeverOpen                 = new Vector3(0, 55, 180);    // Red: Open Lever Position
 
     //  DASHBOARD VARIABLES (static public)
@@ -225,15 +234,18 @@ public class T1_AutoFarRed  extends LinearOpMode{
         autoTasks.addDelay(300);
 
         // Intake from Row3 and Launch.
-        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow3, p_IntakeRedArtifactRow3,
-                    p_LaunchPos, launchRPM);
+        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow3,
+                p_IntakeRedArtifactRow3_1, p_IntakeRedArtifactRow3_2, p_IntakeRedArtifactRow3_3,
+                p_LaunchPos, launchRPM);
 
         // Intake from Row2 and Launch.
-        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow2, p_IntakeRedArtifactRow2,
-                                    p_LaunchPos, launchRPM);
+        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow2,
+                p_IntakeRedArtifactRow2_1, p_IntakeRedArtifactRow2_2, p_IntakeRedArtifactRow2_3,
+                p_LaunchPos, launchRPM);
 
         // Intake from Row1 and Launch.
-//        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow1, p_IntakeRedArtifactRow1,
+//        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow1,
+//        p_IntakeRedArtifactRow1_1, p_IntakeRedArtifactRow1_2,p_IntakeRedArtifactRow1_3,
 //                p_LaunchPos, launchRPM);
 
         // Move to ParkAfterAuto Position.
@@ -243,7 +255,8 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
     // Artifact Intake and Launch.
     protected void artifactIntakeAndLaunch (TimedTask autoTasks,
-                                            Vector3 p_pre_intake, Vector3 p_intake,
+                                            Vector3 p_pre_intake,
+                                            Vector3 p_intake_1, Vector3 p_intake_2, Vector3 p_intake_3,
                                             Vector3 p_Launch, Integer launchRPM) {
 
         // Move to pre_intake position.
@@ -259,8 +272,14 @@ public class T1_AutoFarRed  extends LinearOpMode{
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceExtraSlowSettings));
 
         // Move to intake.
-        positionSolver.addMoveToTaskEx(p_intake, autoTasks);
-        autoTasks.addDelay(2500); // Test with 1000.
+        positionSolver.addMoveToTaskEx(p_intake_1, autoTasks);
+        autoTasks.addDelay(1000); // Test with 1000.
+
+        positionSolver.addMoveToTaskEx(p_intake_2, autoTasks);
+        autoTasks.addDelay(1000); // Test with 1000.
+
+        positionSolver.addMoveToTaskEx(p_intake_3, autoTasks);
+        autoTasks.addDelay(1000); // Test with 1000.
 
         // StopIntake.
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());

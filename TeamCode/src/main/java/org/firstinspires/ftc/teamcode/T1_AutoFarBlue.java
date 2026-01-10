@@ -60,11 +60,20 @@ public class T1_AutoFarBlue  extends LinearOpMode {
     Vector3 p_LaunchPosTwo              = new Vector3(58,-16,-160);    // FarBlue Launching Position for pinkServo. Z:160.
 
     Vector3 p_pre_IntakeBlueArtifactRow1    = new Vector3(-12, -28, 90);  // Blue: Ready to collect on Row1
-    Vector3 p_IntakeBlueArtifactRow1        = new Vector3(-12, -53, 90);  // Blue: Intake Artifacts in Row1
+    Vector3 p_IntakeBlueArtifactRow1_1        = new Vector3(-12, -36, 90);  // Blue: Intake Artifacts in Row1
+    Vector3 p_IntakeBlueArtifactRow1_2        = new Vector3(-12, -41, 90);  // Blue: Intake Artifacts in Row1
+    Vector3 p_IntakeBlueArtifactRow1_3        = new Vector3(-12, -53, 90);  // Blue: Intake Artifacts in Row1
+
     Vector3 p_pre_IntakeBlueArtifactRow2    = new Vector3(12, -28, 90);   // Blue: Ready to collect on Row2
-    Vector3 p_IntakeBlueArtifactRow2        = new Vector3(12, -60, 90);   // Blue: Intake Artifacts in Row2
+    Vector3 p_IntakeBlueArtifactRow2_1        = new Vector3(12, -36, 90);   // Blue: Intake Artifacts in Row2
+    Vector3 p_IntakeBlueArtifactRow2_2        = new Vector3(12, -41, 90);   // Blue: Intake Artifacts in Row2
+    Vector3 p_IntakeBlueArtifactRow2_3        = new Vector3(12, -60, 90);   // Blue: Intake Artifacts in Row2
+
     Vector3 p_pre_IntakeBlueArtifactRow3    = new Vector3(35.5, -28, 90);   // Blue: Ready to collect in Row3
-    Vector3 p_IntakeBlueArtifactRow3        = new Vector3(35.5, -60, 90);   // Blue: Intake Artifacts in Row3
+    Vector3 p_IntakeBlueArtifactRow3_1        = new Vector3(35.5, -36, 90);   // Blue: Intake Artifacts in Row3
+    Vector3 p_IntakeBlueArtifactRow3_2        = new Vector3(35.5, -41, 90);   // Blue: Intake Artifacts in Row3
+    Vector3 p_IntakeBlueArtifactRow3_3        = new Vector3(35.5, -60, 90);   // Blue: Intake Artifacts in Row3
+
     Vector3 p_LeverOpen                      = new Vector3(0, -55, -180);    // Blue: Open Lever Position
 
     //  DASHBOARD VARIABLES (static public)
@@ -223,15 +232,18 @@ public class T1_AutoFarBlue  extends LinearOpMode {
         autoTasks.addDelay(300);
 
         // Intake from Row3 and Launch.
-        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeBlueArtifactRow3, p_IntakeBlueArtifactRow3,
+        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeBlueArtifactRow3,
+                p_IntakeBlueArtifactRow3_1, p_IntakeBlueArtifactRow3_2, p_IntakeBlueArtifactRow3_3,
                 p_LaunchPos, launchRPM);
 
         // Intake from Row2 and Launch.
-        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeBlueArtifactRow2, p_IntakeBlueArtifactRow2,
-                                    p_LaunchPos, launchRPM);
+        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeBlueArtifactRow2,
+                p_IntakeBlueArtifactRow2_1, p_IntakeBlueArtifactRow2_2, p_IntakeBlueArtifactRow2_3,
+                p_LaunchPos, launchRPM);
 
         // Intake from Row1 and Launch.
-//        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow1, p_IntakeRedArtifactRow1,
+//        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow1,
+//                p_IntakeRedArtifactRow1_1, p_IntakeRedArtifactRow1_2, p_IntakeRedArtifactRow1_3,
 //                p_LaunchPos, launchRPM);
 
         // Move to ParkAfterAuto Position.
@@ -240,8 +252,8 @@ public class T1_AutoFarBlue  extends LinearOpMode {
     }
 
     // Artifact Intake and Launch.
-    protected void artifactIntakeAndLaunch (TimedTask autoTasks,
-                                            Vector3 p_pre_intake, Vector3 p_intake,
+    protected void artifactIntakeAndLaunch (TimedTask autoTasks, Vector3 p_pre_intake,
+                                            Vector3 p_intake_1, Vector3 p_intake_2, Vector3 p_intake_3,
                                             Vector3 p_Launch, Integer launchRPM) {
 
         // Move to pre_intake position.
@@ -256,10 +268,15 @@ public class T1_AutoFarBlue  extends LinearOpMode {
 //        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceExtraSlowSettings));
 
-
         // Move to intake.
-        positionSolver.addMoveToTaskEx(p_intake, autoTasks);
-        autoTasks.addDelay(2500); // Test with 1000.
+        positionSolver.addMoveToTaskEx(p_intake_1, autoTasks);
+        autoTasks.addDelay(1000); // Test with 1000.
+
+        positionSolver.addMoveToTaskEx(p_intake_2, autoTasks);
+        autoTasks.addDelay(1000); // Test with 1000.
+
+        positionSolver.addMoveToTaskEx(p_intake_3, autoTasks);
+        autoTasks.addDelay(1000); // Test with 1000.
 
         // StopIntake.
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());

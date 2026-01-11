@@ -16,9 +16,6 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
     private IntakeSettings3 settings;
     ButtonMgr buttonMgr;
 
-    // NEW: Servo selector
-    private int selectedServo = 0;   // 0, 1, or 2
-
     public IntakeTeleop3(Intake3 parent) {
         super(parent, "Intake teleop");
         setSettings(IntakeSettings3.makeDefault());
@@ -63,110 +60,104 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
 
     public void driverControls() {
 
-        // e-stop
-        if (buttonMgr.getState(2, Buttons.back, State.wasPressed) ||
-                buttonMgr.getState(1, Buttons.back, State.wasPressed)) {
+        // ============================================
+        // CONTROLLER 1 (DRIVER) CONTROLS
+        // ============================================
+
+        // BACK BUTTON - Emergency stop
+        if (buttonMgr.getState(1, Buttons.back, State.wasPressed)) {
             parent.eStop();
         }
 
-//        // reverse intake when 3 artifacts are in the launcher
-//        if(parent.artifacts.getArtifactCount() == 3 && parent.getTargetIntakeRPM() > 0) {
-//            parent.setIntakeRPM(-IntakeSettings3.intakeRPM);
-//        }
-
-        // intake/launch stuff
+        // D-PAD DOWN - Start intake (collect artifacts)
         if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
             parent.setIntakeRPM(IntakeSettings3.intakeRPM);
         }
 
+        // D-PAD UP - Reverse intake (eject artifacts)
         if (buttonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
             parent.setIntakeRPM(-IntakeSettings3.intakeRPM);
         }
 
+        // D-PAD DOWN/UP DOUBLE TAP - Stop intake
         if (buttonMgr.getState(1, Buttons.dpad_down, State.wasDoubleTapped) ||
-            buttonMgr.getState(1, Buttons.dpad_up, State.wasDoubleTapped)) {
+                buttonMgr.getState(1, Buttons.dpad_up, State.wasDoubleTapped)) {
             parent.setIntakeRPM(0);
         }
 
+        // Y BUTTON - Start/Stop launcher
         if (buttonMgr.getState(1, Buttons.y, State.wasTapped)) {
             parent.setLaunchRPM(IntakeSettings3.launchRPM);
-            IntakeSettings3.launchArmed = true; // comment this line to use a dashboard set launch speed
+            IntakeSettings3.launchArmed = true;
         }
 
         if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
             IntakeSettings3.launchArmed = false;
             parent.setLaunchRPM(0);
         }
-        if (buttonMgr.getState(1, Buttons.right_trigger, State.wasPressed)) {
-            parent.computeLaunchOrderAndLaunch(
-                    parent.limeLight.getClassificationPattern()
-            );
-        }
 
-        if (buttonMgr.getState(1, Buttons.b, State.wasTapped)) {
-//            if(parent.launchRPMInTolerance() & launchRPM > 0){
-//                parent.stopAllIntakeTasks();
-//                parent.tasks.ballLaunchTask.restart();
-//            }
-//            else {}
-            parent.stopAllIntakeTasks();
-            parent.tasks.ballLaunchTask.restart();
-        }
-
-        if (buttonMgr.getState(1, Buttons.a, State.wasTapped)) {
-            parent.stopAllIntakeTasks();
-            parent.tasks.sameTimeBallLaunchTask.restart();
-        }
-
-        if (buttonMgr.getState(1, Buttons.x, State.wasTapped)) {
+        // X BUTTON - Move to blueshoot1 and launch (auto-starts launcher)
+        if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {
+            if (parent.getTargetLaunchRPM() < 500) {
+                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+            }
             parent.launchData = IntakeSettings3.launchPosiMap.get("blueshoot1");
             parent.tasks.moveAndLaunch.restart();
         }
 
-        if (buttonMgr.getState(1, Buttons.left_stick_button, State.wasTapped)) {
-            parent.launchData = IntakeSettings3.launchPosiMap.get("bluefartriangle");
-            parent.tasks.moveAndLaunch.restart();
+        // ============================================
+        // CONTROLLER 2 (OPERATOR) CONTROLS
+        // ============================================
+
+        // BACK BUTTON - Emergency stop
+        if (buttonMgr.getState(2, Buttons.back, State.wasPressed)) {
+            parent.eStop();
         }
 
-        if (buttonMgr.getState(1, Buttons.left_bumper, State.isHeld)) {
+        // LEFT BUMPER - Auto-align to April tag
+        if (buttonMgr.getState(2, Buttons.left_bumper, State.isHeld)) {
             IntakeSettings3.alignTarget = true;
         } else {
             IntakeSettings3.alignTarget = false;
         }
 
-//        // left bumper: cycle servo selection
-//        if (buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
-//            selectedServo = (selectedServo + 1) % 3;
-//        }r
-//
-//        // right bumper: activate selected servo
-//        if (buttonMgr.getState(1, Buttons.right_bumper, State.wasTapped)) {
-//            switch (selectedServo) {
-//                case 0:
-//                    parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
-//                    break;
-//                case 1:
-//                    parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
-//                    break;
-//                case 2:
-//                    parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
-//                    break;
-//            }
-//        }
-//
-//        // right bumper double tap: return selected servo to rest
-//        if (buttonMgr.getState(1, Buttons.right_bumper, State.wasDoubleTapped)) {
-//            switch (selectedServo) {
-//                case 0:
-//                    parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
-//                    break;
-//                case 1:
-//                    parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
-//                    break;
-//                case 2:
-//                    parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
-//                    break;
-//            }
-//        }
+        // RIGHT TRIGGER - Color-ordered launch (auto-starts launcher)
+        if (buttonMgr.getState(2, Buttons.right_trigger, State.wasPressed)) {
+            parent.computeLaunchOrderAndLaunchBlocking(
+                    parent.limeLight.getClassificationPattern()
+            );
+            parent.getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
+        }
+
+        // B BUTTON - Simultaneous launch (auto-starts launcher)
+        if (buttonMgr.getState(2, Buttons.b, State.wasTapped)) {
+            if (parent.getTargetLaunchRPM() < 500) {
+                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+            }
+            parent.stopAllIntakeTasks();
+            parent.tasks.sameTimeBallLaunchTask.restart();
+        }
+
+        // A BUTTON - Sequential launch (auto-starts launcher)
+        if (buttonMgr.getState(2, Buttons.a, State.wasTapped)) {
+            if (parent.getTargetLaunchRPM() < 500) {
+                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+            }
+            parent.stopAllIntakeTasks();
+            parent.tasks.ballLaunchTask.restart();
+        }
+
+        // X BUTTON - Reverse shooter
+        if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {
+            parent.setLaunchRPM(-IntakeSettings3.launchRPM);
+        }
+        // LEFT STICK BUTTON - Move to bluefartriangle and launch (auto-starts launcher)
+        if (buttonMgr.getState(2, Buttons.left_stick_button, State.wasTapped)) {
+            if (parent.getTargetLaunchRPM() < 500) {
+                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+            }
+            parent.launchData = IntakeSettings3.launchPosiMap.get("bluefartriangle");
+            parent.tasks.moveAndLaunch.restart();
+        }
     }
 }

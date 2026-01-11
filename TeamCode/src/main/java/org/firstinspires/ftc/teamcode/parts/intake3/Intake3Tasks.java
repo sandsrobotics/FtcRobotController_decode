@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
 import om.self.ezftc.core.Robot;
 import om.self.task.core.Group;
 import om.self.task.other.TimedTask;
+import org.firstinspires.ftc.teamcode.parts.artifact.ArtifactDetectionPipeline;
 
 public class Intake3Tasks {
     protected final Group movementTask;
@@ -16,8 +17,11 @@ public class Intake3Tasks {
     public final TimedTask moveAndLaunch;
     public final TimedTask resetLaunchServos;
     public final TimedTask alignTarget;
+    public final TimedTask orderedColorLaunchTask;
     private final Intake3 intake;
+    private int[] currentLaunchOrder = null;  // Stores computed launch order
     private final Robot robot;
+
 
     public Intake3Tasks(Intake3 intake, Robot robot) {
         this.intake = intake;
@@ -29,6 +33,7 @@ public class Intake3Tasks {
         moveAndLaunch = new TimedTask(TaskNames.MoveAndLaunch, movementTask);
         resetLaunchServos = new TimedTask(TaskNames.ResetLaunch, movementTask);
         alignTarget = new TimedTask(TaskNames.AlignTarget, movementTask);
+        orderedColorLaunchTask = new TimedTask(TaskNames.OrderedColorLaunch, movementTask);
     }
 
     public void constructAllIntakeTasks() {
@@ -38,7 +43,6 @@ public class Intake3Tasks {
 
         // launch all three balls one after the other
         ballLaunchTask.autoStart = false;
-//        ballLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.VIOLET.getLedPwm()));
 
         //unlock all
         ballLaunchTask.addStep(()-> intake.getHardware().lockServo0.setPosition(intake.getSettings().lockServo0Unlock));
@@ -67,12 +71,9 @@ public class Intake3Tasks {
 
         // all three ball task at the same time
         sameTimeBallLaunchTask.autoStart = false;
-//        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.VIOLET.getLedPwm()));
 
         //unlock all
         sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo0.setPosition(intake.getSettings().lockServo0Unlock));
-//        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo1.setPosition(intake.getSettings().lockServo1Unlock));
-//        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo2.setPosition(intake.getSettings().lockServo2Unlock));
         sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo0.isDone());
 
         //launch
@@ -90,14 +91,63 @@ public class Intake3Tasks {
 
         /* Begin */
 
+// Ordered color launch
+        orderedColorLaunchTask.autoStart = false;
+
+// Unlock
+        orderedColorLaunchTask.addStep(() -> intake.getHardware().lockServo0.setPosition(intake.getSettings().lockServo0Unlock));
+        orderedColorLaunchTask.addStep(() -> intake.getHardware().lockServo0.isDone());
+
+// Compute order using the ONE method
+        orderedColorLaunchTask.addStep(() -> {
+            ArtifactDetectionPipeline.ArtifactColor[] desiredOrder = intake.limeLight.getClassificationPattern();
+            currentLaunchOrder = intake.computeLaunchOrderAndLaunch(desiredOrder);
+        });
+
+// Ball 1
+        orderedColorLaunchTask.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), intake.getSettings().launchRPMToleranceTime);
+        orderedColorLaunchTask.addStep(() -> {
+            if (currentLaunchOrder != null && currentLaunchOrder.length > 0) {
+                intake.launchServoByIndex(currentLaunchOrder[0]);
+            }
+        });
+        orderedColorLaunchTask.addStep(() -> currentLaunchOrder != null && currentLaunchOrder.length > 0 ? intake.servoIsDoneByIndex(currentLaunchOrder[0]) : true);
+        orderedColorLaunchTask.addDelay(intake.getSettings().launchServoDelay);
+
+// Ball 2
+        orderedColorLaunchTask.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), intake.getSettings().launchRPMToleranceTime);
+        orderedColorLaunchTask.addStep(() -> {
+            if (currentLaunchOrder != null && currentLaunchOrder.length > 1) {
+                intake.launchServoByIndex(currentLaunchOrder[1]);
+            }
+        });
+        orderedColorLaunchTask.addStep(() -> currentLaunchOrder != null && currentLaunchOrder.length > 1 ? intake.servoIsDoneByIndex(currentLaunchOrder[1]) : true);
+        orderedColorLaunchTask.addDelay(intake.getSettings().launchServoDelay);
+
+// Ball 3
+        orderedColorLaunchTask.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), intake.getSettings().launchRPMToleranceTime);
+        orderedColorLaunchTask.addStep(() -> {
+            if (currentLaunchOrder != null && currentLaunchOrder.length > 2) {
+                intake.launchServoByIndex(currentLaunchOrder[2]);
+            }
+        });
+        orderedColorLaunchTask.addStep(() -> currentLaunchOrder != null && currentLaunchOrder.length > 2 ? intake.servoIsDoneByIndex(currentLaunchOrder[2]) : true);
+        orderedColorLaunchTask.addDelay(intake.getSettings().launchServoDelay);
+
+// Reset
+        orderedColorLaunchTask.addStep(() -> resetLaunchServos.restart());
+
+        /* End */
+
+        /* Begin */
+
         // move to given position and launch balls sequentially
         moveAndLaunch.autoStart = false;
         moveAndLaunch.addStep(() -> intake.positionSolver.setNewTarget(intake.launchData.getPosition(), true));
         moveAndLaunch.addStep(() -> intake.setLaunchRPM(intake.launchData.getRPM()));
         moveAndLaunch.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 4000);
-        moveAndLaunch.addStep(ballLaunchTask::restart);
-        moveAndLaunch.addStep(intake.tasks.ballLaunchTask::isDone);
-//        moveAndLaunch.addDelay(1000);
+        moveAndLaunch.addStep(orderedColorLaunchTask::restart);  // ✅ CHANGED THIS
+        moveAndLaunch.addStep(orderedColorLaunchTask::isDone);   // ✅ CHANGED THIS
         moveAndLaunch.addStep(() -> intake.setLaunchRPM(0));
 
         /* End */
@@ -112,7 +162,6 @@ public class Intake3Tasks {
         resetLaunchServos.addStep(()-> intake.getHardware().lockServo0.setPosition(intake.getSettings().lockServo0Lock));
         resetLaunchServos.addStep(()-> intake.getHardware().lockServo1.setPosition(intake.getSettings().lockServo1Lock));
         resetLaunchServos.addStep(()-> intake.getHardware().lockServo2.setPosition(intake.getSettings().lockServo2Lock));
-//        resetLaunchServos.addStep(()-> intake.getHardware().pixel.setPosition(Intake3.LEDColor.GREEN.getLedPwm()));
 
         /* End */
 
@@ -133,6 +182,7 @@ public class Intake3Tasks {
         public final static String sameTimeBallLaunch = "auto same time ball launch task";
         public final static String MoveAndLaunch = "auto move and launch";
         public final static String ResetLaunch = "auto reset launch servos";
+        public final static String OrderedColorLaunch = "auto ordered color launch";
         public final static String AlignTarget = "auto align to april tag";
     }
 }

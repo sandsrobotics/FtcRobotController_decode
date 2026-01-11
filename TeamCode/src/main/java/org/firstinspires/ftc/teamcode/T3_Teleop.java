@@ -74,7 +74,7 @@ public class T3_Teleop extends LinearOpMode {
         robot.init();
 
         /* *********** Take this out for competition ************/
-        odo.setPosition(fieldStartPos);
+//        odo.setPosition(fieldStartPos);
         /*  ******************************************************/
 
         while (!isStarted()) {

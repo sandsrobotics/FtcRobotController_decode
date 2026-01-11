@@ -8,10 +8,8 @@ import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class ArtifactDetectionPipeline extends OpenCvPipeline
-{
-    public enum ArtifactColor
-    {
+public class ArtifactDetectionPipeline extends OpenCvPipeline {
+    public enum ArtifactColor {
         NONE,
         GREEN,
         PURPLE
@@ -23,17 +21,17 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
     static final Scalar BLUE = new Scalar(0, 0, 255);
     static final Scalar YELLOW = new Scalar(0, 255, 255);
     static final Scalar GREEN = new Scalar(0, 255, 0);
-    static final Scalar BLOCK = new Scalar(76,166,40);
-    static final Scalar WHITE = new Scalar(255,255,255);
+    static final Scalar BLOCK = new Scalar(76, 166, 40);
+    static final Scalar WHITE = new Scalar(255, 255, 255);
     static final Scalar PURPLE = new Scalar(128, 0, 128);
 
     /*
      * The core values which define the location and size of the sample regions
      */
     static final double leftTagLeftTopLeft = 50;
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,300);
-    static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(550,400);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(980,300); // was x=1080
+    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0, 300);
+    static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(550, 400);
+    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(980, 300); // was x=1080
     static final int tpREGION_WIDTH = 200;
     static final int tpREGION_HEIGHT = 300;
 
@@ -101,27 +99,23 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
      * This function takes the RGB frame, converts to YCrCb,
      * and extracts the Cb channel to the 'Cb' variable
      */
-    void inputToCb(Mat input)
-    {
+    void inputToCb(Mat input) {
         Imgproc.cvtColor(input, inputConv, Imgproc.COLOR_RGB2YCrCb);
         Core.extractChannel(inputConv, extracted, 2);
     }
 
-    void inputToSat(Mat input)
-    {
+    void inputToSat(Mat input) {
         Imgproc.cvtColor(input, inputConv, Imgproc.COLOR_RGB2HSV);
         Core.extractChannel(inputConv, extracted, 1);
     }
 
-    void inputToHsv(Mat input)
-    {
+    void inputToHsv(Mat input) {
         Imgproc.cvtColor(input, inputConv, Imgproc.COLOR_RGB2HSV);
         Core.extractChannel(inputConv, extracted, 0);
     }
 
     @Override
-    public void init(Mat firstFrame)
-    {
+    public void init(Mat firstFrame) {
         /*
          * We need to call this in order to make sure the 'Cb'
          * object is initialized, so that the submats we make
@@ -142,14 +136,13 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
          */
 
         // create the region mat for each artifact
-        for (Artifact  artifact : artifacts) {
+        for (Artifact artifact : artifacts) {
             artifact.submat = extracted.submat(new Rect(artifact.pta, artifact.ptb));
         }
     }
 
     @Override
-    public Mat processFrame(Mat input)
-    {
+    public Mat processFrame(Mat input) {
         //inputToCb(input);
 //        inputToSat(input);
         inputToHsv(input);
@@ -164,7 +157,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
 
         // Determine the color and status of artifacts in array
 
-        for (Artifact  artifact : artifacts) {
+        for (Artifact artifact : artifacts) {
             Core.inRange(artifact.submat, lowerGreen, upperGreen, maskGreen);
             Core.inRange(artifact.submat, lowerPurple, upperPurple, maskPurple);
             int greenPixels = Core.countNonZero(maskGreen);
@@ -199,7 +192,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
                     2,                               // font scale
                     WHITE,             // Scalar object for color
                     4); // thickness
-            }
+        }
         /*
          * Render the 'input' buffer to the viewport. But note this is not
          * simply rendering the raw camera feed, because we called functions
@@ -208,7 +201,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
         return input;
     }
 
-    public static class Artifact{
+    public static class Artifact {
         public ArtifactDetectionPipeline.ArtifactColor color;
         public Mat submat;
         public Point pta;
@@ -230,7 +223,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
 
     public int getArtifactCount() {
         int totalArtifacts = 0;
-        for (Artifact  artifact : artifacts) {
+        for (Artifact artifact : artifacts) {
             if (artifact.color != ArtifactColor.NONE) {
                 totalArtifacts++;
             }

@@ -13,7 +13,7 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
     // Flags to enable/disable going to certain spikes
     private boolean enableSpike1 = true;
     private boolean enableSpike2 = false;
-    private boolean enableSpike3 = true;
+    private boolean enableSpike3 = false;
 
     @Override
     public void initAuto(){
@@ -30,8 +30,8 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
         IntakeSettings3.LaunchData shootLaunchData = new IntakeSettings3.LaunchData(3600, transformFunc.apply(new Vector3(55, -14.2, -158)));
         Vector3 blueSpikeReady1 = transformFunc.apply(new Vector3(-12,-28,-90));
         Vector3 blueSpike1 = transformFunc.apply(new Vector3(-12,-48,-90));
-        Vector3 blueSpikeReady2 = transformFunc.apply(new Vector3(12,-28,-90));
-        Vector3 blueSpike2 = transformFunc.apply(new Vector3(12,-60,-90));
+        Vector3 blueSpikeReady2 = transformFunc.apply(new Vector3(13,-28,-90));
+        Vector3 blueSpike2 = transformFunc.apply(new  Vector3(13,-60,-90));
         Vector3 blueSpikeReady3 = transformFunc.apply(new Vector3(34.5,-28,-90));
         Vector3 blueSpike3 = transformFunc.apply(new Vector3(34,-60,-90));
 

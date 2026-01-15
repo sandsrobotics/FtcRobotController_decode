@@ -196,8 +196,18 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     public void computeLaunchOrderAndLaunchBlocking(ArtifactDetectionPipeline.ArtifactColor[] desiredOrder) {
         // Auto-start launcher if not running
         if (getTargetLaunchRPM() < 500) {
-            setLaunchRPM(IntakeSettings3.launchRPM);
+            IntakeSettings3.launchArmed = true;
+
+            // Calculate RPM based on distance immediately
+            double distance = getTargetVector(
+                    IntakeSettings3.isRedSide ? IntakeSettings3.targetRed : IntakeSettings3.targetBlue
+            ).distance;
+            int calculatedRPM = (int) getSpinnerRPMfromDistance(distance);
+
+            setLaunchRPM(calculatedRPM);
             parent.opMode.telemetry.addData("Launch", "Starting launcher...");
+            parent.opMode.telemetry.addData("Distance", distance);
+            parent.opMode.telemetry.addData("Calculated RPM", calculatedRPM);
             parent.opMode.telemetry.update();
         }
 
@@ -229,6 +239,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 
         // Unlock servos before firing
         getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Unlock);
+        parent.opMode.sleep(IntakeSettings3.lockServoUnlockDelay); // Wait for lock servo to fully unlock
 
         // Determine if color matching should be attempted
         boolean shouldAttemptColorMatch = true;
@@ -304,10 +315,14 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         // Fire servos in order
         for (int idx : launchOrder) {
             launchServoByIndex(idx);
-            parent.opMode.sleep(IntakeSettings3.launchServoSweepTime);
-            parent.opMode.sleep(IntakeSettings3.launchServoDelay);
+            parent.opMode.sleep(IntakeSettings3.launchServoSweepTime + IntakeSettings3.launchServoSettleTime); // Wait for full movement + settling
             resetServoByIndex(idx);
+            parent.opMode.sleep(IntakeSettings3.launchServoDelay); // Wait before next launch
         }
+
+        // Re-lock servos after all launches complete
+        parent.opMode.sleep(IntakeSettings3.launchServoResetSettleTime); // Wait for last servo to fully reset
+        getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
     }
 
     private void waitForLauncherToleranceOrTimeout() {

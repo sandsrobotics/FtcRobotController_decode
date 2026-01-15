@@ -38,7 +38,7 @@ public class T3_Teleop extends LinearOpMode {
     Robot robot;
     PositionSolver positionSolver;
     PositionTracker pt;
-    Vector3 fieldStartPos = new Vector3(0,0,0);
+    Vector3 fieldStartPos = new Vector3(0,0,180);
     Pinpoint odo;
     Artifacts artifacts;
     LimeLight limelight;
@@ -64,14 +64,28 @@ public class T3_Teleop extends LinearOpMode {
                 100, new Vector3(2,2,2), fieldStartPos);
         pt = new PositionTracker(robot,pts, PositionTrackerHardware.makeDefault(robot));
 //        XRelativeSolver solver = new XRelativeSolver(drive);
-        odo = new Pinpoint(pt,false);
-        pt.positionSourceId = Pinpoint.class;
         positionSolver = new PositionSolver(drive);
-        positionSolver.setSettings(PositionSolverSettings.specimenAssistSettings);
+        odo = new Pinpoint(pt,false);
+//        while (odo == null){};
+//        sleep(2000);
+//        positionSolver.setNewTarget(odo.getPosition(), false); OLD
+        pt.positionSourceId = Pinpoint.class;
+// positionSolver.setSettings(PositionSolverSettings.specimenAssistSettings);
 
         Intake3 intake = new Intake3(robot, "Teleop");
         new IntakeTeleop3(intake);
         robot.init();
+
+
+        long timer = System.currentTimeMillis() + 2500;
+        while (odo.getValidPosition() == null && System.currentTimeMillis() <= timer) {
+            telemetry.addLine("Waiting for Pinpoint...");
+            telemetry.update();
+            //todo: What to do if it doesn't initialize?
+        }
+        positionSolver.setNewTarget(odo.getPosition(), false);
+
+
 
         /* *********** Take this out for competition ************/
 //        odo.setPosition(fieldStartPos);
@@ -94,11 +108,13 @@ public class T3_Teleop extends LinearOpMode {
             telemetry.update();
         }
         robot.start();
+        positionSolver.stopSolver();
+
 
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
             robot.run();
-//            telemetry.addData("position tracker", pt.getCurrentPosition());
+            telemetry.addData("position tracker", pt.getCurrentPosition());
             telemetry.addData("time", System.currentTimeMillis() - start);
 //            telemetry.addData("Intake speed",intake.getHardware().intakeMotor.getVelocity());
             telemetry.addData("launch speed",intake.getCurrentLaunchRPM());

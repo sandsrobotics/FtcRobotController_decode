@@ -133,6 +133,7 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         if (buttonMgr.getState(2, Buttons.b, State.wasTapped)) {
             if (parent.getTargetLaunchRPM() < 500) {
                 parent.setLaunchRPM(IntakeSettings3.launchRPM);
+                IntakeSettings3.launchArmed = true;
             }
             parent.stopAllIntakeTasks();
             parent.tasks.sameTimeBallLaunchTask.restart();
@@ -142,6 +143,8 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         if (buttonMgr.getState(2, Buttons.a, State.wasTapped)) {
             if (parent.getTargetLaunchRPM() < 500) {
                 parent.setLaunchRPM(IntakeSettings3.launchRPM);
+                IntakeSettings3.launchArmed = true;
+
             }
             parent.stopAllIntakeTasks();
             parent.tasks.ballLaunchTask.restart();
@@ -151,10 +154,20 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {
             parent.setLaunchRPM(-IntakeSettings3.launchRPM);
         }
+
+        // Y BUTTON - Lock servo (tap to lock, double tap to unlock)
+        if (buttonMgr.getState(2, Buttons.y, State.wasTapped)) {
+            parent.getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
+        }
+
+        if (buttonMgr.getState(2, Buttons.y, State.wasDoubleTapped)) {
+            parent.getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Unlock);
+        }
         // LEFT STICK BUTTON - Move to bluefartriangle and launch (auto-starts launcher)
         if (buttonMgr.getState(2, Buttons.left_stick_button, State.wasTapped)) {
             if (parent.getTargetLaunchRPM() < 500) {
                 parent.setLaunchRPM(IntakeSettings3.launchRPM);
+                IntakeSettings3.launchArmed = true;
             }
             parent.launchData = IntakeSettings3.launchPosiMap.get("bluefartriangle");
             parent.tasks.moveAndLaunch.restart();

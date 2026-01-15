@@ -11,7 +11,7 @@ import om.self.task.other.TimedTask;
 
 @Autonomous(name="Blue Goal", group="32859")
 public class T3_AutoBlueLaunch extends T3_AutoBase {
-    Vector3 blueLaunchStart = new Vector3(-41.362,-53.692,180);; //-58.8,-45,140
+    Vector3 blueLaunchStart = new Vector3(-42.4,-53.692,180);; //-58.8,-45,140
     @Override
     public void initAuto(){
         isRedSide = false;
@@ -27,7 +27,7 @@ public class T3_AutoBlueLaunch extends T3_AutoBase {
         Vector3 start = fieldStartPos; //new Vector3(-51, -50, 140);
         Vector3 aprilTag = transformFunc.apply(new Vector3(-42, -41, 140)); //z=122
 
-        LaunchData shootLaunchData = new LaunchData(3225, transformFunc.apply(new Vector3(-11, -11, -139)));
+        LaunchData shootLaunchData = new LaunchData(3080, transformFunc.apply(new Vector3(-11, -11, -139)));
 
         Vector3 blueSpikeReady1 = transformFunc.apply(new Vector3(-12,-28,-90));
         Vector3 blueSpike1 = transformFunc.apply(new Vector3(-12,-53,-90));
@@ -63,15 +63,15 @@ public class T3_AutoBlueLaunch extends T3_AutoBase {
 
 
         MoveAndLaunch(autoTasks, shootLaunchData);
-        autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
-        positionSolver.addMoveToTaskEx(blueSpikeReady3, autoTasks);
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
-        positionSolver.addMoveToTaskEx(blueSpike3, autoTasks);
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
-        autoTasks.addDelay(500);
-
-        MoveAndLaunch(autoTasks, shootLaunchData);
-        positionSolver.addMoveToTaskEx(blueSpike3, autoTasks); //Goes off launch line
+//        autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
+//        positionSolver.addMoveToTaskEx(blueSpikeReady3, autoTasks);
+//        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
+//        positionSolver.addMoveToTaskEx(blueSpike3, autoTasks);
+//        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
+//        autoTasks.addDelay(500);
+//
+//        MoveAndLaunch(autoTasks, shootLaunchData);
+        positionSolver.addMoveToTaskEx(blueSpike1, autoTasks); //Goes off launch line
         autoTasks.addStep(() -> intake.setIntakeRPM(0));
         autoTasks.addStep(() -> intake.setLaunchRPM(0));
     }

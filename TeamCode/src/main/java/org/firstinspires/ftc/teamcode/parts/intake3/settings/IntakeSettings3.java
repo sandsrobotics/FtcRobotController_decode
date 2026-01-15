@@ -16,12 +16,16 @@ public class IntakeSettings3 {
     public static  double launchServo2Launch = 0.45; //.5
     public static  double launchServo2Rest = 0.265; //.278, 0.245
     // lock servo values
-    public static  double lockServo0Lock = 0.33; // 0
-    public static  double lockServo0Unlock = 0.44; //0.48
+    public static  double lockServo0Lock = 0.628; // 0
+    public static  double lockServo0Unlock = 0.843; //0.48
     public static  double lockServo1Lock = 0.48;
     public static  double lockServo1Unlock = 0.76; 
     public static  double lockServo2Lock = 0;  //not avail
     public static  double lockServo2Unlock = 0; //not avail
+    // Add these with your other timing constants
+    public static int lockServoUnlockDelay = 300;        // Time to wait for lock servo to fully unlock
+    public static int launchServoSettleTime = 100;       // Extra time for servo to settle at launch position
+    public static int launchServoResetSettleTime = 300;  // Time to wait for servo to fully reset before locking
 
     // launch servo values
     public static int launchServoDelay = 150;

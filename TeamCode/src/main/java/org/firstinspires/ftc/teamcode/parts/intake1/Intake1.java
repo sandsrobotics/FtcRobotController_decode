@@ -73,6 +73,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         getHardware().pinkServo.setPosition(Intake1Settings.servoPinkLow);
         getHardware().blueServo.setPosition(Intake1Settings.servoBlueLow);
         getHardware().greenServo.setPosition(Intake1Settings.servoGreenDock);
+        getHardware().intakeServo.setPosition(Intake1Settings.intakeServoOff);
     }
 
     public void initializeMotors() {
@@ -192,6 +193,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         // TODO: Stop LaunchMotors?
         this.getHardware().launchMotorLeft.setVelocity(0);
         this.getHardware().launchMotorRight.setVelocity(0);
+        this.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoOff);
 
         // stop all tasks in the intake group
         stopAllIntakeTasks();

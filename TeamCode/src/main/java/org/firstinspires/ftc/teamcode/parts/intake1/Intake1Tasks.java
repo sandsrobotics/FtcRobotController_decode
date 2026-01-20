@@ -77,12 +77,14 @@ public class Intake1Tasks {
             intakeTask.addStep(allServoDock::restart);
             intakeTask.addStep(allServoDock::isDone);
             intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeIn);
+            intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoIn);
         });
 
         /*   Artifact Intake Stop Task   */
         artifactIntakeStopTask.autoStart = false;
         artifactIntakeStopTask.addStep(()-> {
             intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeStop);
+            intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoOff);
         });
         artifactIntakeStopTask.addStep(allServoStore::restart);
         artifactIntakeStopTask.addStep(allServoStore::isDone);
@@ -90,6 +92,8 @@ public class Intake1Tasks {
          /*    Artifact outtake Task*/
         outtakeTask.autoStart = false;
         outtakeTask.addStep(() -> intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeOut));
+        // TODO: Check if this is needed.
+//        outtakeTask.addStep(()-> intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoOut));
 
         /*    Servo Transfer Tasks      */
         //         pink

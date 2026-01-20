@@ -10,6 +10,9 @@ public class Intake1Settings {
     public static double intakeIn =                                    -.85;
     public static double intakeStop =                                   0;
     public static double intakeOut =                                    .85;
+    public static final double intakeServoIn                                = 0;
+    public static final double intakeServoOff                               = 0.5;
+    public static final double intakeServoOut                               = 1;
     public static int launchServoDelay                          = 200;
     public static int launchServoSweepTime                      = 1000;
     public static int launchRPMTolerance                        = 100;

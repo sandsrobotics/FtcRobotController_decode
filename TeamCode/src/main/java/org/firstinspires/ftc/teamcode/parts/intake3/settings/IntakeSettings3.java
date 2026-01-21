@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode.parts.intake3.settings;
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
+import org.firstinspires.ftc.teamcode.lib.ServoSSR;
+
 import java.util.HashMap;
 import java.util.Map;
 import om.self.ezftc.utils.Vector3;
@@ -36,17 +38,18 @@ public class IntakeSettings3 {
     public static final Map<String, LaunchData> launchPosiMap = new HashMap<String, LaunchData>();
     public static PIDFCoefficients spinnerPID = new PIDFCoefficients(100,0,0,12.4);
     public static int launchRPM = 3150; // for teleop tests
+    public static int launchAllRPM = 3500;
     public static int intakeRPM = 950;
     public static final double ticksPerRev = 28;
     public static final double ticksPerRev1150 = 145.1;
 
-    public static double spinNear                 = 2900; // 3300
+    public static double spinNear                 = 2300; // 3300 2900
     public static final double spinMiddle               = 0;// 3900
-    public static double spinFar                  = 3500; // 4500
+    public static double spinFar                  = 3300; // 4500 needs to be within 100 tolerance
 
-    public static double nearTest      = 70;  // 1 tile diagonally 40
+    public static double nearTest      = 65;  // 1 tile diagonally 40
     public static final double midTest       = 98; //98
-    public static double farTest       = 136; // 140
+    public static double farTest       = 133.5; // 140
 
     public static final Vector3 targetRed              = new Vector3(-70.5, 70.5, 0.0);
     public static final Vector3 targetBlue             = new Vector3(-70.5, -70.5, 0.0);
@@ -64,6 +67,7 @@ public class IntakeSettings3 {
     public static final double MIN_TURN_SPEED = 0.1;
     public static  double P_TURN_GAIN = 0.05;       // Proportional gain for turning
     public static final double P_DRIVE_GAIN = 0.01;      // Proportional gain for forward/back
+    public static final Launcher[] Launchers = new Launcher[3];
 
     public IntakeSettings3() {}
 
@@ -86,5 +90,22 @@ public class IntakeSettings3 {
 
         public Integer getRPM() {return RPM;}
         public Vector3 getPosition() {return position;}
+    }
+
+    public static class Launcher{
+        private ServoSSR servo;
+        private double launcherServoLaunch;
+        private double launcherServoRest;
+
+        public Launcher(ServoSSR servo, double launcherServoLaunch, double launcherServoRest) {
+            this.servo = servo;
+            this.launcherServoLaunch = launcherServoLaunch;
+            this.launcherServoRest = launcherServoRest;
+        }
+
+        public ServoSSR getServo() {return servo;}
+        public double getLauncherServoLaunch() {return launcherServoLaunch;}
+        public double getLauncherServoRest() {return launcherServoRest;}
+
     }
 }

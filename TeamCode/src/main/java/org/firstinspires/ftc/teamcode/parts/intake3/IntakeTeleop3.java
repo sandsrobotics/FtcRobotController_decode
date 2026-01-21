@@ -88,10 +88,15 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         // Y BUTTON - Start/Stop launcher
         if (buttonMgr.getState(1, Buttons.y, State.wasTapped)) {
             parent.setLaunchRPM(IntakeSettings3.launchRPM);
-            IntakeSettings3.launchArmed = true;
+            IntakeSettings3.launchArmed = true;  // use true for interpolated
         }
 
         if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
+            IntakeSettings3.launchArmed = false;
+            parent.setLaunchRPM(0);
+        }
+
+        if (buttonMgr.getState(1, Buttons.b, State.wasTapped)) {
             IntakeSettings3.launchArmed = false;
             parent.setLaunchRPM(0);
         }
@@ -103,6 +108,18 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             }
             parent.launchData = IntakeSettings3.launchPosiMap.get("blueshoot1");
             parent.tasks.moveAndLaunch.restart();
+        }
+
+        if (buttonMgr.getState(1, Buttons.left_trigger, State.wasPressed)) {
+            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
+            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
+            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
+        }
+
+        if (buttonMgr.getState(1, Buttons.right_trigger, State.wasPressed)) {
+            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
+            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
+            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
         }
 
         // ============================================
@@ -132,7 +149,7 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         // B BUTTON - Simultaneous launch (auto-starts launcher)
         if (buttonMgr.getState(2, Buttons.b, State.wasTapped)) {
             if (parent.getTargetLaunchRPM() < 500) {
-                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+                parent.setLaunchRPM(IntakeSettings3.launchAllRPM);
                 IntakeSettings3.launchArmed = true;
             }
             parent.stopAllIntakeTasks();

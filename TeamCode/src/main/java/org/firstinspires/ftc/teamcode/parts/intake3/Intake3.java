@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode.parts.intake3;
 
+import static org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3.*;
+
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Tools.DataTypes.Vector2D;
@@ -100,74 +102,91 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     /**
      * AUTONOMOUS - Non-blocking method that computes launch order
      * Returns an array of servo indices in the order they should fire.
+     * Colored artifacts matching the pattern fire first, then NONE artifacts.
      */
     public int[] computeLaunchOrderAndLaunch(ArtifactDetectionPipeline.ArtifactColor[] desiredOrder) {
         ArtifactDetectionPipeline.Artifact[] current = artifacts.getArtifactList();
 
-        // Build list of artifact indices that have actual artifacts
-        List<Integer> artifactIndices = new ArrayList<>();
+        // Separate colored and NONE artifacts
+        List<Integer> coloredIndices = new ArrayList<>();
+        List<Integer> noneIndices = new ArrayList<>();
+
         for (int i = 0; i < current.length; i++) {
             if (current[i].color != ArtifactDetectionPipeline.ArtifactColor.NONE) {
-                artifactIndices.add(i);
+                coloredIndices.add(i);
+            } else {
+                noneIndices.add(i);
             }
         }
 
-        // No artifacts detected - return null for backward compatibility
-        if (artifactIndices.isEmpty()) {
-            parent.opMode.telemetry.addData("Launch", "No artifacts");
+        // If ALL artifacts are NONE, launch them sequentially
+        if (coloredIndices.isEmpty()) {
+            parent.opMode.telemetry.addData("Launch", "All NONE - sequential order");
             parent.opMode.telemetry.update();
-            return null;
+            return noneIndices.stream().mapToInt(Integer::intValue).toArray();
         }
 
-        // No desired order specified - use sequential
+        // No desired order specified - launch colored first, then NONE
         if (desiredOrder == null) {
-            parent.opMode.telemetry.addData("Launch", "No pattern, sequential order");
+            parent.opMode.telemetry.addData("Launch", "No pattern - colored first, then NONE");
             parent.opMode.telemetry.update();
-            return artifactIndices.stream().mapToInt(Integer::intValue).toArray();
+            List<Integer> combined = new ArrayList<>(coloredIndices);
+            combined.addAll(noneIndices);
+            return combined.stream().mapToInt(Integer::intValue).toArray();
         }
 
-        // Artifact count doesn't match pattern - use sequential
-        if (artifactIndices.size() != desiredOrder.length) {
-            parent.opMode.telemetry.addData("Launch", "No pattern, sequential order");
-            parent.opMode.telemetry.update();
-            return artifactIndices.stream().mapToInt(Integer::intValue).toArray();
-        }
-
-        // Try to match colors to desired order
+        // Try to match colored artifacts to desired order
         boolean[] used = new boolean[current.length];
-        int[] launchOrder = new int[desiredOrder.length];
+        List<Integer> launchOrder = new ArrayList<>();
 
         for (int i = 0; i < desiredOrder.length; i++) {
             ArtifactDetectionPipeline.ArtifactColor wanted = desiredOrder[i];
             boolean found = false;
 
-            for (int j : artifactIndices) {
+            for (int j : coloredIndices) {
                 if (!used[j] && current[j].color == wanted) {
-                    launchOrder[i] = j;
+                    launchOrder.add(j);
                     used[j] = true;
                     found = true;
                     break;
                 }
             }
 
-            // If any color not found, fall back to sequential immediately
+            // If color not found, continue trying to match remaining colors
             if (!found) {
-                parent.opMode.telemetry.addData("Launch", "Mismatch, sequential order");
-                parent.opMode.telemetry.update();
-                return artifactIndices.stream().mapToInt(Integer::intValue).toArray();
+                parent.opMode.telemetry.addData("Launch", "Partial match - missing " + wanted);
             }
         }
 
-        // All colors matched successfully
-        parent.opMode.telemetry.addData("Launch", "Pattern matched!");
+        // If we matched at least one color, use that order + remaining colored + NONE
+        if (!launchOrder.isEmpty()) {
+            // Add any colored artifacts that weren't matched
+            for (int j : coloredIndices) {
+                if (!used[j]) {
+                    launchOrder.add(j);
+                }
+            }
+            // Add NONE artifacts at the end
+            launchOrder.addAll(noneIndices);
+
+            parent.opMode.telemetry.addData("Launch", "Pattern matched with NONE last");
+            parent.opMode.telemetry.update();
+            return launchOrder.stream().mapToInt(Integer::intValue).toArray();
+        }
+
+        // No matches - launch all colored first, then NONE
+        parent.opMode.telemetry.addData("Launch", "No matches - colored first, then NONE");
         parent.opMode.telemetry.update();
-        return launchOrder;
+        List<Integer> combined = new ArrayList<>(coloredIndices);
+        combined.addAll(noneIndices);
+        return combined.stream().mapToInt(Integer::intValue).toArray();
     }
+
 
     public void launchServoByIndex(int index) {
         switch (index) {
             case 0:
-                getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
+                getHardware().launchServo0.setPosition(launchServo0Launch);
                 break;
             case 1:
                 getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
@@ -188,10 +207,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     }
     /**
      * TELEOP ONLY - Blocking launch method with smart fallback
-     * Auto-starts launcher, attempts color matching, falls back to sequential if:
-     * - No April tag detected
-     * - All 3 artifacts are the same color
-     * - Artifact colors don't match the desired pattern
+     * Launches colored artifacts in matched order first, then NONE artifacts.
      */
     public void computeLaunchOrderAndLaunchBlocking(ArtifactDetectionPipeline.ArtifactColor[] desiredOrder) {
         // Auto-start launcher if not running
@@ -221,17 +237,21 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
             }
         }
 
-        // Get current artifacts
+        // Get current artifacts - separate colored and NONE
         ArtifactDetectionPipeline.Artifact[] current = artifacts.getArtifactList();
-        List<Integer> artifactIndices = new ArrayList<>();
+        List<Integer> coloredIndices = new ArrayList<>();
+        List<Integer> noneIndices = new ArrayList<>();
+
         for (int i = 0; i < current.length; i++) {
             if (current[i].color != ArtifactDetectionPipeline.ArtifactColor.NONE) {
-                artifactIndices.add(i);
+                coloredIndices.add(i);
+            } else {
+                noneIndices.add(i);
             }
         }
 
-        // No artifacts detected - exit
-        if (artifactIndices.isEmpty()) {
+        // If ALL are NONE, launch sequentially and exit
+        if (coloredIndices.isEmpty() && noneIndices.isEmpty()) {
             parent.opMode.telemetry.addData("Launch", "No artifacts detected!");
             parent.opMode.telemetry.update();
             return;
@@ -239,89 +259,92 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 
         // Unlock servos before firing
         getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Unlock);
-        parent.opMode.sleep(IntakeSettings3.lockServoUnlockDelay); // Wait for lock servo to fully unlock
+        parent.opMode.sleep(IntakeSettings3.lockServoUnlockDelay);
 
-        // Determine if color matching should be attempted
-        boolean shouldAttemptColorMatch = true;
-        String fallbackReason = "";
+        List<Integer> launchOrder = new ArrayList<>();
+        String launchMessage = "";
 
-        // Check 1: No April tag detected
-        if (desiredOrder == null) {
-            shouldAttemptColorMatch = false;
-            fallbackReason = "No April tag detected";
-        }
-        // Check 2: All artifacts are the same color (only if we still want to try matching)
-        else if (artifactIndices.size() >= 2) {
-            ArtifactDetectionPipeline.ArtifactColor firstColor = current[artifactIndices.get(0)].color;
-            boolean allSameColor = true;
-            for (int idx : artifactIndices) {
-                if (current[idx].color != firstColor) {
-                    allSameColor = false;
-                    break;
-                }
-            }
-            if (allSameColor) {
+        // If we have colored artifacts, try to match them
+        if (!coloredIndices.isEmpty()) {
+            boolean shouldAttemptColorMatch = true;
+            String fallbackReason = "";
+
+            // Check 1: No April tag detected
+            if (desiredOrder == null) {
                 shouldAttemptColorMatch = false;
-                fallbackReason = "All artifacts same color (" + firstColor + ")";
+                fallbackReason = "No April tag detected";
             }
-        }
-
-        // Check 3: Wrong number of artifacts vs pattern (only if still want to try)
-        if (shouldAttemptColorMatch && artifactIndices.size() != desiredOrder.length) {
-            shouldAttemptColorMatch = false;
-            fallbackReason = "Artifact count mismatch";
-        }
-
-        int[] launchOrder = null;
-
-        // Try color matching if conditions are good
-        if (shouldAttemptColorMatch) {
-            boolean[] used = new boolean[current.length];
-            int[] tempOrder = new int[desiredOrder.length];
-            boolean matched = true;
-
-            for (int i = 0; i < desiredOrder.length; i++) {
-                boolean found = false;
-                for (int j : artifactIndices) {
-                    if (!used[j] && current[j].color == desiredOrder[i]) {
-                        tempOrder[i] = j;
-                        used[j] = true;
-                        found = true;
+            // Check 2: All colored artifacts are the same color
+            else if (coloredIndices.size() >= 2) {
+                ArtifactDetectionPipeline.ArtifactColor firstColor = current[coloredIndices.get(0)].color;
+                boolean allSameColor = true;
+                for (int idx : coloredIndices) {
+                    if (current[idx].color != firstColor) {
+                        allSameColor = false;
                         break;
                     }
                 }
-                if (!found) {
-                    matched = false;
-                    fallbackReason = "Colors don't match pattern";
-                    break;
+                if (allSameColor) {
+                    shouldAttemptColorMatch = false;
+                    fallbackReason = "All artifacts same color (" + firstColor + ")";
                 }
             }
 
-            // Only use matched order if ALL colors matched
-            if (matched) {
-                launchOrder = tempOrder;
+            // Try color matching if conditions are good
+            if (shouldAttemptColorMatch) {
+                boolean[] used = new boolean[current.length];
+
+                for (int i = 0; i < desiredOrder.length; i++) {
+                    boolean found = false;
+                    for (int j : coloredIndices) {
+                        if (!used[j] && current[j].color == desiredOrder[i]) {
+                            launchOrder.add(j);
+                            used[j] = true;
+                            found = true;
+                            break;
+                        }
+                    }
+                }
+
+                // Add any unmatched colored artifacts
+                for (int j : coloredIndices) {
+                    if (!used[j]) {
+                        launchOrder.add(j);
+                    }
+                }
+
+                if (launchOrder.size() == coloredIndices.size()) {
+                    launchMessage = "Color matched!";
+                } else {
+                    launchMessage = "Partial match";
+                }
+            } else {
+                // Use sequential order for colored artifacts
+                launchOrder.addAll(coloredIndices);
+                launchMessage = "Sequential - " + fallbackReason;
             }
         }
 
-        // Use color order if matched, otherwise sequential
-        if (launchOrder == null) {
-            launchOrder = artifactIndices.stream().mapToInt(Integer::intValue).toArray();
-            parent.opMode.telemetry.addData("Launch", "Sequential - " + fallbackReason);
-        } else {
-            parent.opMode.telemetry.addData("Launch", "Color matched!");
+        // Add NONE artifacts at the end
+        launchOrder.addAll(noneIndices);
+
+        if (!noneIndices.isEmpty()) {
+            launchMessage += " (NONE last)";
         }
+
+        parent.opMode.telemetry.addData("Launch", launchMessage);
         parent.opMode.telemetry.update();
 
         // Fire servos in order
         for (int idx : launchOrder) {
             launchServoByIndex(idx);
-            parent.opMode.sleep(IntakeSettings3.launchServoSweepTime + IntakeSettings3.launchServoSettleTime); // Wait for full movement + settling
+            parent.opMode.sleep(IntakeSettings3.launchServoSweepTime + IntakeSettings3.launchServoSettleTime);
             resetServoByIndex(idx);
-            parent.opMode.sleep(IntakeSettings3.launchServoDelay); // Wait before next launch
+            parent.opMode.sleep(IntakeSettings3.launchServoDelay);
         }
 
         // Re-lock servos after all launches complete
-        parent.opMode.sleep(IntakeSettings3.launchServoResetSettleTime); // Wait for last servo to fully reset
+        parent.opMode.sleep(IntakeSettings3.launchServoResetSettleTime);
         getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
     }
 
@@ -363,7 +386,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
                 getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
                 break;
             case 2:
-                getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
+                getHardware().launchServo2.setPosition(launchServo2Rest);
                 break;
         }
     }
@@ -405,16 +428,21 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         getHardware().launchServo1.stop();
         getHardware().launchServo2.stop();
         getHardware().lockServo0.stop();
+        launchArmed = false;
     }
 
     public void initializeServos() {
         getHardware().launchServo0.setSweepTime(IntakeSettings3.launchServoSweepTime);
         getHardware().launchServo1.setSweepTime(IntakeSettings3.launchServoSweepTime);
         getHardware().launchServo2.setSweepTime(IntakeSettings3.launchServoSweepTime);
-        getHardware().lockServo0.setPosition(IntakeSettings3.lockServoSweepTime);
+//        getHardware().lockServo0.setPosition(IntakeSettings3.lockServoSweepTime); testing if the servos stall on init.
         getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
         getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
-        getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
+        getHardware().launchServo2.setPosition(launchServo2Rest);
+        Launchers[0] = new IntakeSettings3.Launcher(getHardware().launchServo0, launchServo0Launch, launchServo0Rest);
+        Launchers[1] = new IntakeSettings3.Launcher(getHardware().launchServo1, launchServo1Launch, launchServo1Rest);
+        Launchers[2] = new IntakeSettings3.Launcher(getHardware().launchServo2, launchServo2Launch, launchServo2Rest);
+
     }
 
     @Override

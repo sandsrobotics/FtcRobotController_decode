@@ -18,6 +18,7 @@ public class Intake3Tasks {
     public final TimedTask resetLaunchServos;
     public final TimedTask alignTarget;
     public final TimedTask orderedColorLaunchTask;
+    public final TimedTask launchOneArtifact;
     private final Intake3 intake;
     private int[] currentLaunchOrder = null;  // Stores computed launch order
     private final Robot robot;
@@ -34,6 +35,7 @@ public class Intake3Tasks {
         resetLaunchServos = new TimedTask(TaskNames.ResetLaunch, movementTask);
         alignTarget = new TimedTask(TaskNames.AlignTarget, movementTask);
         orderedColorLaunchTask = new TimedTask(TaskNames.OrderedColorLaunch, movementTask);
+        launchOneArtifact = new TimedTask(TaskNames.LaunchOneArtifact, movementTask);
     }
 
     public void constructAllIntakeTasks() {
@@ -60,12 +62,18 @@ public class Intake3Tasks {
         ballLaunchTask.addDelay(intake.getSettings().launchServoDelay);
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Launch));
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo2.isDone());
-        ballLaunchTask.addDelay(intake.getSettings().launchServoDelay);
+        ballLaunchTask.addDelay(intake.getSettings().launchServoDelay + 100);
 
         //launch reset
         ballLaunchTask.addStep(()-> resetLaunchServos.restart());
 
         /* End */
+
+        launchOneArtifact.autoStart = false;
+//        launchOneArtifact.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), intake.getSettings().launchRPMToleranceTime);
+//        launchOneArtifact.addStep(()-> intake.getHardware().launchServo0.setPosition(intake.getSettings().launchServo0Launch));
+//        launchOneArtifact.addStep(()-> intake.getHardware().launchServo0.isDone());
+//        launchOneArtifact.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), intake.getSettings().launchRPMToleranceTime);
 
         /* Begin */
 
@@ -184,5 +192,6 @@ public class Intake3Tasks {
         public final static String ResetLaunch = "auto reset launch servos";
         public final static String OrderedColorLaunch = "auto ordered color launch";
         public final static String AlignTarget = "auto align to april tag";
+        public final static String LaunchOneArtifact = "auto launch just one ball by index";
     }
 }

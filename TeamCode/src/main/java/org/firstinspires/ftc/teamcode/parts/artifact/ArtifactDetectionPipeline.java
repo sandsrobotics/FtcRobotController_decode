@@ -45,7 +45,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline {
     Scalar lowerPurple = new Scalar(130, 50, 10);
     Scalar upperPurple = new Scalar(160, 255, 200);
 
-    int colorThreshold = 45000;
+    int colorThreshold = 38000;
 
     Scalar rectangleColor = BLOCK;
 

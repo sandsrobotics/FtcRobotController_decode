@@ -270,14 +270,35 @@ public class Intake1Tasks {
         teleopFarLaunch.addStep(() -> {
             intake.positionSolver.addMoveToTaskEx(
                     DecodeSettings.isAllianceBlue() ?
-                            intake.getSettings().p_teleopFarBlueLaunch :
-                            intake.getSettings().p_teleopFarRedLaunch,
+                            Intake1Settings.p_teleopFarBlueLaunch_1 :
+                            Intake1Settings.p_teleopFarRedLaunch_1,
                     teleopFarLaunch);
               });
         teleopFarLaunch.addStep(startFarLaunch::restart);
         teleopFarLaunch.addStep(startFarLaunch::isDone);
-        teleopFarLaunch.addStep(pinkBlueGreenServoLaunch::restart);
-        teleopFarLaunch.addDelay(1500);
+        teleopFarLaunch.addStep(pinkServoLaunch::restart);
+        teleopFarLaunch.addStep(pinkServoLaunch::isDone);
+        teleopFarLaunch.addDelay(200);
+        teleopFarLaunch.addStep(() -> {
+            intake.positionSolver.addMoveToTaskEx(
+                    DecodeSettings.isAllianceBlue() ?
+                            Intake1Settings.p_teleopFarBlueLaunch_2 :
+                            Intake1Settings.p_teleopFarRedLaunch_2,
+                    teleopFarLaunch);
+        });
+        teleopFarLaunch.addStep(blueServoLaunch::restart);
+        teleopFarLaunch.addStep(blueServoLaunch::isDone);
+        teleopFarLaunch.addDelay(200);
+        teleopFarLaunch.addStep(() -> {
+            intake.positionSolver.addMoveToTaskEx(
+                    DecodeSettings.isAllianceBlue() ?
+                            Intake1Settings.p_teleopFarBlueLaunch_3 :
+                            Intake1Settings.p_teleopFarRedLaunch_3,
+                    teleopFarLaunch);
+        });
+        teleopFarLaunch.addStep(greenServoLaunch::restart);
+        teleopFarLaunch.addStep(greenServoLaunch::isDone);
+        teleopFarLaunch.addDelay(200);
 
         // teleopNearLaunch
         teleopNearLaunch.autoStart = false;

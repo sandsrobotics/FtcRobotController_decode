@@ -31,9 +31,9 @@ public class Intake1Settings {
     public static double ticksPerRevolution =                          28;
     public double secondsPerMinute =                                 60;
     public static double autoFarLaunchMotorRPM =                     3000; // 3100; 3200
-    public static double farLaunchMotorRPM =                         3100; // 3100; 3200
+    public static double farLaunchMotorRPM =                         3200; // 3100; 3200
     public static double threeLaunchMotorRPM =                       2800; // 2700.; 2900
-    public static double goalLaunchMotorRPM =                        2500;
+    public static double goalLaunchMotorRPM =                        2600; // 2500;
 
     public static double aLaunchMotorRPM =                        500;
     public static double bLaunchMotorRPM =                        1000;
@@ -51,12 +51,18 @@ public class Intake1Settings {
     public double launchMotorVelocityStop =                      0;
 
 
-    public Vector3 p_teleopFarRedLaunch = new Vector3(58, -16, 145);
+    public static Vector3 p_teleopFarRedLaunch_1 = new Vector3(58, -16, 150);
+    public static Vector3 p_teleopFarRedLaunch_2 = new Vector3(58, -16, 153);
+    public static Vector3 p_teleopFarRedLaunch_3 = new Vector3(58, -16, 153);
+
     public Vector3 p_teleopNearRedLaunch = new Vector3(-32, -32, 111);
     public Vector3 p_teleopThreeRedLaunch = new Vector3(-24, 24, 135);
     public Vector3 p_teleopGoalRedLaunch = new Vector3(-24, 24, 135);
 
-    public Vector3 p_teleopFarBlueLaunch = new Vector3(58, 16, -145);
+    public static Vector3 p_teleopFarBlueLaunch_1 = new Vector3(58, 16, -150);
+    public static Vector3 p_teleopFarBlueLaunch_2 = new Vector3(58, 16, -153);
+    public static Vector3 p_teleopFarBlueLaunch_3 = new Vector3(58, 16, -153);
+
     public Vector3 p_teleopNearBlueLaunch = new Vector3(-32, 32, -111);
     public Vector3 p_teleopThreeBlueLaunch = new Vector3(-24, -24, -135);
     public Vector3 p_teleopGoalBlueLaunch = new Vector3(-24, -24, -135);

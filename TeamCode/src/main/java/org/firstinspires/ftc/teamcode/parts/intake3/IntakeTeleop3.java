@@ -85,42 +85,25 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.setIntakeRPM(0);
         }
 
-        // Y BUTTON - Start/Stop launcher
-        if (buttonMgr.getState(1, Buttons.y, State.wasTapped)) {
-            parent.setLaunchRPM(IntakeSettings3.launchRPM);
-            IntakeSettings3.launchArmed = true;  // use true for interpolated
-        }
-
-        if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
-            IntakeSettings3.launchArmed = false;
-            parent.setLaunchRPM(0);
-        }
-
+        // B BUTTON - test and find out.
         if (buttonMgr.getState(1, Buttons.b, State.wasTapped)) {
             IntakeSettings3.launchArmed = false;
             parent.setLaunchRPM(0);
         }
 
-        // X BUTTON - Move to blueshoot1 and launch (auto-starts launcher)
-        if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {
-            if (parent.getTargetLaunchRPM() < 500) {
-                parent.setLaunchRPM(IntakeSettings3.launchRPM);
-            }
-            parent.launchData = IntakeSettings3.launchPosiMap.get("blueshoot1");
-            parent.tasks.moveAndLaunch.restart();
-        }
 
-        if (buttonMgr.getState(1, Buttons.left_trigger, State.wasPressed)) {
-            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
-            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
-            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
-        }
-
-        if (buttonMgr.getState(1, Buttons.right_trigger, State.wasPressed)) {
-            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
-            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
-            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
-        }
+//
+//        if (buttonMgr.getState(1, Buttons.left_trigger, State.wasPressed)) {
+//            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
+//            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
+//            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
+//        }
+//
+//        if (buttonMgr.getState(1, Buttons.right_trigger, State.wasPressed)) {
+//            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
+//            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
+//            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
+//        }
 
         // ============================================
         // CONTROLLER 2 (OPERATOR) CONTROLS
@@ -144,6 +127,26 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
                     parent.limeLight.getClassificationPattern()
             );
             parent.getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
+        }
+
+        // Y BUTTON - Start/Stop launcher
+        if (buttonMgr.getState(2, Buttons.y, State.wasTapped)) {
+            parent.setLaunchRPM(IntakeSettings3.launchRPM);
+            IntakeSettings3.launchArmed = false;  // use true for interpolated
+        }
+
+        if (buttonMgr.getState(2, Buttons.y, State.wasDoubleTapped)) {
+            IntakeSettings3.launchArmed = false;
+            parent.setLaunchRPM(0);
+        }
+
+        // X BUTTON - Move to blueshoot1 and launch (auto-starts launcher)
+        if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {
+            if (parent.getTargetLaunchRPM() < 500) {
+                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+            }
+            parent.launchData = IntakeSettings3.launchPosiMap.get("blueshoot1");
+            parent.tasks.moveAndLaunch.restart();
         }
 
         // B BUTTON - Simultaneous launch (auto-starts launcher)
@@ -172,12 +175,12 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.setLaunchRPM(-IntakeSettings3.launchRPM);
         }
 
-        // Y BUTTON - Lock servo (tap to lock, double tap to unlock)
-        if (buttonMgr.getState(2, Buttons.y, State.wasTapped)) {
+        // B BUTTON - Lock servo (tap to lock, double tap to unlock)
+        if (buttonMgr.getState(2, Buttons.b, State.wasTapped)) {
             parent.getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
         }
 
-        if (buttonMgr.getState(2, Buttons.y, State.wasDoubleTapped)) {
+        if (buttonMgr.getState(2, Buttons.b, State.wasDoubleTapped)) {
             parent.getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Unlock);
         }
         // LEFT STICK BUTTON - Move to bluefartriangle and launch (auto-starts launcher)

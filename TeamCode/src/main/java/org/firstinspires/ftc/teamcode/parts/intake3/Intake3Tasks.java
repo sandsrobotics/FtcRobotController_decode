@@ -154,8 +154,8 @@ public class Intake3Tasks {
         moveAndLaunch.addStep(() -> intake.positionSolver.setNewTarget(intake.launchData.getPosition(), true));
         moveAndLaunch.addStep(() -> intake.setLaunchRPM(intake.launchData.getRPM()));
         moveAndLaunch.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 4000);
-        moveAndLaunch.addStep(orderedColorLaunchTask::restart);  // ✅ CHANGED THIS
-        moveAndLaunch.addStep(orderedColorLaunchTask::isDone);   // ✅ CHANGED THIS
+        moveAndLaunch.addStep(orderedColorLaunchTask::restart);  // CHANGED THIS
+        moveAndLaunch.addStep(orderedColorLaunchTask::isDone);   // CHANGED THIS
         moveAndLaunch.addStep(() -> intake.setLaunchRPM(0));
 
         /* End */

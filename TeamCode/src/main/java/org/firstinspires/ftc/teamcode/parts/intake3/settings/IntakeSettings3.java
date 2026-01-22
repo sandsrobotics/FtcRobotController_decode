@@ -12,13 +12,13 @@ import om.self.ezftc.utils.Vector3;
 @Config
 public class IntakeSettings3 {
     public static  double launchServo0Launch = 0.441; //.367
-    public static  double launchServo0Rest = 0.62; //0.610, 0.643
+    public static  double launchServo0Rest = 0.62; //0.654 - ground, Qualifier - 0.62
     public static  double launchServo1Launch = 0.54;
-    public static  double launchServo1Rest = 0.35; //.36, 0.30
+    public static  double launchServo1Rest = 0.35; //.324 - ground, Qualifier - 0.35
     public static  double launchServo2Launch = 0.45; //.5
-    public static  double launchServo2Rest = 0.265; //.278, 0.245
+    public static  double launchServo2Rest = 0.265; //.237 - ground, Qualifier - 0.265
     // lock servo values
-    public static  double lockServo0Lock = 0.628; // 0
+    public static  double lockServo0Lock = 0.708; // 0
     public static  double lockServo0Unlock = 0.843; //0.48
     public static  double lockServo1Lock = 0.48;
     public static  double lockServo1Unlock = 0.76; 
@@ -34,7 +34,7 @@ public class IntakeSettings3 {
     public static int launchServoSweepTime = 400;
     public static int lockServoSweepTime = 1500;
     public static int launchRPMTolerance = 100;
-    public static int launchRPMToleranceTime = 4000;
+    public static int launchRPMToleranceTime = 400;
     public static final Map<String, LaunchData> launchPosiMap = new HashMap<String, LaunchData>();
     public static PIDFCoefficients spinnerPID = new PIDFCoefficients(100,0,0,12.4);
     public static int launchRPM = 3150; // for teleop tests

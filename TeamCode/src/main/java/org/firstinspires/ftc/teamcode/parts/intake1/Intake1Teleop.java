@@ -77,6 +77,26 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
             }
         }
 
+        //todo: Read this note and fix things!
+        /* **********************************************************
+         *
+         * IMPORTANT NOTE FROM MR. KN:
+         *
+         * State.isPressed should not be used when controlling tasks (or triggering anything).
+         * It returns the current state of the button, not a rising or falling edge event.
+         * That means it triggers the task repeatedly for the entire duration it is pressed.
+         * Not good!
+         *
+         * Better choices would be:
+         *    wasPressed;       // Rise
+         *    wasReleased;      // Fall
+         *    wasHeld;          // Rise + Long Hold + Fall
+         *    wasTapped;        // Rise + Short Hold + Fall
+         *    wasSingleTapped;  // Rise + Short Hold + Fall + Gap  [note the gap/delay at end!]
+         *    wasDoubleTapped;  // Rise + Short Hold + Fall + Short Gap x2
+         *
+         * ***********************************************************/
+
         // *** DRIVER 2 CONTROLS ***
         // Driver 2 - slide control
 //        parent.setUserSlidePower(-parent.parent.opMode.gamepad2.left_stick_y);

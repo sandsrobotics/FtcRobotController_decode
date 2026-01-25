@@ -49,6 +49,10 @@ public class Vector3 {
 		}
 	}
 
+	public Vector3 copy() {
+		return new Vector3(X, Y, Z);
+	}
+
 	public Vector3 switchXY(){
 		return new Vector3(Y, X, Z);
 	}

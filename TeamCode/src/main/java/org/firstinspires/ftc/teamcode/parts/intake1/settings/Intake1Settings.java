@@ -17,23 +17,23 @@ public class Intake1Settings {
     public static int launchServoSweepTime                      = 1000;
     public static int launchRPMTolerance                        = 100;
 
-    public static double servoGreenDock =                           0.463;
+    public static double servoGreenDock =                           0.500; // 0.463;
     public static double servoGreenLaunch =                         0.183; //.243
 
-    public static double servoPinkDock =                            0.518;
+    public static double servoPinkDock =                            0.518; // 0.490; // 0.518;
     public static double servoPinkLaunch =                          0.680; // .732
     public static double servoPinkLow =                             0.434;
 
-    public static double servoBlueDock =                            0.494;
+    public static double servoBlueDock =                            0.500; // 0.494;
     public static double servoBlueLaunch =                          0.671;
     public static double servoBlueLow =                             0.390;
 
     public static double ticksPerRevolution =                          28;
     public double secondsPerMinute =                                 60;
-    public static double autoFarLaunchMotorRPM =                     3000; // 3100; 3200
-    public static double farLaunchMotorRPM =                         3200; // 3100; 3200
-    public static double threeLaunchMotorRPM =                       2800; // 2700.; 2900
-    public static double goalLaunchMotorRPM =                        2600; // 2500;
+    public static double autoFarLaunchMotorRPM =                     3100; // 3000; 3100; 3200
+    public static double farLaunchMotorRPM =                         3300; // 3100; 3200
+    public static double threeLaunchMotorRPM =                       2700; // 2700; 2800; 2900
+    public static double goalLaunchMotorRPM =                        2800; // 2700; 2600; 2500;
 
     public static double aLaunchMotorRPM =                        500;
     public static double bLaunchMotorRPM =                        1000;
@@ -55,17 +55,17 @@ public class Intake1Settings {
     public static Vector3 p_teleopFarRedLaunch_2 = new Vector3(58, -16, 153);
     public static Vector3 p_teleopFarRedLaunch_3 = new Vector3(58, -16, 153);
 
-    public Vector3 p_teleopNearRedLaunch = new Vector3(-32, -32, 111);
-    public Vector3 p_teleopThreeRedLaunch = new Vector3(-24, 24, 135);
-    public Vector3 p_teleopGoalRedLaunch = new Vector3(-24, 24, 135);
+    public static Vector3 p_teleopNearRedLaunch = new Vector3(-32, -32, 111);
+    public static Vector3 p_teleopThreeRedLaunch = new Vector3(-28.26, 16, 141.5);  // (-24, 24, 135);
+    public static Vector3 p_teleopGoalRedLaunch = new Vector3(-24, 24, 135);
 
     public static Vector3 p_teleopFarBlueLaunch_1 = new Vector3(58, 16, -150);
     public static Vector3 p_teleopFarBlueLaunch_2 = new Vector3(58, 16, -153);
     public static Vector3 p_teleopFarBlueLaunch_3 = new Vector3(58, 16, -153);
 
-    public Vector3 p_teleopNearBlueLaunch = new Vector3(-32, 32, -111);
-    public Vector3 p_teleopThreeBlueLaunch = new Vector3(-24, -24, -135);
-    public Vector3 p_teleopGoalBlueLaunch = new Vector3(-24, -24, -135);
+    public static Vector3 p_teleopNearBlueLaunch = new Vector3(-32, 32, -111);
+    public static Vector3 p_teleopThreeBlueLaunch = new Vector3(-24, -24, -135);
+    public static Vector3 p_teleopGoalBlueLaunch = new Vector3(-24, -24, -135);
 
     public Intake1Settings() {
     }

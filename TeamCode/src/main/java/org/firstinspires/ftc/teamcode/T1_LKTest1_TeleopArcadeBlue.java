@@ -29,8 +29,8 @@ import java.text.DecimalFormat;
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.utils.Vector3;
 
-@TeleOp(name="14273 LK Test TeleArcadeBlue", group="C14273")
-public class T1_LKTest_TeleopArcadeBlue extends LinearOpMode {
+@TeleOp(name="14273 LKTest1 TeleArcadeBlue", group="C14273")
+public class T1_LKTest1_TeleopArcadeBlue extends LinearOpMode {
     double tileSide = 23.5;
     Drive drive;
     Robot robot;
@@ -54,7 +54,8 @@ public class T1_LKTest_TeleopArcadeBlue extends LinearOpMode {
 
         // LK Test
         DecodeSettings.lkPinpoint = true;
-        DecodeSettings.lkTestMode = true;
+        DecodeSettings.lkTestMode1 = true;
+        DecodeSettings.lkTestMode2 = false;
 
         extraSettings();
 

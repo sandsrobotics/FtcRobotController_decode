@@ -218,25 +218,38 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
                 // Driver 1
             }
             // Driver 1 - start button is a "shift" key; anything below is when start is held first
-            else {
-                // add shifted controls here
+        else {
+            // add shifted controls here
 
-                // LK new test
-                if (DecodeSettings.lkTestMode) {
-                    if (buttonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
-                        parent.headingSolver.startSolver();
-                    }
-                    if (buttonMgr.getState(1, Buttons.dpad_left, State.wasTapped)) {
-                        parent.headingSolver.setNewTarget(DecodeSettings.targetBlue, true);
-                    }
-                    if (buttonMgr.getState(1, Buttons.dpad_right, State.wasTapped)) {
-                        parent.headingSolver.setNewTarget(DecodeSettings.targetRed, true);
-                    }
-                    if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
-                        parent.headingSolver.stopSolver();
-                    }
+            // LK new test
+            if (DecodeSettings.lkTestMode1) {
+                if (buttonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
+                    parent.headingSolver.startSolver();
                 }
-
+                if (buttonMgr.getState(1, Buttons.dpad_left, State.wasTapped)) {
+                    parent.headingSolver.setNewTarget(DecodeSettings.targetBlue, true);
+                }
+                if (buttonMgr.getState(1, Buttons.dpad_right, State.wasTapped)) {
+                    parent.headingSolver.setNewTarget(DecodeSettings.targetRed, true);
+                }
+                if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
+                    parent.headingSolver.stopSolver();
+                }
+            }
+            if (DecodeSettings.lkTestMode2) {
+                if (buttonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
+                    parent.headerAimer.setAutoAim(true);
+                }
+                if (buttonMgr.getState(1, Buttons.dpad_left, State.wasTapped)) {
+                    parent.headerAimer.setTarget(DecodeSettings.targetBlue);
+                }
+                if (buttonMgr.getState(1, Buttons.dpad_right, State.wasTapped)) {
+                    parent.headerAimer.setTarget(DecodeSettings.targetRed);
+                }
+                if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
+                    parent.headerAimer.setAutoAim(false);
+                }
             }
         }
     }
+}

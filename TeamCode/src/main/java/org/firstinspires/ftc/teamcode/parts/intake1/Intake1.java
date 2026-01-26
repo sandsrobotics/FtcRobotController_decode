@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
 import org.firstinspires.ftc.teamcode.parts.artifact.ArtifactDetectionPipeline;
 import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
+import org.firstinspires.ftc.teamcode.parts.drive.headeraimer.HeaderAimer;
 import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.intake1.hardware.Intake1Hardware;
 import org.firstinspires.ftc.teamcode.parts.intake1.settings.Intake1Settings;
@@ -28,6 +29,8 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     protected Pinpoint pinpoint;
     protected PositionSolver positionSolver;
     protected HeadingSolver headingSolver;  // LK New Test
+    protected HeaderAimer headerAimer;      // LK New Test
+
     public int launchRPM;
 
     public Artifacts artifacts;
@@ -240,7 +243,8 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 //        artifactPipeline = getBeanManager().getBestMatch(ArtifactDetectionPipeline.class, false);
         limeLight = getBeanManager().getBestMatch(LimeLight.class, false);
         // LK New Test
-        if (DecodeSettings.lkTestMode) headingSolver = getBeanManager().getBestMatch(HeadingSolver.class, false);
+        if (DecodeSettings.lkTestMode1) headingSolver = getBeanManager().getBestMatch(HeadingSolver.class, false);
+        if (DecodeSettings.lkTestMode2) headerAimer = getBeanManager().getBestMatch(HeaderAimer.class, false);
 
     }
 

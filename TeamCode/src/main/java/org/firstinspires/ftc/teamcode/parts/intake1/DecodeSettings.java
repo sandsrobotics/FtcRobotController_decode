@@ -21,7 +21,8 @@ public class DecodeSettings {
    public static Vector3 targetRed  = new Vector3(-70.5, 70.5, 0.0);
    public static Vector3 targetBlue = new Vector3(-70.5, -70.5, 0.0);
    public static boolean lkPinpoint = false;
-   public static boolean lkTestMode = false;
+   public static boolean lkTestMode1 = false;
+   public static boolean lkTestMode2 = false;
    // --
 
    public static boolean autonomousDebugMode = false;

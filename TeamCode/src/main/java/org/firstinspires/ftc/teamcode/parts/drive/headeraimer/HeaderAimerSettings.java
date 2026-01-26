@@ -21,7 +21,7 @@ public class HeaderAimerSettings {
         return new HeaderAimerSettings(
                 0.01,
                 new PIDCoefficients(
-                        -0.02,0,0
+                        0.03,0,0   // was -0.02
                 )//,
 //                0.3,
 //                700

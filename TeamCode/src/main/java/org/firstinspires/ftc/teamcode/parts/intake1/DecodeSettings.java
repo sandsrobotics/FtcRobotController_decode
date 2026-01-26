@@ -17,6 +17,13 @@ public class DecodeSettings {
    static Vector3 currentLaunchPosOne = new Vector3(); // Each Mode is supposed to set this value before calling computeAndLaunchInOrder.
    static Vector3 currentLaunchPosTwo = new Vector3(); // Each Mode is supposed to set this value before calling computeAndLaunchInOrder.
 
+   // LK new test stuff
+   public static Vector3 targetRed  = new Vector3(-70.5, 70.5, 0.0);
+   public static Vector3 targetBlue = new Vector3(-70.5, -70.5, 0.0);
+   public static boolean lkPinpoint = false;
+   public static boolean lkTestMode = false;
+   // --
+
    public static boolean autonomousDebugMode = false;
    public static boolean firstRun = true;
    static Vector3 controlGovernor = new Vector3(1,1,1);

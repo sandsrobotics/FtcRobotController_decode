@@ -19,7 +19,7 @@ public class HeadingSolver extends Part<Drive, HeadingSolverSettings, ObjectUtil
 //        public static final String done = "DONE";
 //    } //TODO add done event
 
-//    private boolean t = false;
+    private boolean t = false;
     private long startTime;
     private boolean isStarted = false;
     Vector3 storedTarget = new Vector3();
@@ -54,7 +54,9 @@ public class HeadingSolver extends Part<Drive, HeadingSolverSettings, ObjectUtil
 
         @Override
         public void move(DriveControl base) {
-            base.power = base.power.withZ(pid.returnValue());
+            if (base.power.Z==0) {   // this allows user rotate to override
+                base.power = base.power.withZ(pid.returnValue());
+            }
         }
     };
 
@@ -104,6 +106,13 @@ public class HeadingSolver extends Part<Drive, HeadingSolverSettings, ObjectUtil
         return angle;
     }
 
+    public void startSolver() {
+        if (!isStarted) {
+            triggerEvent(Robot.Events.START);
+            isStarted = true;
+        }
+    }
+
     public void stopSolver() {
         if (isStarted) {
             triggerEvent(Robot.Events.STOP);
@@ -151,10 +160,11 @@ public class HeadingSolver extends Part<Drive, HeadingSolverSettings, ObjectUtil
 
     @Override
     public void onStart() {
-//        if(!t) {
-//            t = true;
-//            setNewTarget(positionTracker.getCurrentPosition(), true);
-//        }
+        // LK: if it's not started, weirdness happens and it doesn't stop. Investigate?
+        if(!t) {
+            t = true;
+            setNewTarget(positionTracker.getCurrentPosition(), true);
+        }
     }
 
     @Override

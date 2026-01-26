@@ -11,6 +11,7 @@ import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.intake1.hardware.Intake1Hardware;
 import org.firstinspires.ftc.teamcode.parts.intake1.settings.Intake1Settings;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
+import org.firstinspires.ftc.teamcode.parts.positionsolver.HeadingSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
 
@@ -26,6 +27,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     protected Drive drive;
     protected Pinpoint pinpoint;
     protected PositionSolver positionSolver;
+    protected HeadingSolver headingSolver;  // LK New Test
     public int launchRPM;
 
     public Artifacts artifacts;
@@ -237,6 +239,8 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         artifacts = getBeanManager().getBestMatch(Artifacts.class, false);
 //        artifactPipeline = getBeanManager().getBestMatch(ArtifactDetectionPipeline.class, false);
         limeLight = getBeanManager().getBestMatch(LimeLight.class, false);
+        // LK New Test
+        if (DecodeSettings.lkTestMode) headingSolver = getBeanManager().getBestMatch(HeadingSolver.class, false);
 
     }
 

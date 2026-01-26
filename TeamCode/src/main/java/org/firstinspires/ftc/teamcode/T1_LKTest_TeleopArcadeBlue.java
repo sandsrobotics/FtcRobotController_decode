@@ -9,13 +9,14 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.lib.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
-import org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings;
-import org.firstinspires.ftc.teamcode.parts.intake1.Intake1;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
 import org.firstinspires.ftc.teamcode.parts.drive.settings.DriveTeleopSettings;
+import org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings;
+import org.firstinspires.ftc.teamcode.parts.intake1.Intake1;
 import org.firstinspires.ftc.teamcode.parts.intake1.Intake1Teleop;
 import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
+import org.firstinspires.ftc.teamcode.parts.positionsolver.HeadingSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
@@ -28,8 +29,8 @@ import java.text.DecimalFormat;
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.utils.Vector3;
 
-@TeleOp(name="14273 TeleArcadeBlue", group="B14273")
-public class T1_TeleopArcadeBlue extends LinearOpMode {
+@TeleOp(name="14273 LK Test TeleArcadeBlue", group="C14273")
+public class T1_LKTest_TeleopArcadeBlue extends LinearOpMode {
     double tileSide = 23.5;
     Drive drive;
     Robot robot;
@@ -37,9 +38,11 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
     Artifacts artifacts;
     LimeLight limelight;
     PositionSolver positionSolver;
+    HeadingSolver headingSolver;    // LK New Test
     PositionTracker pt;
     Pinpoint odo;
-    protected Vector3 fieldStartPos = new Vector3(64,-16,180);
+    //protected Vector3 fieldStartPos = new Vector3(64,-16,180);
+    protected Vector3 fieldStartPos = new Vector3(0,0,180);
     boolean testModeReverse = false;
 
     public void initTeleop(){
@@ -50,8 +53,8 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
     public void runOpMode() {
 
         // LK Test
-        DecodeSettings.lkPinpoint = false;
-        DecodeSettings.lkTestMode = false;
+        DecodeSettings.lkPinpoint = true;
+        DecodeSettings.lkTestMode = true;
 
         extraSettings();
 
@@ -76,15 +79,27 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
 //       EncoderTracker et = new EncoderTracker(pt);
 //       pt.positionSourceId = EncoderTracker.class;
 
-        odo = new Pinpoint(pt, false, "odo",
+        if (!DecodeSettings.lkPinpoint) {
+            odo = new Pinpoint(pt, false, "odo",
                 DecodeSettings.pinpointSettingsXoffset, DecodeSettings.pinpointSettingsYoffset, DecodeSettings.pinpointSettingsResolution,
                 GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+        } else {  // LK's robot
+            odo = new Pinpoint(pt, false, "odo",
+                DecodeSettings.pinpointSettingsXoffset, DecodeSettings.pinpointSettingsYoffset, 67.503280839895f,
+                GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
+        }
+
         pt.positionSourceId = Pinpoint.class;
         positionSolver = new PositionSolver(drive); // removed so it won't rotate 90deg clockwise
         positionSolver.setSettings(PositionSolverSettings.specimenAssistSettings);
 
+        // LK New Test
+        headingSolver = new HeadingSolver(drive);
+
         intake = new Intake1(robot);
         new Intake1Teleop(intake);
+
+
 
         robot.init();
         long timer = System.currentTimeMillis() + 2500;
@@ -116,6 +131,14 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         }
 
         robot.start();
+
+        // LK new
+        if (DecodeSettings.isAllianceBlue()) {
+            headingSolver.setNewTarget(DecodeSettings.targetBlue, true);
+        } else {
+            headingSolver.setNewTarget(DecodeSettings.targetRed, true);
+        }
+        headingSolver.stopSolver();
 
         while (opModeIsActive()) {
             start = System.currentTimeMillis();

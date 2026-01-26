@@ -101,7 +101,7 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
         // Driver 2 - slide control
 //        parent.setUserSlidePower(-parent.parent.opMode.gamepad2.left_stick_y);
         // Driver 2 - start button is a "shift" key; anything below is if start is not pushed
-        if (!buttonMgr.getState(2, Buttons.start, State.wasTapped)) {
+        if (!buttonMgr.getState(2, Buttons.start, State.isPressed)) {
             // Driver 2
             /*      Teleop Pre-selected Launch Tasks     */
             //        pre-selected-teleopFar
@@ -193,7 +193,7 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
 
         // *** DRIVER 1 CONTROLS ***
         // Driver 1 - start button is a "shift" key; anything below is if start is not pushed
-        if (!buttonMgr.getState(1, Buttons.start, State.wasTapped)) {
+        if (!buttonMgr.getState(1, Buttons.start, State.isPressed)) {
             //           DRIVER 1
             //             intake Task
             if (buttonMgr.getState(1, Buttons.right_bumper, State.wasTapped)) {
@@ -221,6 +221,21 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
             else {
                 // add shifted controls here
 
+                // LK new test
+                if (DecodeSettings.lkTestMode) {
+                    if (buttonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
+                        parent.headingSolver.startSolver();
+                    }
+                    if (buttonMgr.getState(1, Buttons.dpad_left, State.wasTapped)) {
+                        parent.headingSolver.setNewTarget(DecodeSettings.targetBlue, true);
+                    }
+                    if (buttonMgr.getState(1, Buttons.dpad_right, State.wasTapped)) {
+                        parent.headingSolver.setNewTarget(DecodeSettings.targetRed, true);
+                    }
+                    if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
+                        parent.headingSolver.stopSolver();
+                    }
+                }
 
             }
         }

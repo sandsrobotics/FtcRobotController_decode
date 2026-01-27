@@ -18,6 +18,7 @@ public class DecodeSettings {
    static Vector3 currentLaunchPosTwo = new Vector3(); // Each Mode is supposed to set this value before calling computeAndLaunchInOrder.
 
    // LK new test stuff
+   static Vector3 fusedRobotPosition = new Vector3();
    public static Vector3 targetRed  = new Vector3(-70.5, 70.5, 0.0);
    public static Vector3 targetBlue = new Vector3(-70.5, -70.5, 0.0);
    public static boolean lkPinpoint = false;
@@ -69,6 +70,17 @@ public class DecodeSettings {
 
    public static Vector3 getRobotPosition() {
       return robotPosition;
+   }
+
+   public static void storeFusedPosition(Vector3 fusedPosition) {
+      fusedRobotPosition = fusedPosition;
+   }
+
+   public static Vector3 getFusedRobotPosition() {
+      if (fusedRobotPosition != null && (fusedRobotPosition.X != 0 || fusedRobotPosition.Y != 0 || fusedRobotPosition.Z != 0 )) {
+         return fusedRobotPosition;
+      }
+      else return robotPosition;
    }
 
    public static void storeLaunchPositionZero(Vector3 launchPosition) {

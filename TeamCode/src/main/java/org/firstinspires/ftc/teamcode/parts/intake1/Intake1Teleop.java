@@ -250,6 +250,11 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
                     parent.headerAimer.setAutoAim(false);
                 }
             }
+            if (DecodeSettings.lkTestMode1 || DecodeSettings.lkTestMode2) {
+                if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
+                    parent.limeLight.applyTransform();
+                }
+            }
         }
     }
 }

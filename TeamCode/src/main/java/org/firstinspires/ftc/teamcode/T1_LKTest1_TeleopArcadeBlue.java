@@ -86,7 +86,7 @@ public class T1_LKTest1_TeleopArcadeBlue extends LinearOpMode {
                 GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
         } else {  // LK's robot
             odo = new Pinpoint(pt, false, "odo",
-                DecodeSettings.pinpointSettingsXoffset, DecodeSettings.pinpointSettingsYoffset, 67.503280839895f,
+                    200, -57.5, 67.503280839895f,
                 GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
         }
 
@@ -146,6 +146,7 @@ public class T1_LKTest1_TeleopArcadeBlue extends LinearOpMode {
             robot.run();
             telemetry.addData("Launch Motor RPM", intake.getLaunchMotorRPM());
             telemetry.addData("Position", odo.getPosition());
+            telemetry.addData("Fused", DecodeSettings.getFusedRobotPosition().toString());
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();
         }

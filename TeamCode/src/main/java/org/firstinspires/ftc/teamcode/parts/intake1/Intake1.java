@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.parts.intake1;
 
-import static java.lang.Math.abs;
-
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.PIDFCoefficients;
 
@@ -21,6 +19,7 @@ import java.util.Arrays;
 
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.core.part.ControllablePart;
+import om.self.ezftc.utils.Vector3;
 import om.self.task.core.Group;
 
 public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Hardware, Intake1Control> {
@@ -233,7 +232,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         }
         pinpoint = getBeanManager().getBestMatch(Pinpoint.class, false);
         positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
-        positionTracker = getBeanManager().getBestMatch(PositionTracker.class, false);
+        positionTracker = getBeanManager().getBestMatch(PositionTracker.class, false);  // should this be here or onBeanLoad()???
         tasks = new Intake1Tasks(this, parent);
         tasks.constructAllIntakeTasks();
     }
@@ -268,7 +267,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
                 initializeServos();
             }
         }
-}
+    }
 
     @Override
     public void onStop() {
@@ -277,6 +276,46 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 
     public static final class ControllerNames {
         public static final String distanceController = "distance controller";
+    }
+
+    // LK demo additions
+
+    public static final double nearest = 48;  // 1 tile diagonally
+    public static final double farthest = 140;
+    public static final double spinNear = 1500;
+    public static final double spinFar = 3300;
+//    public static Vector3 storedTarget = new Vector3();
+    public Vector3 storedTarget = DecodeSettings.targetBlue;
+
+    public double calcSpinnerVelocity() {
+        return calcSpinnerRPM() / 60 * Intake1Settings.ticksPerRevolution;
+    }
+
+    public double calcSpinnerRPM() {
+        return getSpinnerRPMfromDistance(calculateTargetDistance(positionTracker.getOverridePosition(), storedTarget));
+    }
+
+    public static double getSpinnerRPMfromDistance(double distance) {
+        return interpolate(distance, nearest, farthest, spinNear, spinFar);
+    }
+
+    public static double calculateTargetDistance(Vector3 currentPos, Vector3 target) {
+        // Exit if either position is null
+        if (currentPos==null) return -1;
+        if (target==null) return -1;
+
+        // Calculate the vector from the current position to the target
+        double x = target.X - currentPos.X;
+        double y = target.Y - currentPos.Y;
+        double distance = Math.sqrt(x*x + y*y);
+//        double angle = AngleMath.scaleAngle(Math.toDegrees(Math.atan2(y, x)));
+
+        // Return the distance
+        return distance;
+    }
+
+    public static double interpolate(double x, double x1, double x2, double y1, double y2) {
+        return y1 + (x-x1)*(y2-y1)/(x2-x1);
     }
 
 }

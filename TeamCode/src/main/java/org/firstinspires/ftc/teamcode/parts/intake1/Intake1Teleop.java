@@ -228,9 +228,11 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
                 }
                 if (buttonMgr.getState(1, Buttons.dpad_left, State.wasTapped)) {
                     parent.headingSolver.setNewTarget(DecodeSettings.targetBlue, true);
+                    parent.storedTarget = DecodeSettings.targetBlue;
                 }
                 if (buttonMgr.getState(1, Buttons.dpad_right, State.wasTapped)) {
                     parent.headingSolver.setNewTarget(DecodeSettings.targetRed, true);
+                    parent.storedTarget = DecodeSettings.targetRed;
                 }
                 if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
                     parent.headingSolver.stopSolver();
@@ -242,9 +244,11 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
                 }
                 if (buttonMgr.getState(1, Buttons.dpad_left, State.wasTapped)) {
                     parent.headerAimer.setTarget(DecodeSettings.targetBlue);
+                    parent.storedTarget = DecodeSettings.targetBlue;
                 }
                 if (buttonMgr.getState(1, Buttons.dpad_right, State.wasTapped)) {
                     parent.headerAimer.setTarget(DecodeSettings.targetRed);
+                    parent.storedTarget = DecodeSettings.targetRed;
                 }
                 if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
                     parent.headerAimer.setAutoAim(false);

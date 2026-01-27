@@ -15,6 +15,10 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
     private boolean enableSpike2 = true;
     private boolean enableSpike3 = true;
 
+    // CONFIGURABLE PICKUP TIMEOUT (in milliseconds)
+    // Adjust this value to control how long the robot tries to pickup balls on each spike
+    private final int SPIKE_PICKUP_TIMEOUT = 5000; // 5 second default, change as needed
+
     @Override
     public void initAuto(){
         isRedSide = false;
@@ -27,9 +31,9 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
         Vector3 start = fieldStartPos;
         Vector3 aprilTag = transformFunc.apply(new Vector3(38.879, -24.293, 168));
 
-        IntakeSettings3.LaunchData shootLaunchData = new IntakeSettings3.LaunchData(3750, transformFunc.apply(new Vector3(55, -14.2, -163)));
+        IntakeSettings3.LaunchData shootLaunchData = new IntakeSettings3.LaunchData(3275, transformFunc.apply(new Vector3(52.843, -13.030, -155.40 )));  /*Z: 153.4*/
         Vector3 blueSpikeReady1 = transformFunc.apply(new Vector3(-12,-28,-90));
-        Vector3 blueSpike1 = transformFunc.apply(new Vector3(-12,-48,-90));
+        Vector3 blueSpike1 = transformFunc.apply(new Vector3(-12,-53,-90));
         Vector3 blueSpikeReady2 = transformFunc.apply(new Vector3(13,-28,-90));
         Vector3 blueSpike2 = transformFunc.apply(new  Vector3(13,-60,-90));
         Vector3 blueSpikeReady3 = transformFunc.apply(new Vector3(34.5,-28,-90));
@@ -49,7 +53,7 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
             autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
             positionSolver.addMoveToTaskEx(blueSpikeReady3, autoTasks);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
-            positionSolver.addMoveToTaskEx(blueSpike3, autoTasks);
+            positionSolver.addMoveToTaskEx(blueSpike3, autoTasks, SPIKE_PICKUP_TIMEOUT);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
             autoTasks.addDelay(1000);
             autoTasks.addStep(() -> intake.setIntakeRPM(0));
@@ -62,7 +66,7 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
             positionSolver.addMoveToTaskEx(blueSpikeReady2, autoTasks);
             autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
-            positionSolver.addMoveToTaskEx(blueSpike2, autoTasks);
+            positionSolver.addMoveToTaskEx(blueSpike2, autoTasks, SPIKE_PICKUP_TIMEOUT);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
             positionSolver.addMoveToTaskExNoWait(blueSpikeReady2, autoTasks);
             autoTasks.addDelay(1000);
@@ -76,7 +80,7 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
             autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
             positionSolver.addMoveToTaskEx(blueSpikeReady1, autoTasks);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
-            positionSolver.addMoveToTaskEx(blueSpike1, autoTasks);
+            positionSolver.addMoveToTaskEx(blueSpike1, autoTasks, SPIKE_PICKUP_TIMEOUT);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
             autoTasks.addDelay(1000);
             autoTasks.addStep(() -> intake.setIntakeRPM(0));

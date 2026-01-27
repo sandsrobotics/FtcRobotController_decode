@@ -42,7 +42,9 @@ public class T3_Teleop extends LinearOpMode {
     Pinpoint odo;
     Artifacts artifacts;
     LimeLight limelight;
-    public void initTeleop(){
+    public void initTeleop()
+    {
+//        IntakeSettings3.launchArmed = true;
         new DriveTeleop(this.drive);
     }
 
@@ -97,12 +99,15 @@ public class T3_Teleop extends LinearOpMode {
             telemetry.addData("position", odo.getPosition());
             telemetry.addData ("Press Red or Blue button to select alliance","");
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
-                intake.getHardware().pixel.setPosition(Intake3.LEDColor.BLUE.getLedPwm());
                 IntakeSettings3.isRedSide = false;
             }
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.b, ButtonMgr.State.wasTapped)) {
-                intake.getHardware().pixel.setPosition(Intake3.LEDColor.RED.getLedPwm());
                 IntakeSettings3.isRedSide = true;
+            }
+            if (IntakeSettings3.isRedSide) {
+                intake.getHardware().pixel.setPosition(Intake3.LEDColor.RED.getLedPwm());
+            } else {
+                intake.getHardware().pixel.setPosition(Intake3.LEDColor.BLUE.getLedPwm());
             }
             telemetry.addData("Alliance Color:",(IntakeSettings3.isRedSide?"Red":"Blue"));
             telemetry.update();

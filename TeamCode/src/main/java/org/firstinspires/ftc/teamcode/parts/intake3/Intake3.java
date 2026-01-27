@@ -453,6 +453,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         initializeServos();
         tasks = new Intake3Tasks(this, parent);
         tasks.constructAllIntakeTasks();
+        setLaunchRPM(0);
         getHardware().pixel.setPosition(LEDColor.GREEN.getLedPwm());
     }
 
@@ -486,11 +487,11 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
             setLaunchRPM(launchRPM);
             parent.opMode.telemetry.addData("Calc launch RPM", launchRPM);
         }
-        if (launchRPM > 0 && launchRPMInTolerance()) {
-            getHardware().pixel.setPosition(Intake3.LEDColor.VIOLET.getLedPwm());
-        } else {
-            getHardware().pixel.setPosition(LEDColor.OFF.getLedPwm());
-        }
+//        if (launchRPM > 0 && launchRPMInTolerance()) {
+//            getHardware().pixel.setPosition(Intake3.LEDColor.VIOLET.getLedPwm());
+//        } else {
+//            getHardware().pixel.setPosition(LEDColor.OFF.getLedPwm());
+//        }
     }
 
     @Override

@@ -2,12 +2,9 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
@@ -25,7 +22,6 @@ import java.text.DecimalFormat;
 import java.util.function.Function;
 import om.self.ezftc.core.Robot;
 import om.self.ezftc.utils.Constants;
-import om.self.ezftc.utils.Vector;
 import om.self.ezftc.utils.Vector3;
 import om.self.task.core.Group;
 import om.self.task.other.TimedTask;
@@ -54,19 +50,41 @@ public class T3_AutoBase extends LinearOpMode{
     Vector3 fieldStartPos;
 
     public void initAuto(){
+        IntakeSettings3.launchArmed = false;
         isRedSide = false;
         transformFunc = (v) -> v;
         fieldStartPos = new Vector3(-51, 51, 143);
     }
 
+    double launchServo0Rest = IntakeSettings3.launchServo0Rest;
+    double launchServo1Rest = IntakeSettings3.launchServo1Rest;
+    double launchServo2Rest = IntakeSettings3.launchServo2Rest;
+
+    public void resetIntakeSettings()
+    {
+        IntakeSettings3.launchServo0Rest = launchServo0Rest;
+        IntakeSettings3.launchServo1Rest = launchServo1Rest;
+        IntakeSettings3.launchServo2Rest = launchServo2Rest;
+    }
+
+    public void setIntakeSettings()
+    {
+        IntakeSettings3.launchServo0Rest = 0.637; //0.654 - ground, Qualifier - 0.62
+        IntakeSettings3.launchServo1Rest = 0.35; //.324 - ground, Qualifier - 0.35 intermediate - 0.337
+        IntakeSettings3.launchServo2Rest = 0.265; //.237 - ground, Qualifier - 0.265 intermediate - 2.51
+    }
+
     @Override
     public void runOpMode() {
         long start;
+
+        setIntakeSettings();
         initAuto();
-        FtcDashboard dashboard = FtcDashboard.getInstance();
-        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
-        TelemetryPacket packet = new TelemetryPacket();
-        Telemetry dashboardTelemetry = dashboard.getTelemetry();
+//        FtcDashboard dashboard = FtcDashboard.getInstance();
+//        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
+        telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
+//        TelemetryPacket packet = new TelemetryPacket();
+//        Telemetry dashboardTelemetry = dashboard.getTelemetry();
         Robot robot = new Robot(this);
         Drive drive = new Drive(robot);
         new BulkRead(robot);
@@ -105,16 +123,19 @@ public class T3_AutoBase extends LinearOpMode{
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
             robot.run(); // Tasks are run as part of this run.
-            dashboardTelemetry.addData("position", pt.getCurrentPosition());
+//            dashboardTelemetry.addData("position", pt.getCurrentPosition());
             telemetry.addData("position", pt.getCurrentPosition());
             //telemetry.addData("tile position", fieldToTile(pt.getCurrentPosition()));
             telemetry.addData("time", System.currentTimeMillis() - start);
             telemetry.addData("target launch speed", intake.getTargetLaunchRPM());
             telemetry.addData("current launch speed", df.format(intake.getCurrentLaunchRPM()));
             telemetry.addData("launch servo", intake.getHardware().launchServo0.getPosition());
-            dashboardTelemetry.update();
+//            dashboardTelemetry.update();
             telemetry.update();
         }
+
+        resetIntakeSettings();
+
         robot.stop();
     }
 

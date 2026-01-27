@@ -168,9 +168,7 @@ public class Intake3Tasks {
         resetLaunchServos.addStep(()-> intake.getHardware().launchServo1.setPosition(intake.getSettings().launchServo1Rest));
         resetLaunchServos.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Rest));
         resetLaunchServos.addStep(()-> intake.getHardware().lockServo0.setPosition(intake.getSettings().lockServo0Lock));
-        resetLaunchServos.addStep(()-> intake.getHardware().lockServo1.setPosition(intake.getSettings().lockServo1Lock));
-        resetLaunchServos.addStep(()-> intake.getHardware().lockServo2.setPosition(intake.getSettings().lockServo2Lock));
-
+        
         /* End */
 
         /* Begin */

@@ -12,18 +12,15 @@ import om.self.ezftc.utils.Vector3;
 @Config
 public class IntakeSettings3 {
     public static  double launchServo0Launch = 0.441; //.367
-    public static  double launchServo0Rest = 0.62; //0.654 - ground, Qualifier - 0.62
+    public static  double launchServo0Rest = 0.637; //0.654 - ground, Qualifier - 0.62
     public static  double launchServo1Launch = 0.54;
     public static  double launchServo1Rest = 0.35; //.324 - ground, Qualifier - 0.35
     public static  double launchServo2Launch = 0.45; //.5
     public static  double launchServo2Rest = 0.265; //.237 - ground, Qualifier - 0.265
     // lock servo values
     public static  double lockServo0Lock = 0.708; // 0
-    public static  double lockServo0Unlock = 0.843; //0.48
-    public static  double lockServo1Lock = 0.48;
-    public static  double lockServo1Unlock = 0.76; 
-    public static  double lockServo2Lock = 0;  //not avail
-    public static  double lockServo2Unlock = 0; //not avail
+    public static  double lockServo0Unlock = 0.875; //0.48 //0.843 - last value
+
     // Add these with your other timing constants
     public static int lockServoUnlockDelay = 300;        // Time to wait for lock servo to fully unlock
     public static int launchServoSettleTime = 100;       // Extra time for servo to settle at launch position
@@ -34,7 +31,7 @@ public class IntakeSettings3 {
     public static int launchServoSweepTime = 400;
     public static int lockServoSweepTime = 1500;
     public static int launchRPMTolerance = 100;
-    public static int launchRPMToleranceTime = 400;
+    public static int launchRPMToleranceTime = 800;
     public static final Map<String, LaunchData> launchPosiMap = new HashMap<String, LaunchData>();
     public static PIDFCoefficients spinnerPID = new PIDFCoefficients(100,0,0,12.4);
     public static int launchRPM = 3150; // for teleop tests
@@ -43,11 +40,11 @@ public class IntakeSettings3 {
     public static final double ticksPerRev = 28;
     public static final double ticksPerRev1150 = 145.1;
 
-    public static double spinNear                 = 2300; // 3300 2900
+    public static double spinNear                 = 2600; // 3300 2900
     public static final double spinMiddle               = 0;// 3900
     public static double spinFar                  = 3300; // 4500 needs to be within 100 tolerance
 
-    public static double nearTest      = 65;  // 1 tile diagonally 40
+    public static double nearTest      = 72;  // 1 tile diagonally 40
     public static final double midTest       = 98; //98
     public static double farTest       = 133.5; // 140
 

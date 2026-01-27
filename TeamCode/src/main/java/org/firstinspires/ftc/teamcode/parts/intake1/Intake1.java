@@ -14,6 +14,7 @@ import org.firstinspires.ftc.teamcode.parts.intake1.settings.Intake1Settings;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.HeadingSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
+import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
 
 import java.util.Arrays;
@@ -28,6 +29,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     protected Drive drive;
     protected Pinpoint pinpoint;
     protected PositionSolver positionSolver;
+    protected PositionTracker positionTracker;
     protected HeadingSolver headingSolver;  // LK New Test
     protected HeaderAimer headerAimer;      // LK New Test
 
@@ -231,6 +233,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         }
         pinpoint = getBeanManager().getBestMatch(Pinpoint.class, false);
         positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
+        positionTracker = getBeanManager().getBestMatch(PositionTracker.class, false);
         tasks = new Intake1Tasks(this, parent);
         tasks.constructAllIntakeTasks();
     }

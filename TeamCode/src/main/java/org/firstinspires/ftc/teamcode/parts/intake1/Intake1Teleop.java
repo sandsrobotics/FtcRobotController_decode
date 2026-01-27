@@ -253,6 +253,7 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
             if (DecodeSettings.lkTestMode1 || DecodeSettings.lkTestMode2) {
                 if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
                     parent.limeLight.applyTransform();
+                    parent.positionTracker.setOverrideTransform(parent.limeLight.llSavedTransform);
                 }
             }
         }

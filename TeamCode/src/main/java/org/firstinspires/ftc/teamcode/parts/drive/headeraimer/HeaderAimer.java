@@ -60,7 +60,8 @@ public class HeaderAimer extends Part<Drive, HeaderAimerSettings, ObjectUtils.Nu
             pid.resetErrors();
         });
 //        headerAimer.addStep(() -> pid.updatePID(AngleMath.findAngleError(pt.getCurrentPosition().Z, lastHeading)), () -> false);
-        headerAimer.addStep(() -> pid.updatePID(AngleMath.findAngleError(pt.getCurrentPosition().Z, calculateTargetHeading())), () -> false); //!autoAim);
+//        headerAimer.addStep(() -> pid.updatePID(AngleMath.findAngleError(pt.getCurrentPosition().Z, calculateTargetHeading())), () -> false); //!autoAim);
+        headerAimer.addStep(() -> pid.updatePID(AngleMath.findAngleError(pt.getOverridePosition().Z, calculateTargetHeading())), () -> false); //!autoAim);
     }
 
     @Override
@@ -98,7 +99,8 @@ public class HeaderAimer extends Part<Drive, HeaderAimerSettings, ObjectUtils.Nu
 
     double calculateTargetHeading () {
         // Target is where to aim. Need to calculate appropriate heading
-        Vector3 currentPos = pt.getCurrentPosition();
+//        Vector3 currentPos = pt.getCurrentPosition();
+        Vector3 currentPos = pt.getOverridePosition();
 
         // Exit if either position is null
         if (currentPos==null) return 0;  // what else can we do?

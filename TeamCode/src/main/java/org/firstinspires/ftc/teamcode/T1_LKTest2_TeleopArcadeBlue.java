@@ -153,6 +153,7 @@ public class T1_LKTest2_TeleopArcadeBlue extends LinearOpMode {
             telemetry.addData("Launch Motor RPM", intake.getLaunchMotorRPM());
             telemetry.addData("Position", odo.getPosition());
             telemetry.addData("Fused", DecodeSettings.getFusedRobotPosition().toString());
+            telemetry.addData("ptOvrr", pt.getOverridePosition());
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();
         }

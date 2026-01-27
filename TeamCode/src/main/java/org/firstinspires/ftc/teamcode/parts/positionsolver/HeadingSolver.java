@@ -36,7 +36,8 @@ public class HeadingSolver extends Part<Drive, HeadingSolverSettings, ObjectUtil
             // the target if not necessary.  This is the explanation for the following
             // weirdness.
 
-            Vector3 currentPos = positionTracker.getCurrentPosition();
+//            Vector3 currentPos = positionTracker.getCurrentPosition();
+            Vector3 currentPos = positionTracker.getOverridePosition();
             if (currentPos==null) return 0;  // no position = no error
 
             // find the updated target angle
@@ -72,7 +73,8 @@ public class HeadingSolver extends Part<Drive, HeadingSolverSettings, ObjectUtil
 
     public void setNewTarget(Vector3 target, boolean resetPID){
         // Target is where to aim.
-        Vector3 currentPos = positionTracker.getCurrentPosition();
+//        Vector3 currentPos = positionTracker.getCurrentPosition();
+        Vector3 currentPos = positionTracker.getOverridePosition();
 
         // Exit if either position is null
         if (target==null || currentPos==null) return;

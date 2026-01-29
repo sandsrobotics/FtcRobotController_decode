@@ -96,7 +96,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         getHardware().launchMotorRight.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER,launchSpinPID);
     }
 
-    public int getLaunchMotorRPM() {
+    public int getCurrentLaunchMotorRPM() {
         int launchMotorVelocity = (int) getHardware().launchMotorLeft.getVelocity();
         return (int) ((launchMotorVelocity/Intake1Settings.ticksPerRevolution)*60);
     }

@@ -12,10 +12,27 @@ public class DecodeSettings {
 
    static boolean allianceBlue = true;
 
-   static Vector3 robotPosition = new Vector3();
-   static Vector3 currentLaunchPosZero = new Vector3(); // Each Mode is supposed to set this value before calling computeAndLaunchInOrder.
-   static Vector3 currentLaunchPosOne = new Vector3(); // Each Mode is supposed to set this value before calling computeAndLaunchInOrder.
-   static Vector3 currentLaunchPosTwo = new Vector3(); // Each Mode is supposed to set this value before calling computeAndLaunchInOrder.
+   static Vector3 robotPosition                  = new Vector3();
+   static Vector3 pos_fieldStart                 = new Vector3();
+   static Vector3 pos_obeliskView                = new Vector3();
+
+   static Vector3 pos_launchPosZero             = new Vector3();
+   static Vector3 pos_launchPosOne              = new Vector3();
+   static Vector3 pos_launchPosTwo              = new Vector3();
+
+   static Vector3 pos_pre_intakeArtifactRow1    = new Vector3();
+   static Vector3 pos_intakeArtifactRow1        = new Vector3();
+   static Vector3 pos_pre_intakeArtifactRow2    = new Vector3();
+   static Vector3 pos_intakeArtifactRow2        = new Vector3();
+   static Vector3 pos_pre_intakeArtifactRow3    = new Vector3();
+   static Vector3 pos_intakeArtifactRow3        = new Vector3();
+
+   static Vector3 pos_parkAfterAuto             = new Vector3();
+   static Vector3 pos_leverOpen                 = new Vector3();
+
+   static int   launchRPM                       = 3200; // "RequiredRPM" for the currentLaunch.
+
+   static String currentOpMode                  = "NOT SET!";
 
    // LK new test stuff
    static Vector3 fusedRobotPosition = new Vector3();
@@ -63,7 +80,7 @@ public class DecodeSettings {
       return controlGovernor;
    }
 
-   public static void storeRobotPosition(Vector3 currentPosition) {
+   public static void setRobotPosition(Vector3 currentPosition) {
       if (currentPosition.X == 0 && currentPosition.Y == 0 && currentPosition.Z == 0) return;
       robotPosition = currentPosition;
    }
@@ -83,29 +100,124 @@ public class DecodeSettings {
       else return robotPosition;
    }
 
-   public static void storeLaunchPositionZero(Vector3 launchPosition) {
+   public static void setFieldStartPos(Vector3 position) {
+      if (position.X == 0 && position.Y == 0 && position.Z == 0) return;
+      pos_fieldStart = position;
+   }
+   public static Vector3 getFieldStartPos() {
+      return pos_fieldStart;
+   }
+
+   public static void setObeliskViewPos(Vector3 position) {
+      if (position.X == 0 && position.Y == 0 && position.Z == 0) return;
+      pos_obeliskView = position;
+   }
+   public static Vector3 getObeliskViewPos() {
+      return pos_obeliskView;
+   }
+
+   public static void setLaunchPositionZero(Vector3 launchPosition) {
       if (launchPosition.X == 0 && launchPosition.Y == 0 && launchPosition.Z == 0) return;
-      currentLaunchPosZero = launchPosition;
+      pos_launchPosZero = launchPosition;
    }
    public static Vector3 getLaunchPositionZero() {
-      return currentLaunchPosZero;
+      return pos_launchPosZero;
    }
 
-   public static void storeLaunchPositionOne(Vector3 launchPosition) {
+   public static void setLaunchPositionOne(Vector3 launchPosition) {
       if (launchPosition.X == 0 && launchPosition.Y == 0 && launchPosition.Z == 0) return;
-      currentLaunchPosOne = launchPosition;
+      pos_launchPosOne = launchPosition;
    }
    public static Vector3 getLaunchPositionOne() {
-      return currentLaunchPosOne;
+      return pos_launchPosOne;
    }
 
-   public static void storeLaunchPositionTwo(Vector3 launchPosition) {
+   public static void setLaunchPositionTwo(Vector3 launchPosition) {
       if (launchPosition.X == 0 && launchPosition.Y == 0 && launchPosition.Z == 0) return;
-      currentLaunchPosTwo = launchPosition;
+      pos_launchPosTwo = launchPosition;
    }
    public static Vector3 getLaunchPositionTwo() {
-      return currentLaunchPosTwo;
+      return pos_launchPosTwo;
    }
+
+   public static void setPreIntakeArtifactRow1(Vector3 position) {
+      if (position.X == 0 && position.Y == 0 && position.Z == 0) return;
+      pos_pre_intakeArtifactRow1 = position;
+   }
+   public static Vector3 getPreIntakeArtifactRow1() {
+      return pos_pre_intakeArtifactRow1;
+   }
+
+   public static void setIntakeArtifactRow1(Vector3 position) {
+      if (position.X == 0 && position.Y == 0 && position.Z == 0) return;
+      pos_intakeArtifactRow1 = position;
+   }
+   public static Vector3 getIntakeArtifactRow1() {
+      return pos_intakeArtifactRow1;
+   }
+
+   public static void setPreIntakeArtifactRow2(Vector3 position) {
+      if (position.X == 0 && position.Y == 0 && position.Z == 0) return;
+      pos_pre_intakeArtifactRow2 = position;
+   }
+   public static Vector3 getPreIntakeArtifactRow2() {
+      return pos_pre_intakeArtifactRow2;
+   }
+
+   public static void setIntakeArtifactRow2(Vector3 position) {
+      if (position.X == 0 && position.Y == 0 && position.Z == 0) return;
+      pos_intakeArtifactRow2 = position;
+   }
+   public static Vector3 getIntakeArtifactRow2() {
+      return pos_intakeArtifactRow2;
+   }
+
+   public static void setPreIntakeArtifactRow3(Vector3 position) {
+      if (position.X == 0 && position.Y == 0 && position.Z == 0) return;
+      pos_pre_intakeArtifactRow3 = position;
+   }
+   public static Vector3 getPreIntakeArtifactRow3() {
+      return pos_pre_intakeArtifactRow3;
+   }
+
+   public static void setIntakeArtifactRow3(Vector3 position) {
+      if (position.X == 0 && position.Y == 0 && position.Z == 0) return;
+      pos_intakeArtifactRow3 = position;
+   }
+   public static Vector3 getIntakeArtifactRow3() {
+      return pos_intakeArtifactRow3;
+   }
+
+   public static void setParkAfterAutoPos(Vector3 position) {
+      if (position.X == 0 && position.Y == 0 && position.Z == 0) return;
+      pos_parkAfterAuto = position;
+   }
+   public static Vector3 getParkAfterAutoPos() {
+      return pos_parkAfterAuto;
+   }
+
+   public static void setLeverOpenPos(Vector3 position) {
+      if (position.X == 0 && position.Y == 0 && position.Z == 0) return;
+      pos_leverOpen = position;
+   }
+   public static Vector3 getLeverOpenPos() {
+      return pos_leverOpen;
+   }
+
+   public static void setLaunchRPM(Integer requiredRPM) {
+      if (requiredRPM == 0) return;
+      launchRPM = requiredRPM;
+   }
+   public static Integer getLaunchRPM() {
+      return launchRPM;
+   }
+
+   public static void setCurrentOpMode (String currOpMode) {
+      if (currOpMode != null && !currOpMode.isEmpty()) {
+         currentOpMode = currOpMode;
+      }
+   }
+   public static  String  getCurrentOpMode() { return  currentOpMode; }
 
    private static double clamp(double pos) {
       return Math.max(0, Math.min(pos, 1));

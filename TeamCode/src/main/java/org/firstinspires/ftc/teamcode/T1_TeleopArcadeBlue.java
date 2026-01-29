@@ -121,7 +121,7 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
             robot.run();
-            telemetry.addData("Launch Motor RPM", intake.getLaunchMotorRPM());
+            telemetry.addData("Launch Motor RPM", intake.getCurrentLaunchMotorRPM());
             telemetry.addData("Position", odo.getPosition());
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();
@@ -133,6 +133,6 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         DecodeSettings.isDemoMode = false;
         DecodeSettings.setTeleOp();
         DecodeSettings.setAllianceBlue();
-        DecodeSettings.storeRobotPosition(fieldStartPos); // TODO: Do this only if the currentPosition is (0,0,0)?
+        DecodeSettings.setRobotPosition(fieldStartPos); // TODO: Do this only if the currentPosition is (0,0,0)?
     }
 }

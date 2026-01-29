@@ -17,7 +17,6 @@ import org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings;
 import org.firstinspires.ftc.teamcode.parts.intake1.Intake1;
 import org.firstinspires.ftc.teamcode.parts.intake1.Intake1Teleop;
 import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
-import org.firstinspires.ftc.teamcode.parts.positionsolver.HeadingSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
@@ -150,7 +149,7 @@ public class T1_LKTest2_TeleopArcadeBlue extends LinearOpMode {
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
             robot.run();
-            telemetry.addData("Launch Motor RPM", intake.getLaunchMotorRPM());
+            telemetry.addData("Launch Motor RPM", intake.getCurrentLaunchMotorRPM());
             telemetry.addData("Position", odo.getPosition());
             telemetry.addData("Fused", DecodeSettings.getFusedRobotPosition().toString());
             telemetry.addData("ptOvrr", pt.getOverridePosition());
@@ -164,6 +163,6 @@ public class T1_LKTest2_TeleopArcadeBlue extends LinearOpMode {
         DecodeSettings.isDemoMode = false;
         DecodeSettings.setTeleOp();
         DecodeSettings.setAllianceBlue();
-        DecodeSettings.storeRobotPosition(fieldStartPos); // TODO: Do this only if the currentPosition is (0,0,0)?
+        DecodeSettings.setRobotPosition(fieldStartPos); // TODO: Do this only if the currentPosition is (0,0,0)?
     }
 }

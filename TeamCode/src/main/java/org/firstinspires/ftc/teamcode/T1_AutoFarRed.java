@@ -7,7 +7,6 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.GoBildaPinpointDriver;
@@ -16,7 +15,6 @@ import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
 import org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings;
 import org.firstinspires.ftc.teamcode.parts.intake1.Intake1;
-import org.firstinspires.ftc.teamcode.parts.intake1.settings.Intake1Settings;
 import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
@@ -25,8 +23,6 @@ import org.firstinspires.ftc.teamcode.parts.positiontracker.hardware.PositionTra
 import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.settings.PositionTrackerSettings;
 
-import java.text.DecimalFormat;
-import java.util.Objects;
 import java.util.function.Function;
 
 import om.self.ezftc.core.Robot;
@@ -52,31 +48,21 @@ public class T1_AutoFarRed  extends LinearOpMode{
     Integer launchRPM = 3200;
 
     // Positions to travel in AutoFarRed
-    Vector3 p_fieldStartPos             = new Vector3(64,16,180);
-    Vector3 p_parkAfterAuto             = new Vector3(32,16,157);
-
+    Vector3 p_fieldStart                 = new Vector3(64,16,180);
     Vector3 p_obeliskView               = new Vector3(58, 16, 180);  // Was: 56, 16, 180; // FarRed: ObeliskView Position
-    Vector3 p_LaunchPos                 = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_LaunchPosZero             = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_LaunchPosOne              = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_LaunchPosTwo              = new Vector3(58,16,160);    // FarRed Launching Position for pinkServo. Z:160.
+    Vector3 p_launchPosZero             = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
+    Vector3 p_launchPosOne              = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(58,16,160);    // FarRed Launching Position for pinkServo. Z:160.
 
-    Vector3 p_pre_IntakeRedArtifactRow1 = new Vector3(-12, 28, -90);  // Was Y: 28; Red: Ready to collect on Row1
-    Vector3 p_IntakeRedArtifactRow1_1     = new Vector3(-12, 36, -90);  // Red: Intake Artifacts in Row1
-    Vector3 p_IntakeRedArtifactRow1_2     = new Vector3(-12, 41, -90);  // Red: Intake Artifacts in Row1
-    Vector3 p_IntakeRedArtifactRow1_3     = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
+    Vector3 p_pre_intakeArtifactRow1 = new Vector3(-12, 28, -90);  // Was Y: 28; Red: Ready to collect on Row1
+    Vector3 p_intakeArtifactRow1     = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
+    Vector3 p_pre_intakeArtifactRow2 = new Vector3(12, 28, -90);   // Was Y:28; Red: Ready to collect on Row2
+    Vector3 p_intakeArtifactRow2     = new Vector3(12, 60, -90);   // Red: Intake Artifacts in Row2
+    Vector3 p_pre_intakeArtifactRow3 = new Vector3(35.5, 28, -90);   // Was Y:28; Red: Ready to collect in Row3
+    Vector3 p_intakeArtifactRow3     = new Vector3(35.5, 60, -90);   // Red: Intake Artifacts in Row3
 
-    Vector3 p_pre_IntakeRedArtifactRow2 = new Vector3(12, 28, -90);   // Was Y:28; Red: Ready to collect on Row2
-    Vector3 p_IntakeRedArtifactRow2_1     = new Vector3(12, 36, -90);   // Red: Intake Artifacts in Row2
-    Vector3 p_IntakeRedArtifactRow2_2     = new Vector3(12, 41, -90);   // Red: Intake Artifacts in Row2
-    Vector3 p_IntakeRedArtifactRow2_3     = new Vector3(12, 60, -90);   // Red: Intake Artifacts in Row2
-
-    Vector3 p_pre_IntakeRedArtifactRow3 = new Vector3(35.5, 28, -90);   // Was Y:28; Red: Ready to collect in Row3
-    Vector3 p_IntakeRedArtifactRow3_1     = new Vector3(35.5, 36, -90);   // Red: Intake Artifacts in Row3
-    Vector3 p_IntakeRedArtifactRow3_2     = new Vector3(35.5, 41, -90);   // Red: Intake Artifacts in Row3
-    Vector3 p_IntakeRedArtifactRow3_3     = new Vector3(35.5, 60, -90);   // Red: Intake Artifacts in Row3
-
-    Vector3 p_LeverOpen                 = new Vector3(0, 55, 180);    // Red: Open Lever Position
+    Vector3 p_leverOpen                 = new Vector3(0, 55, 180);    // Red: Open Lever Position
+    Vector3 p_parkAfterAuto             = new Vector3(32,16,157);
 
     //  DASHBOARD VARIABLES (static public)
     static public int shortDelay = 1000;
@@ -128,7 +114,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
         intake = new Intake1(robot);
         robot.init();
 
-        intake.launchRPM = (int) Intake1Settings.autoFarLaunchMotorRPM;
+//        intake.launchRPM = (int) Intake1Settings.autoFarLaunchMotorRPM;
 
         long timer = System.currentTimeMillis() + 2500;
         while (odo.getValidPosition() == null && System.currentTimeMillis() <= timer) {
@@ -145,7 +131,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         while (!isStarted()) {
             robot.buttonMgr.runLoop();
-            telemetry.addData("AUTO RED: ", "Not Started");
+            telemetry.addData("CurrOpMode: ", DecodeSettings.getCurrentOpMode());
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.right_bumper, ButtonMgr.State.wasTapped)) {
                 startDelay += 1000;
             }
@@ -178,11 +164,11 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         while (opModeIsActive()) {
             robot.run();
-            DecodeSettings.storeRobotPosition(pt.getCurrentPosition());
-            telemetry.addData("Position", odo.getPosition());
-            telemetry.addData("Launch Motor RPM", intake.getLaunchMotorRPM());
-            telemetry.addData("ClassificationId", DecodeSettings.getClassificationId());
-            telemetry.addData("time", System.currentTimeMillis() - startTime);
+            DecodeSettings.setRobotPosition(pt.getCurrentPosition());
+            telemetry.addData("Position:", odo.getPosition());
+            telemetry.addData("Current Launch Motor RPM:", intake.getCurrentLaunchMotorRPM());
+            telemetry.addData("ClassificationId:", DecodeSettings.getClassificationId());
+            telemetry.addData("time:", System.currentTimeMillis() - startTime);
             telemetry.update();
         }
         robot.stop();
@@ -195,7 +181,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
     //     Intake and Launch Artifacts in Row-2.
     //     Intake and Launch Artifacts in Row-1.
     //     Park!
-    private void testNewAuto(TimedTask autoTasks) {
+    protected void testNewAuto(TimedTask autoTasks) {
 
         // Reset and Get Ready.
         autoTasks.addStep(() -> intake.stopAllIntakeTasks());
@@ -205,13 +191,13 @@ public class T1_AutoFarRed  extends LinearOpMode{
         autoTasks.addTimedStep(() -> {}, () -> intake.tasks.allServoStore.isDone(), 250);
 
         //Move to ObeliskView position.
-        positionSolver.addMoveToTaskEx(p_obeliskView, autoTasks);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getObeliskViewPos(), autoTasks);
         // Look at Obelisk, determine classificationId and Store it.
         DecodeSettings.setClassificationId(limelight.getClassificationId());
 
         // Prep "Launch Motor".
-        autoTasks.addStep(() -> intake.setLaunchRPM((int) Intake1Settings.autoFarLaunchMotorRPM));
-        autoTasks.addStep(() -> intake.tasks.startAutoFarLaunch.restart());
+        autoTasks.addStep(() -> intake.setLaunchRPM((int) DecodeSettings.getLaunchRPM()));
+        autoTasks.addStep(() -> intake.tasks.startAutoFarLaunch.restart());   // TODO: Update startAutoFarLaunch to use intake.launchRPM.
         autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
 
 //        // Move to Launch Position.
@@ -223,47 +209,37 @@ public class T1_AutoFarRed  extends LinearOpMode{
 //        autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
 //        autoTasks.addDelay(2500);
         //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
-        positionSolver.addMoveToTaskEx(p_LaunchPosTwo, autoTasks);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
         autoTasks.addStep(() -> intake.tasks.pinkServoLaunch.restart());
         autoTasks.addDelay(300);
-        positionSolver.addMoveToTaskEx(p_LaunchPosOne, autoTasks);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), autoTasks);
         autoTasks.addStep(() -> intake.tasks.blueServoLaunch.restart());
         autoTasks.addDelay(300);
-        positionSolver.addMoveToTaskEx(p_LaunchPosZero, autoTasks);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), autoTasks);
         autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
         autoTasks.addDelay(300);
-//        autoTasks.addStep(() -> intake.tasks.allServoDock.restart());
-//        autoTasks.addStep(() -> intake.tasks.allServoDock.isDone());
 
         // Intake from Row3 and Launch.
-        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow3,
-                p_IntakeRedArtifactRow3_1, p_IntakeRedArtifactRow3_2, p_IntakeRedArtifactRow3_3,
-                p_LaunchPos, launchRPM);
+        artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow3(), DecodeSettings.getIntakeArtifactRow3());
 
         // Intake from Row2 and Launch.
-        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow2,
-                p_IntakeRedArtifactRow2_1, p_IntakeRedArtifactRow2_2, p_IntakeRedArtifactRow2_3,
-                p_LaunchPos, launchRPM);
+        artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow2(), DecodeSettings.getIntakeArtifactRow2());
 
         // Intake from Row1 and Launch.
-//        artifactIntakeAndLaunch(autoTasks, p_pre_IntakeRedArtifactRow1,
-//        p_IntakeRedArtifactRow1_1, p_IntakeRedArtifactRow1_2,p_IntakeRedArtifactRow1_3,
-//                p_LaunchPos, launchRPM);
+//        artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow1(), DecodeSettings.getIntakeArtifactRow1());
 
         // Move to ParkAfterAuto Position.
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
-        positionSolver.addMoveToTaskEx(p_parkAfterAuto, autoTasks);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getParkAfterAutoPos(), autoTasks);
     }
 
     // Artifact Intake and Launch.
     protected void artifactIntakeAndLaunch (TimedTask autoTasks,
-                                            Vector3 p_pre_intake,
-                                            Vector3 p_intake_1, Vector3 p_intake_2, Vector3 p_intake_3,
-                                            Vector3 p_Launch, Integer launchRPM) {
-
+                                            Vector3 pos_pre_intake,
+                                            Vector3 pos_intake) {
         // Move to pre_intake position.
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
-        positionSolver.addMoveToTaskEx(p_pre_intake, autoTasks);
+        positionSolver.addMoveToTaskEx(pos_pre_intake, autoTasks);
 
         // Start "intake".
         autoTasks.addStep(() -> intake.tasks.intakeTask.restart());
@@ -273,7 +249,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceExtraSlowSettings));
 
         // Move to intake.
-        positionSolver.addMoveToTaskEx(p_intake_3, autoTasks);
+        positionSolver.addMoveToTaskEx(pos_intake, autoTasks);
         autoTasks.addDelay(2500); // Test with 1000.
 
 //        // Move to launch.
@@ -286,15 +262,15 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
-        positionSolver.addMoveToTaskEx(p_LaunchPosTwo, autoTasks);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
         autoTasks.addStep(() -> intake.tasks.pinkServoLaunch.restart());
         autoTasks.addDelay(300);
-        positionSolver.addMoveToTaskEx(p_LaunchPosOne, autoTasks);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), autoTasks);
         autoTasks.addStep(() -> intake.tasks.blueServoLaunch.restart());
         autoTasks.addDelay(300);
-        positionSolver.addMoveToTaskEx(p_LaunchPosZero, autoTasks);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), autoTasks);
         autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
         autoTasks.addDelay(300);
     }
@@ -303,10 +279,21 @@ public class T1_AutoFarRed  extends LinearOpMode{
         DecodeSettings.isDemoMode = false;
         DecodeSettings.setAuto();
         DecodeSettings.setAllianceRed();
+        DecodeSettings.setCurrentOpMode("T1_AutoFarRed");
+        DecodeSettings.setRobotPosition(p_fieldStart);
+        DecodeSettings.setObeliskViewPos(p_obeliskView);
+        DecodeSettings.setLaunchPositionZero(p_launchPosZero);
+        DecodeSettings.setLaunchPositionOne(p_launchPosOne);
+        DecodeSettings.setLaunchPositionTwo(p_launchPosTwo);
+        DecodeSettings.setPreIntakeArtifactRow1(p_pre_intakeArtifactRow1);
+        DecodeSettings.setIntakeArtifactRow1(p_intakeArtifactRow1);
+        DecodeSettings.setPreIntakeArtifactRow2(p_pre_intakeArtifactRow2);
+        DecodeSettings.setIntakeArtifactRow2(p_intakeArtifactRow2);
+        DecodeSettings.setPreIntakeArtifactRow3(p_pre_intakeArtifactRow3);
+        DecodeSettings.setIntakeArtifactRow3(p_intakeArtifactRow3);
+        DecodeSettings.setLeverOpenPos(p_leverOpen);
+        DecodeSettings.setParkAfterAutoPos(p_parkAfterAuto);
 
-        DecodeSettings.storeRobotPosition(p_fieldStartPos);
-        DecodeSettings.storeLaunchPositionZero(p_LaunchPosZero);
-        DecodeSettings.storeLaunchPositionOne(p_LaunchPosOne);
-        DecodeSettings.storeLaunchPositionTwo(p_LaunchPosTwo);
+        DecodeSettings.setLaunchRPM(launchRPM);
     }
 }

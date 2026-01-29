@@ -17,6 +17,6 @@ public class T1_TeleopArcadeRed extends T1_TeleopArcadeBlue {
         DecodeSettings.isDemoMode = false;
         DecodeSettings.setTeleOp();
         DecodeSettings.setAllianceRed();
-        DecodeSettings.storeRobotPosition(fieldStartPos); // TODO: Do this only if the currentPosition is (0,0,0)?
+        DecodeSettings.setRobotPosition(fieldStartPos); // TODO: Do this only if the currentPosition is (0,0,0)?
     }
 }

@@ -161,11 +161,11 @@ public class Intake1Tasks {
         //    start Launch
         startAutoFarLaunch.autoStart = false;
         startAutoFarLaunch.addStep(() -> {
-            if (intake.getLaunchMotorRPM() < Intake1Settings.yLaunchMotorRPM) intake.tasks.startYLaunch.restart();
+            if (intake.getCurrentLaunchMotorRPM() < Intake1Settings.yLaunchMotorRPM) intake.tasks.startYLaunch.restart();
         });
         startAutoFarLaunch.addTimedStep(()->{}, startYLaunch::isDone, 1000);
         startAutoFarLaunch.addStep(() -> {
-            if (intake.getLaunchMotorRPM() < Intake1Settings.xLaunchMotorRPM) intake.tasks.startXLaunch.restart();
+            if (intake.getCurrentLaunchMotorRPM() < Intake1Settings.xLaunchMotorRPM) intake.tasks.startXLaunch.restart();
         });
         startAutoFarLaunch.addTimedStep(()->{}, startXLaunch::isDone, 1000);
         startAutoFarLaunch.addStep(() -> {
@@ -178,11 +178,11 @@ public class Intake1Tasks {
         //    start Launch
         startFarLaunch.autoStart = false;
         startFarLaunch.addStep(() -> {
-            if (intake.getLaunchMotorRPM() < Intake1Settings.yLaunchMotorRPM) intake.tasks.startYLaunch.restart();
+            if (intake.getCurrentLaunchMotorRPM() < Intake1Settings.yLaunchMotorRPM) intake.tasks.startYLaunch.restart();
         });
         startFarLaunch.addTimedStep(()->{}, startYLaunch::isDone, 1000);
         startFarLaunch.addStep(() -> {
-            if (intake.getLaunchMotorRPM() < Intake1Settings.xLaunchMotorRPM) intake.tasks.startXLaunch.restart();
+            if (intake.getCurrentLaunchMotorRPM() < Intake1Settings.xLaunchMotorRPM) intake.tasks.startXLaunch.restart();
         });
         startFarLaunch.addTimedStep(()->{}, startXLaunch::isDone, 1000);
         startFarLaunch.addStep(() -> {
@@ -194,11 +194,11 @@ public class Intake1Tasks {
 
         startGoalLaunch.autoStart = false;
         startGoalLaunch.addStep(() -> {
-            if (intake.getLaunchMotorRPM() < Intake1Settings.yLaunchMotorRPM) intake.tasks.startYLaunch.restart();
+            if (intake.getCurrentLaunchMotorRPM() < Intake1Settings.yLaunchMotorRPM) intake.tasks.startYLaunch.restart();
         });
         startGoalLaunch.addTimedStep(()->{}, startYLaunch::isDone, 1000);
         startGoalLaunch.addStep(() -> {
-            if (intake.getLaunchMotorRPM() < Intake1Settings.xLaunchMotorRPM) intake.tasks.startXLaunch.restart();
+            if (intake.getCurrentLaunchMotorRPM() < Intake1Settings.xLaunchMotorRPM) intake.tasks.startXLaunch.restart();
         });
         startGoalLaunch.addTimedStep(()->{}, startXLaunch::isDone, 1000);
         startGoalLaunch.addStep(() -> {
@@ -210,11 +210,11 @@ public class Intake1Tasks {
 
         startThreeLaunch.autoStart = false;
         startThreeLaunch.addStep(() -> {
-            if (intake.getLaunchMotorRPM() < Intake1Settings.yLaunchMotorRPM) intake.tasks.startYLaunch.restart();
+            if (intake.getCurrentLaunchMotorRPM() < Intake1Settings.yLaunchMotorRPM) intake.tasks.startYLaunch.restart();
         });
         startThreeLaunch.addTimedStep(()->{}, startYLaunch::isDone, 1000);
         startThreeLaunch.addStep(() -> {
-            if (intake.getLaunchMotorRPM() < Intake1Settings.xLaunchMotorRPM) intake.tasks.startXLaunch.restart();
+            if (intake.getCurrentLaunchMotorRPM() < Intake1Settings.xLaunchMotorRPM) intake.tasks.startXLaunch.restart();
         });
         startThreeLaunch.addTimedStep(()->{}, startXLaunch::isDone, 1000);
         startThreeLaunch.addStep(() -> {

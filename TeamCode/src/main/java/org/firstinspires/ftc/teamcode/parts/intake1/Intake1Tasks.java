@@ -8,6 +8,8 @@ import om.self.task.other.TimedTask;
 
 public class Intake1Tasks {
     public final Group intakeTasksGroup;
+    public final Group servoTasksGroup;
+
     public final TimedTask intakeTask;
     public final TimedTask artifactIntakeStopTask;
     public final TimedTask outtakeTask;
@@ -48,6 +50,8 @@ public class Intake1Tasks {
         this.intake = intake;
         this.robot = robot;
         intakeTasksGroup = new Group("intake", intake.getTaskManager());
+        servoTasksGroup = new Group("servo", intake.getTaskManager());
+
         intakeTask = new TimedTask(TaskNames.intakeTask, intakeTasksGroup);
         artifactIntakeStopTask = new TimedTask(TaskNames.artifactIntakeStop, intakeTasksGroup);
         outtakeTask = new TimedTask(TaskNames.outtakeTask, intakeTasksGroup);
@@ -87,14 +91,14 @@ public class Intake1Tasks {
             intakeTask.addStep(allServoDock::restart);
             intakeTask.addStep(allServoDock::isDone);
             intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeIn);
-//            intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoIn);
+            intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoIn);
         });
 
         /*   Artifact Intake Stop Task   */
         artifactIntakeStopTask.autoStart = false;
         artifactIntakeStopTask.addStep(()-> {
             intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeStop);
-//            intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoOff);
+            intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoOff);
         });
         artifactIntakeStopTask.addStep(allServoStore::restart);
         artifactIntakeStopTask.addStep(allServoStore::isDone);

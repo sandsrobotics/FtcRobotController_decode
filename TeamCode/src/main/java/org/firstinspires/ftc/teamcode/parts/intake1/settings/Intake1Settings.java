@@ -10,17 +10,17 @@ public class Intake1Settings {
     public static double intakeIn =                                    -.85;
     public static double intakeStop =                                   0;
     public static double intakeOut =                                    .85;
-    public static final double intakeServoIn                                = 0;
+    public static final double intakeServoIn                                = 1;
     public static final double intakeServoOff                               = 0.5;
-    public static final double intakeServoOut                               = 1;
+    public static final double intakeServoOut                               = 0;
     public static int launchServoDelay                          = 200;
     public static int launchServoSweepTime                      = 1000;
     public static int launchRPMTolerance                        = 100;
 
-    public static double servoGreenDock =                           0.500; // 0.463;
+    public static double servoGreenDock =                           0.463; // 0.500; 0.463;
     public static double servoGreenLaunch =                         0.183; //.243
 
-    public static double servoPinkDock =                            0.518; // 0.490; // 0.518;
+    public static double servoPinkDock =                            0.518; // 0.530; 0.490; 0.518;
     public static double servoPinkLaunch =                          0.680; // .732
     public static double servoPinkLow =                             0.434;
 

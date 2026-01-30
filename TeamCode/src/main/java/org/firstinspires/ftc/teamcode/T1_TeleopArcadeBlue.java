@@ -16,6 +16,7 @@ import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
 import org.firstinspires.ftc.teamcode.parts.drive.settings.DriveTeleopSettings;
 import org.firstinspires.ftc.teamcode.parts.intake1.Intake1Teleop;
 import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
+import org.firstinspires.ftc.teamcode.parts.positionsolver.HeadingSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
 import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
 import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
@@ -37,8 +38,10 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
     Artifacts artifacts;
     LimeLight limelight;
     PositionSolver positionSolver;
+    HeadingSolver headingSolver;
     PositionTracker pt;
     Pinpoint odo;
+    protected Vector3 p_targetGoal  = new Vector3(-70.5, -70.5, 180);   // BlueGoal Position.
     protected Vector3 fieldStartPos = new Vector3(64,-16,180);
     boolean testModeReverse = false;
 
@@ -57,7 +60,7 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         extraSettings();
 
         DecimalFormat df = new DecimalFormat("#0.0");
-        long start;
+        long startTime;
         FtcDashboard dashboard = FtcDashboard.getInstance();
         TelemetryPacket packet = new TelemetryPacket();
         robot = new Robot(this);
@@ -84,6 +87,8 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         positionSolver = new PositionSolver(drive); // removed so it won't rotate 90deg clockwise
         positionSolver.setSettings(PositionSolverSettings.specimenAssistSettings);
 
+        headingSolver = new HeadingSolver(drive);
+
         intake = new Intake1(robot);
         new Intake1Teleop(intake);
 
@@ -104,7 +109,7 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
 
         while (!isStarted()) {
             robot.buttonMgr.runLoop();
-            telemetry.addData("TELEOP BLUE", "Not Started");
+            telemetry.addData("CurrOpMode: ", DecodeSettings.getCurrentOpMode());
 
 //            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped) ||
 //                    robot.buttonMgr.getState(2, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
@@ -118,11 +123,17 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
 
         robot.start();
 
+        headingSolver.setNewTarget(DecodeSettings.getTargetGoalPos(), true);
+        headingSolver.stopSolver();
+
         while (opModeIsActive()) {
-            start = System.currentTimeMillis();
+            startTime = System.currentTimeMillis();
             robot.run();
-            telemetry.addData("Launch Motor RPM", intake.getCurrentLaunchMotorRPM());
-            telemetry.addData("Position", odo.getPosition());
+            telemetry.addData("Current Launch Motor RPM:", intake.getCurrentLaunchMotorRPM());
+            telemetry.addData("Position:", odo.getPosition());
+            telemetry.addData("Fused   :", DecodeSettings.getFusedRobotPosition().toString());
+            telemetry.addData("ptOvrr  :", pt.getOverridePosition());
+            telemetry.addData("time:", System.currentTimeMillis() - startTime);
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();
         }
@@ -133,6 +144,9 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         DecodeSettings.isDemoMode = false;
         DecodeSettings.setTeleOp();
         DecodeSettings.setAllianceBlue();
+        DecodeSettings.setCurrentOpMode("T1_TeleopArcadeBlue");
+        DecodeSettings.setTargetGoalPos(p_targetGoal);
         DecodeSettings.setRobotPosition(fieldStartPos); // TODO: Do this only if the currentPosition is (0,0,0)?
+        DecodeSettings.lkTestMode1 = true;  // This enables "headingSolver".
     }
 }

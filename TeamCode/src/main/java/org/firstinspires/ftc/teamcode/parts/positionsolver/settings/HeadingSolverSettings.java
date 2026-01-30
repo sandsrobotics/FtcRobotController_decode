@@ -7,7 +7,7 @@ public class HeadingSolverSettings {
     public final SolverSettings rChannelSettings;
 
     public static PIDCoefficients OmRotate = new PIDCoefficients(0.0125,0.00,0.00);
-    public static PIDCoefficients TestRotate = new PIDCoefficients(0.03,0.00,0.00);
+    public static PIDCoefficients TestRotate = new PIDCoefficients(0.015,0.00,0.00);  //was 0.03
     public static PIDCoefficients LKRotate = new PIDCoefficients(0.026,0.01,0.00025);
 
     public HeadingSolverSettings(SolverSettings rChannelSettings) {

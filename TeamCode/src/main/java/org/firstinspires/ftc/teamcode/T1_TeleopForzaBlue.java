@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
 import org.firstinspires.ftc.teamcode.parts.drive.settings.DriveTeleopSettings;
+import org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings;
 
 @TeleOp(name="14273 TeleForzaBlue", group="B14273")
 public class T1_TeleopForzaBlue extends T1_TeleopArcadeBlue {
@@ -12,4 +13,9 @@ public class T1_TeleopForzaBlue extends T1_TeleopArcadeBlue {
         new DriveTeleop(drive, DriveTeleopSettings.makeForza1(robot));
     }
 
+    @Override
+    protected void extraSettings() {
+        super.extraSettings();
+        DecodeSettings.setCurrentOpMode("T1_TeleopForzaBlue");
+    }
 }

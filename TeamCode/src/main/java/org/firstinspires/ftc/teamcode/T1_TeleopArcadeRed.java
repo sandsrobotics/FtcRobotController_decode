@@ -10,6 +10,7 @@ import om.self.ezftc.utils.Vector3;
 
 @TeleOp(name="14273 TeleArcadeRed", group="B14273")
 public class T1_TeleopArcadeRed extends T1_TeleopArcadeBlue {
+    protected Vector3 p_targetGoal  = new Vector3(-70.5, 70.5, 180);   // RedGoal Position.
     protected Vector3 fieldStartPos = new Vector3(64,16,180);
 
     @Override
@@ -17,6 +18,9 @@ public class T1_TeleopArcadeRed extends T1_TeleopArcadeBlue {
         DecodeSettings.isDemoMode = false;
         DecodeSettings.setTeleOp();
         DecodeSettings.setAllianceRed();
+        DecodeSettings.setCurrentOpMode("T1_TeleopArcadeRed");
+        DecodeSettings.setTargetGoalPos(p_targetGoal);
         DecodeSettings.setRobotPosition(fieldStartPos); // TODO: Do this only if the currentPosition is (0,0,0)?
+        DecodeSettings.lkTestMode1 = true;
     }
 }

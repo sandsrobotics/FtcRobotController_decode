@@ -34,6 +34,8 @@ public class DecodeSettings {
 
    static String currentOpMode                  = "NOT SET!";
 
+   static Vector3 pos_targetGoal                 = new Vector3();  // targetRed or targetBlue.
+
    // LK new test stuff
    static Vector3 fusedRobotPosition = new Vector3();
    public static Vector3 targetRed  = new Vector3(-70.5, 70.5, 0.0);
@@ -203,6 +205,15 @@ public class DecodeSettings {
    public static Vector3 getLeverOpenPos() {
       return pos_leverOpen;
    }
+
+   public static void setTargetGoalPos(Vector3 position) {
+      if (position.X == 0 && position.Y == 0 && position.Z == 0) return;
+      pos_targetGoal = position;
+   }
+   public static Vector3 getTargetGoalPos() {
+      return pos_targetGoal;
+   }
+
 
    public static void setLaunchRPM(Integer requiredRPM) {
       if (requiredRPM == 0) return;

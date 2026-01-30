@@ -48,6 +48,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
     Integer launchRPM = 3200;
 
     // Positions to travel in AutoFarRed
+    Vector3 p_targetGoal                 = new Vector3(-70.5, 70.5, 180);   // RedGoal Position.
     Vector3 p_fieldStart                 = new Vector3(64,16,180);
     Vector3 p_obeliskView               = new Vector3(58, 16, 180);  // Was: 56, 16, 180; // FarRed: ObeliskView Position
     Vector3 p_launchPosZero             = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
@@ -280,6 +281,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
         DecodeSettings.setAuto();
         DecodeSettings.setAllianceRed();
         DecodeSettings.setCurrentOpMode("T1_AutoFarRed");
+        DecodeSettings.setTargetGoalPos(p_targetGoal);
         DecodeSettings.setRobotPosition(p_fieldStart);
         DecodeSettings.setObeliskViewPos(p_obeliskView);
         DecodeSettings.setLaunchPositionZero(p_launchPosZero);

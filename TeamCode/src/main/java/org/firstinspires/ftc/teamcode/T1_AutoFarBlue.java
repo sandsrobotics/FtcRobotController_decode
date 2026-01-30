@@ -54,5 +54,6 @@ public class T1_AutoFarBlue  extends T1_AutoFarRed {
         DecodeSettings.setLeverOpenPos(p_leverOpen);
         DecodeSettings.setParkAfterAutoPos(p_parkAfterAuto);
         DecodeSettings.setLaunchRPM(launchRPM);
+        DecodeSettings.lkTestMode1 = false;
     }
 }

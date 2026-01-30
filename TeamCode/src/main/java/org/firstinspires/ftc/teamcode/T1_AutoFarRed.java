@@ -297,5 +297,6 @@ public class T1_AutoFarRed  extends LinearOpMode{
         DecodeSettings.setParkAfterAutoPos(p_parkAfterAuto);
 
         DecodeSettings.setLaunchRPM(launchRPM);
+        DecodeSettings.lkTestMode1 = false;
     }
 }

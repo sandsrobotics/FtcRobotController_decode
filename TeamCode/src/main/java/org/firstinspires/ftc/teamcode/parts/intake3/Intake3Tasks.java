@@ -62,7 +62,7 @@ public class Intake3Tasks {
         ballLaunchTask.addDelay(intake.getSettings().launchServoDelay);
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Launch));
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo2.isDone());
-        ballLaunchTask.addDelay(intake.getSettings().launchServoDelay + 100);
+        ballLaunchTask.addDelay(intake.getSettings().launchServoDelay);
 
         //launch reset
         ballLaunchTask.addStep(()-> resetLaunchServos.restart());
@@ -168,7 +168,7 @@ public class Intake3Tasks {
         resetLaunchServos.addStep(()-> intake.getHardware().launchServo1.setPosition(intake.getSettings().launchServo1Rest));
         resetLaunchServos.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Rest));
         resetLaunchServos.addStep(()-> intake.getHardware().lockServo0.setPosition(intake.getSettings().lockServo0Lock));
-        
+
         /* End */
 
         /* Begin */

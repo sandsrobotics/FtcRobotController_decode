@@ -31,7 +31,7 @@ public class IntakeSettings3 {
     public static int launchServoSweepTime = 400;
     public static int lockServoSweepTime = 1500;
     public static int launchRPMTolerance = 100;
-    public static int launchRPMToleranceTime = 800;
+    public static int launchRPMToleranceTime = 1000;
     public static final Map<String, LaunchData> launchPosiMap = new HashMap<String, LaunchData>();
     public static PIDFCoefficients spinnerPID = new PIDFCoefficients(100,0,0,12.4);
     public static int launchRPM = 3150; // for teleop tests
@@ -42,7 +42,7 @@ public class IntakeSettings3 {
 
     public static double spinNear                 = 2600; // 3300 2900
     public static final double spinMiddle               = 0;// 3900
-    public static double spinFar                  = 3300; // 4500 needs to be within 100 tolerance
+    public static double spinFar                  = 3500; // 4500 needs to be within 100 tolerance
 
     public static double nearTest      = 72;  // 1 tile diagonally 40
     public static final double midTest       = 98; //98

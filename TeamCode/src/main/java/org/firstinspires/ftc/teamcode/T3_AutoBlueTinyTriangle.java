@@ -10,14 +10,13 @@ import om.self.task.other.TimedTask;
 public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
     Vector3 blueLaunchStart = new Vector3(62.365, -15.197, 180);
 
-    // Flags to enable/disable going to certain spikes
-    private boolean enableSpike1 = true;
-    private boolean enableSpike2 = true;
-    private boolean enableSpike3 = true;
+
+
+
 
     // CONFIGURABLE PICKUP TIMEOUT (in milliseconds)
     // Adjust this value to control how long the robot tries to pickup balls on each spike
-    private final int SPIKE_PICKUP_TIMEOUT = 5000; // 5 second default, change as needed
+    private final int SPIKE_PICKUP_TIMEOUT = 2500; // 5 second default, change as needed
 
     @Override
     public void initAuto(){
@@ -28,6 +27,9 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
 
     @Override
     public void BaseAuto(TimedTask autoTasks) {
+        int localSpikeCount = runSpikeCount; // Get from base class
+
+
         Vector3 start = fieldStartPos;
         Vector3 aprilTag = transformFunc.apply(new Vector3(38.879, -24.293, 168));
 
@@ -43,13 +45,16 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
         autoTasks.addStep(() -> intake.stopAllIntakeTasks());
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
         autoTasks.addStep(() -> odo.setPosition(start));
-        positionSolver.addMoveToTaskEx(aprilTag, autoTasks);
+        // start launcher before first move to get it up to speed before timing out
+        autoTasks.addStep(() -> intake.setLaunchRPM(shootLaunchData.getRPM()));
+//        positionSolver.addMoveToTaskEx(aprilTag, autoTasks); // can see april tag due to robot mods
 
         // Initial launch
-        MoveAndLaunch(autoTasks, shootLaunchData);
+        MoveAndLaunch(autoTasks, shootLaunchData, false);
 
         // Spike 3
-        if (enableSpike3) {
+//        SPIKE 1 - with timeout
+        if(runSpikeCount >= 1) {
             autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
             positionSolver.addMoveToTaskEx(blueSpikeReady3, autoTasks);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
@@ -62,7 +67,7 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
         }
 
         // Spike 2
-        if (enableSpike2) {
+        if(runSpikeCount >= 2) {
             positionSolver.addMoveToTaskEx(blueSpikeReady2, autoTasks);
             autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
@@ -76,7 +81,7 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
         }
 
         // Spike 1
-        if (enableSpike1) {
+        if(runSpikeCount >= 3) {
             autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
             positionSolver.addMoveToTaskEx(blueSpikeReady1, autoTasks);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
@@ -93,25 +98,58 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
 
     /************************************************************/
     private void MoveAndLaunch(TimedTask autoTasks, IntakeSettings3.LaunchData launchData) {
+        MoveAndLaunch(autoTasks, launchData, true);
+    }
+//    private void MoveAndLaunch(TimedTask autoTasks, IntakeSettings3.LaunchData launchData, Boolean rejectExtraArtifacts) {
+//        int RPM = launchData.getRPM();
+//        Vector3 pos = launchData.getPosition();
+//        autoTasks.addDelay(1000); // tjk to let balls all get in
+//        positionSolver.addMoveToTaskExNoWait(pos, autoTasks);
+//        autoTasks.addStep(() -> intake.setLaunchRPM(RPM));
+//
+//        // Reject extra artifacts
+//        if (rejectExtraArtifacts) {
+//            autoTasks.addTimedStep(
+//                    () -> intake.setIntakeRPM(-IntakeSettings3.intakeRPM),
+//                    () -> positionSolver.isDone(),
+//                    1500
+//            );
+//        }
+//
+//        autoTasks.addStep(() -> intake.setIntakeRPM(0));
+//
+//        // Use regular ball launch
+//        autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
+//        autoTasks.addStep(intake.tasks.ballLaunchTask::restart);
+//        autoTasks.addStep(intake.tasks.ballLaunchTask::isDone);
+////        autoTasks.addDelay(1000);
+////        autoTasks.addStep(() -> intake.setLaunchRPM(0));
+//
+//        // Use ordered color launch instead of regular ball launch
+////        autoTasks.addStep(intake.tasks.orderedColorLaunchTask::restart);
+////        autoTasks.addStep(intake.tasks.orderedColorLaunchTask::isDone);
+//    }
+    private void MoveAndLaunch(TimedTask autoTasks, IntakeSettings3.LaunchData launchData, Boolean rejectExtraArtifacts) {
         int RPM = launchData.getRPM();
-        Vector3 pos = launchData.getPosition();
-        positionSolver.addMoveToTaskExNoWait(pos, autoTasks);
+        Vector3 launchPos = launchData.getPosition();
+        autoTasks.addDelay(1000); // tjk to let balls all get in
+        positionSolver.addMoveToTaskExNoWait(launchPos, autoTasks);
         autoTasks.addStep(() -> intake.setLaunchRPM(RPM));
 
-        // Feed artifacts in
-        autoTasks.addTimedStep(
-                () -> intake.setIntakeRPM(-500),
-                () -> positionSolver.isDone(),
-                3000
-        );
+        // Reject extra artifacts
+        if (rejectExtraArtifacts) {
+            autoTasks.addTimedStep(
+                    () -> intake.setIntakeRPM(-IntakeSettings3.intakeRPM),
+                    () -> positionSolver.isDone(),
+                    1500
+            );
+        }
 
         autoTasks.addStep(() -> intake.setIntakeRPM(0));
 
-        // Use regular ball launch
-        autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
-        autoTasks.addStep(intake.tasks.ballLaunchTask::restart);
-        autoTasks.addStep(intake.tasks.ballLaunchTask::isDone);
-        autoTasks.addDelay(1000);
-        autoTasks.addStep(() -> intake.setLaunchRPM(0));
+        // Use ordered color launch instead of regular ball launch
+        autoTasks.addStep(intake.tasks.orderedColorLaunchTask::restart);
+        autoTasks.addStep(intake.tasks.orderedColorLaunchTask::isDone);
     }
+
 }

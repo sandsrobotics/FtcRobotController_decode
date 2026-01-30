@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
@@ -46,6 +47,7 @@ public class T3_AutoBase extends LinearOpMode{
     static public int midDelay = 2000;
     static public int longDelay = 3000;
     public static int maxDelay = 3000;
+    static public int runSpikeCount = 3; // - Default to all 3 spikes
     /**************************/
     Vector3 fieldStartPos;
 
@@ -80,11 +82,7 @@ public class T3_AutoBase extends LinearOpMode{
 
         setIntakeSettings();
         initAuto();
-//        FtcDashboard dashboard = FtcDashboard.getInstance();
-//        telemetry = new MultipleTelemetry(telemetry, dashboard.getTelemetry());
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
-//        TelemetryPacket packet = new TelemetryPacket();
-//        Telemetry dashboardTelemetry = dashboard.getTelemetry();
         Robot robot = new Robot(this);
         Drive drive = new Drive(robot);
         new BulkRead(robot);
@@ -94,48 +92,62 @@ public class T3_AutoBase extends LinearOpMode{
         pt = new PositionTracker(robot, pts, PositionTrackerHardware.makeDefault(robot));
         odo = new Pinpoint(pt);
         pt.positionSourceId = Pinpoint.class;
-        positionSolver = new PositionSolver(drive); // removed so it won't rotate 90deg clockwise
+        positionSolver = new PositionSolver(drive);
         DecimalFormat df = new DecimalFormat("#0.0");
         artifacts = new Artifacts(robot);
         limelight = new LimeLight(robot);
         robot.init();
-        IntakeSettings3.isRedSide = this.isRedSide;  // set side from auto start in permanent settings
+        IntakeSettings3.isRedSide = this.isRedSide;
 
         while (!isStarted()) {
-            telemetry.addData("position", pt.getCurrentPosition());
+            telemetry.addData("position", odo.getPosition());
+            telemetry.addData("Press D-PAD UP/DOWN to change spike count from closest to farthest","");
+
+            // D-pad controls for spike count
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasTapped)) {
+                runSpikeCount = Math.max(3, runSpikeCount + 1);
+            }
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped)) {
+                runSpikeCount = Math.min(1, runSpikeCount - 1);
+            }
+
+            telemetry.addData("Spikes to run:", runSpikeCount);
+
+            // LED color indicator
+            if (IntakeSettings3.isRedSide) {
+                intake.getHardware().pixel.setPosition(Intake3.LEDColor.RED.getLedPwm());
+            } else {
+                intake.getHardware().pixel.setPosition(Intake3.LEDColor.BLUE.getLedPwm());
+            }
+
+            telemetry.addData("Alliance Color:",(IntakeSettings3.isRedSide?"Red":"Blue"));
             limelight.onRun();
             telemetry.update();
             sleep(50);
         }
-        
+
         odo.setPosition(fieldStartPos);
         robot.start();
 
         if(shutdownps) positionSolver.triggerEvent(Robot.Events.STOP);
 
-        // Setting up group container, task queue, and setting positionSolver target
         Group container = new Group("container", robot.taskManager);
         TimedTask autoTasks = new TimedTask("auto task", container);
 
-        // call the method to create auto tasks
         BaseAuto(autoTasks);
 
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
-            robot.run(); // Tasks are run as part of this run.
-//            dashboardTelemetry.addData("position", pt.getCurrentPosition());
+            robot.run();
             telemetry.addData("position", pt.getCurrentPosition());
-            //telemetry.addData("tile position", fieldToTile(pt.getCurrentPosition()));
             telemetry.addData("time", System.currentTimeMillis() - start);
             telemetry.addData("target launch speed", intake.getTargetLaunchRPM());
             telemetry.addData("current launch speed", df.format(intake.getCurrentLaunchRPM()));
             telemetry.addData("launch servo", intake.getHardware().launchServo0.getPosition());
-//            dashboardTelemetry.update();
             telemetry.update();
         }
 
         resetIntakeSettings();
-
         robot.stop();
     }
 
@@ -143,26 +155,20 @@ public class T3_AutoBase extends LinearOpMode{
         TestAuto(autoTasks);
     }
 
-    /*********************** Autonomous Methods ******************/
-    public void TestAuto(TimedTask autoTasks) { // from 14273
-        // Positions to travel in Auto
+    public void TestAuto(TimedTask autoTasks) {
         Vector3 shootRed = new Vector3(12, 12, 45);
         Vector3 shootBlue = new Vector3(-12, -12, -45);
         Vector3 fieldzero = new Vector3(0, 0, 0);
 
-//        Vector3 StartOpt1 = new Vector3(-50,52,141);
         Vector3 AprilTag = new Vector3(-23.199,20.818,67.953);
         Vector3 ShootingPosition = new Vector3(-23.199,20.818,135.608);
-        // set accuracy of position
+
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.loseSettings));
-        // movement tasks
-//        positionSolver.addMoveToTaskEx(StartOpt1, autoTasks);
         positionSolver.addMoveToTaskEx(AprilTag, autoTasks);
         autoTasks.addDelay(5000);
         positionSolver.addMoveToTaskEx(ShootingPosition, autoTasks);
     }
 
-    /************************* Utilities ************************/
     private Vector3 tileToInchAuto(Vector3 tiles){
         return Constants.tileToInch(transformFunc.apply(tiles));
     }

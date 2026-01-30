@@ -15,9 +15,9 @@ public class T3_AutoBlueGoal extends T3_AutoBase {
 
     // CONFIGURABLE PICKUP TIMEOUT (in milliseconds)
     // Adjust this value to control how long the robot tries to pickup balls on each spike
-    private final int SPIKE_PICKUP_TIMEOUT = 5000; // 5 second default, change as needed
+    private final int SPIKE_PICKUP_TIMEOUT = 2500; // 5 second default, change as needed
 
-    private int runSpikeCount = 3;
+
 
     @Override
     public void initAuto(){
@@ -31,10 +31,13 @@ public class T3_AutoBlueGoal extends T3_AutoBase {
 
     @Override
     public void BaseAuto(TimedTask autoTasks) {
+        int localSpikeCount = runSpikeCount; // Get from base class
+
+
         Vector3 start = fieldStartPos; //new Vector3(-51, -50, 140);
         Vector3 aprilTag = transformFunc.apply(new Vector3(-42, -41, 140)); //z=122
 
-        LaunchData shootLaunchData = new LaunchData(2500, transformFunc.apply(new Vector3(-26.188, -14.106, -129.448)));
+        LaunchData shootLaunchData = new LaunchData(2500, transformFunc.apply(new Vector3(-26, -14, -128 )));
 
         Vector3 blueSpikeReady1 = transformFunc.apply(new Vector3(-12,-28,-90));
         Vector3 blueSpike1 = transformFunc.apply(new Vector3(-12,-53,-90));
@@ -69,7 +72,7 @@ public class T3_AutoBlueGoal extends T3_AutoBase {
             positionSolver.addMoveToTaskEx(blueSpikeReady2, autoTasks);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
             positionSolver.addMoveToTaskEx(blueSpike2, autoTasks, SPIKE_PICKUP_TIMEOUT);
-            autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.extraLoseSettings));
+            autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.loseSettings));
             positionSolver.addMoveToTaskEx(blueSpikeReady2, autoTasks);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
             MoveAndLaunch(autoTasks, shootLaunchData);
@@ -97,7 +100,7 @@ public class T3_AutoBlueGoal extends T3_AutoBase {
     private void MoveAndLaunch(TimedTask autoTasks, LaunchData launchData, Boolean rejectExtraArtifacts) {
         int RPM = launchData.getRPM();
         Vector3 launchPos = launchData.getPosition();
-        autoTasks.addDelay(1000); // tjk to let balls all get in
+        autoTasks.addDelay(750); // tjk to let balls all get in
         positionSolver.addMoveToTaskExNoWait(launchPos, autoTasks);
         autoTasks.addStep(() -> intake.setLaunchRPM(RPM));
 

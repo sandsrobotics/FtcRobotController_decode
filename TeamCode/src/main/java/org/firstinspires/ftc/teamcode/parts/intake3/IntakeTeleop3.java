@@ -176,21 +176,21 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         }
 
         // B BUTTON - Lock servo (tap to lock, double tap to unlock)
-        if (buttonMgr.getState(2, Buttons.b, State.wasTapped)) {
+        if (buttonMgr.getState(2, Buttons.right_stick_button, State.wasTapped)) {
             parent.getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
         }
 
-        if (buttonMgr.getState(2, Buttons.b, State.wasDoubleTapped)) {
+        if (buttonMgr.getState(2, Buttons.right_stick_button, State.wasDoubleTapped)) {
             parent.getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Unlock);
         }
         // LEFT STICK BUTTON - Move to bluefartriangle and launch (auto-starts launcher)
-        if (buttonMgr.getState(2, Buttons.left_stick_button, State.wasTapped)) {
-            if (parent.getTargetLaunchRPM() < 500) {
-                parent.setLaunchRPM(IntakeSettings3.launchRPM);
-                IntakeSettings3.launchArmed = true;
-            }
-            parent.launchData = IntakeSettings3.launchPosiMap.get("bluefartriangle");
-            parent.tasks.moveAndLaunch.restart();
-        }
+//        if (buttonMgr.getState(2, Buttons.left_stick_button, State.wasTapped)) {
+//            if (parent.getTargetLaunchRPM() < 500) {
+//                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+//                IntakeSettings3.launchArmed = true;
+//            }
+//            parent.launchData = IntakeSettings3.launchPosiMap.get("bluefartriangle");
+//            parent.tasks.moveAndLaunch.restart();
+//        }
     }
 }

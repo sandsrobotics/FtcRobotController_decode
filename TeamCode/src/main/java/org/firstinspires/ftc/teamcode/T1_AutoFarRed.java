@@ -192,7 +192,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
         autoTasks.addTimedStep(() -> {}, () -> intake.tasks.allServoStore.isDone(), 250);
 
         //Move to ObeliskView position.
-        positionSolver.addMoveToTaskEx(DecodeSettings.getObeliskViewPos(), autoTasks);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getObeliskViewPos(), autoTasks, 1000);
         // Look at Obelisk, determine classificationId and Store it.
         DecodeSettings.setClassificationId(limelight.getClassificationId());
 
@@ -250,8 +250,8 @@ public class T1_AutoFarRed  extends LinearOpMode{
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceExtraSlowSettings));
 
         // Move to intake.
-        positionSolver.addMoveToTaskEx(pos_intake, autoTasks);
-        autoTasks.addDelay(2500); // Test with 1000.
+        positionSolver.addMoveToTaskEx(pos_intake, autoTasks, 2000);
+        autoTasks.addDelay(1500); // 2500; Test with 1000.
 
 //        // Move to launch.
 

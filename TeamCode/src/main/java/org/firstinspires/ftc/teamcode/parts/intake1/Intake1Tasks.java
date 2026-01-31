@@ -41,6 +41,8 @@ public class Intake1Tasks {
     public final TimedTask teleopNearBlueLaunch;
     public final TimedTask teleopGoalBlueLaunch;
     public final TimedTask teleopThreeBlueLaunch;
+    public final TimedTask teleopMoveToRedLoadingZone;
+    public final TimedTask teleopMoveToBlueLoadingZone;
 
     private final Intake1 intake;
     private final Robot robot;
@@ -81,6 +83,8 @@ public class Intake1Tasks {
         teleopNearBlueLaunch = new TimedTask(TaskNames.teleopNearBlueLaunch, intakeTasksGroup);
         teleopGoalBlueLaunch = new TimedTask(TaskNames.teleopGoalBlueLaunch, intakeTasksGroup);
         teleopThreeBlueLaunch = new TimedTask(TaskNames.teleopThreeBlueLaunch, intakeTasksGroup);
+        teleopMoveToRedLoadingZone = new TimedTask(TaskNames.teleopMoveToRedLoadingZone, intakeTasksGroup);
+        teleopMoveToBlueLoadingZone = new TimedTask(TaskNames.teleopMoveToBlueLoadingZone, intakeTasksGroup);
 
     }
 
@@ -433,6 +437,26 @@ public class Intake1Tasks {
         teleopThreeBlueLaunch.addStep(allServoLaunch::restart);
         teleopThreeBlueLaunch.addDelay(500);
 
+        //  teleopMoveToRedLoadingZone
+        teleopMoveToRedLoadingZone.autoStart = false;
+        teleopMoveToRedLoadingZone.addStep(() -> intake.positionSolver.setNewTarget(Intake1Settings.p_teleopMoveToRedLoadingZone_1, true));
+        teleopMoveToRedLoadingZone.addStep(() -> intake.positionSolver.isDone());
+        teleopMoveToRedLoadingZone.addStep(intakeTask::restart);
+        teleopMoveToRedLoadingZone.addStep(() -> intake.positionSolver.setNewTarget(Intake1Settings.p_teleopMoveToRedLoadingZone_2, true));
+        teleopMoveToRedLoadingZone.addStep(() -> intake.positionSolver.isDone());
+        teleopMoveToRedLoadingZone.addDelay(500);
+        teleopMoveToRedLoadingZone.addStep(artifactIntakeStopTask::restart);
+
+        //  teleopMoveToBlueLoadingZone
+        teleopMoveToBlueLoadingZone.autoStart = false;
+        teleopMoveToBlueLoadingZone.addStep(() -> intake.positionSolver.setNewTarget(Intake1Settings.p_teleopMoveToBlueLoadingZone_1, true));
+        teleopMoveToBlueLoadingZone.addStep(() -> intake.positionSolver.isDone());
+        teleopMoveToBlueLoadingZone.addStep(intakeTask::restart);
+        teleopMoveToBlueLoadingZone.addStep(() -> intake.positionSolver.setNewTarget(Intake1Settings.p_teleopMoveToBlueLoadingZone_2, true));
+        teleopMoveToBlueLoadingZone.addStep(() -> intake.positionSolver.isDone());
+        teleopMoveToBlueLoadingZone.addDelay(500);
+        teleopMoveToBlueLoadingZone.addStep(artifactIntakeStopTask::restart);
+
     }
 
     /***********************************************************************************/
@@ -466,6 +490,8 @@ public class Intake1Tasks {
         public final static String teleopNearBlueLaunch = "teleop NearBlueLaunch";
         public final static String teleopGoalBlueLaunch = "teleop GoalBlueLaunch";
         public final static String teleopThreeBlueLaunch = "teleop ThreeBlueLaunch";
+        public final static String teleopMoveToRedLoadingZone = "teleop MoveToRedLoadingZone";
+        public final static String teleopMoveToBlueLoadingZone = "teleop MoveToBlueLoadingZone";
 
     }
 

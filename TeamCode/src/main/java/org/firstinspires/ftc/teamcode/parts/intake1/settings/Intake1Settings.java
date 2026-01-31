@@ -67,6 +67,12 @@ public class Intake1Settings {
     public static Vector3 p_teleopThreeBlueLaunch = new Vector3(-24, -24, -135);
     public static Vector3 p_teleopGoalBlueLaunch = new Vector3(-24, -24, -135);
 
+    public static Vector3 p_teleopMoveToRedLoadingZone_1 = new Vector3(52, -38, 90);
+    public static Vector3 p_teleopMoveToRedLoadingZone_2 = new Vector3(52, -44, 90);
+    public static Vector3 p_teleopMoveToBlueLoadingZone_1 = new Vector3(52, 38, -90);
+    public static Vector3 p_teleopMoveToBlueLoadingZone_2 = new Vector3(-24, 44, -90);
+
+
     public Intake1Settings() {
     }
 

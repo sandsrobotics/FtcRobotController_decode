@@ -119,7 +119,7 @@ public class T3_Teleop extends LinearOpMode {
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
             robot.run();
-            telemetry.addData("position tracker", pt.getCurrentPosition());
+//            telemetry.addData("position tracker", pt.getCurrentPosition());
             telemetry.addData("time", System.currentTimeMillis() - start);
 //            telemetry.addData("Intake speed",intake.getHardware().intakeMotor.getVelocity());
             telemetry.addData("launch speed",intake.getCurrentLaunchRPM());

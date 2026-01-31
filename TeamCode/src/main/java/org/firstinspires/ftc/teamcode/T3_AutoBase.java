@@ -100,15 +100,19 @@ public class T3_AutoBase extends LinearOpMode{
         IntakeSettings3.isRedSide = this.isRedSide;
 
         while (!isStarted()) {
+            robot.buttonMgr.runLoop();
+
             telemetry.addData("position", odo.getPosition());
             telemetry.addData("Press D-PAD UP/DOWN to change spike count from closest to farthest","");
 
             // D-pad controls for spike count
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasTapped)) {
-                runSpikeCount = Math.max(3, runSpikeCount + 1);
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasHeld))
+            {
+                runSpikeCount = Math.min(3, runSpikeCount + 1);
             }
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped)) {
-                runSpikeCount = Math.min(1, runSpikeCount - 1);
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasHeld))
+            {
+                runSpikeCount = Math.max(1, runSpikeCount - 1);
             }
 
             telemetry.addData("Spikes to run:", runSpikeCount);

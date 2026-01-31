@@ -8,11 +8,7 @@ import om.self.task.other.TimedTask;
 
 @Autonomous(name="Blue TinyTriangle", group="32859")
 public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
-    Vector3 blueLaunchStart = new Vector3(62.365, -15.197, 180);
-
-
-
-
+    Vector3 blueLaunchStart = new Vector3(62.365, -15, 180);
 
     // CONFIGURABLE PICKUP TIMEOUT (in milliseconds)
     // Adjust this value to control how long the robot tries to pickup balls on each spike
@@ -29,11 +25,11 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
     public void BaseAuto(TimedTask autoTasks) {
         int localSpikeCount = runSpikeCount; // Get from base class
 
-
         Vector3 start = fieldStartPos;
         Vector3 aprilTag = transformFunc.apply(new Vector3(38.879, -24.293, 168));
+        Vector3 parkingPosition = transformFunc.apply(new Vector3(38.879, -24.293, 168));
 
-        IntakeSettings3.LaunchData shootLaunchData = new IntakeSettings3.LaunchData(3275, transformFunc.apply(new Vector3(52.843, -13.030, -155.40 )));  /*Z: 153.4*/
+        IntakeSettings3.LaunchData shootLaunchData = new IntakeSettings3.LaunchData(3400, transformFunc.apply(new Vector3(52.8, -13, -154.5 )));  //Z: 153.4 155.40
         Vector3 blueSpikeReady1 = transformFunc.apply(new Vector3(-12,-28,-90));
         Vector3 blueSpike1 = transformFunc.apply(new Vector3(-12,-53,-90));
         Vector3 blueSpikeReady2 = transformFunc.apply(new Vector3(13,-28,-90));
@@ -60,7 +56,7 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
             positionSolver.addMoveToTaskEx(blueSpike3, autoTasks, SPIKE_PICKUP_TIMEOUT);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
-            autoTasks.addDelay(1000);
+//            autoTasks.addDelay(1000);
             autoTasks.addStep(() -> intake.setIntakeRPM(0));
 
             MoveAndLaunch(autoTasks, shootLaunchData);
@@ -73,8 +69,8 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
             positionSolver.addMoveToTaskEx(blueSpike2, autoTasks, SPIKE_PICKUP_TIMEOUT);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
-            positionSolver.addMoveToTaskExNoWait(blueSpikeReady2, autoTasks);
-            autoTasks.addDelay(1000);
+//            positionSolver.addMoveToTaskExNoWait(blueSpikeReady2, autoTasks);
+//            autoTasks.addDelay(1000);
             autoTasks.addStep(() -> intake.setIntakeRPM(0));
 
             MoveAndLaunch(autoTasks, shootLaunchData);
@@ -87,52 +83,26 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
             positionSolver.addMoveToTaskEx(blueSpike1, autoTasks, SPIKE_PICKUP_TIMEOUT);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
-            autoTasks.addDelay(1000);
+//            autoTasks.addDelay(1000);
             autoTasks.addStep(() -> intake.setIntakeRPM(0));
 
             MoveAndLaunch(autoTasks, shootLaunchData);
         }
 
+        positionSolver.addMoveToTaskEx(parkingPosition, autoTasks); //Goes off launch line
         autoTasks.addStep(() -> intake.setIntakeRPM(0));
+        autoTasks.addStep(() -> intake.setLaunchRPM(0));
     }
 
     /************************************************************/
     private void MoveAndLaunch(TimedTask autoTasks, IntakeSettings3.LaunchData launchData) {
         MoveAndLaunch(autoTasks, launchData, true);
     }
-//    private void MoveAndLaunch(TimedTask autoTasks, IntakeSettings3.LaunchData launchData, Boolean rejectExtraArtifacts) {
-//        int RPM = launchData.getRPM();
-//        Vector3 pos = launchData.getPosition();
-//        autoTasks.addDelay(1000); // tjk to let balls all get in
-//        positionSolver.addMoveToTaskExNoWait(pos, autoTasks);
-//        autoTasks.addStep(() -> intake.setLaunchRPM(RPM));
-//
-//        // Reject extra artifacts
-//        if (rejectExtraArtifacts) {
-//            autoTasks.addTimedStep(
-//                    () -> intake.setIntakeRPM(-IntakeSettings3.intakeRPM),
-//                    () -> positionSolver.isDone(),
-//                    1500
-//            );
-//        }
-//
-//        autoTasks.addStep(() -> intake.setIntakeRPM(0));
-//
-//        // Use regular ball launch
-//        autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
-//        autoTasks.addStep(intake.tasks.ballLaunchTask::restart);
-//        autoTasks.addStep(intake.tasks.ballLaunchTask::isDone);
-////        autoTasks.addDelay(1000);
-////        autoTasks.addStep(() -> intake.setLaunchRPM(0));
-//
-//        // Use ordered color launch instead of regular ball launch
-////        autoTasks.addStep(intake.tasks.orderedColorLaunchTask::restart);
-////        autoTasks.addStep(intake.tasks.orderedColorLaunchTask::isDone);
-//    }
+
     private void MoveAndLaunch(TimedTask autoTasks, IntakeSettings3.LaunchData launchData, Boolean rejectExtraArtifacts) {
         int RPM = launchData.getRPM();
         Vector3 launchPos = launchData.getPosition();
-        autoTasks.addDelay(1000); // tjk to let balls all get in
+        if(rejectExtraArtifacts) autoTasks.addDelay(750); // tjk to let balls all get in
         positionSolver.addMoveToTaskExNoWait(launchPos, autoTasks);
         autoTasks.addStep(() -> intake.setLaunchRPM(RPM));
 

@@ -146,7 +146,12 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         DecodeSettings.setAllianceBlue();
         DecodeSettings.setCurrentOpMode("T1_TeleopArcadeBlue");
         DecodeSettings.setTargetGoalPos(p_targetGoal);
-        DecodeSettings.setRobotPosition(fieldStartPos); // TODO: Do this only if the currentPosition is (0,0,0)?
+
+        // Reset to fieldStartPos only when it's zero. Otherwise, Carry-over Position from Auto.
+        Vector3 tempPosition = DecodeSettings.getRobotPosition();
+        if (tempPosition.X == 0.0 && tempPosition.Y == 0.0 && tempPosition.Z == 0.0)  {
+            DecodeSettings.setRobotPosition(fieldStartPos);
+        }
         DecodeSettings.lkTestMode1 = true;  // This enables "headingSolver".
     }
 }

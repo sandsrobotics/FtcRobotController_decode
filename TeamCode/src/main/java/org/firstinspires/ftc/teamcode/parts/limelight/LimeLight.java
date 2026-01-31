@@ -4,6 +4,8 @@ import com.qualcomm.hardware.limelightvision.LLResult;
 import com.qualcomm.hardware.limelightvision.LLResultTypes;
 import com.qualcomm.hardware.limelightvision.LLStatus;
 import com.qualcomm.hardware.limelightvision.Limelight3A;
+import com.qualcomm.robotcore.hardware.Servo;
+
 import org.apache.commons.lang3.ObjectUtils;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
@@ -34,6 +36,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     Vector3 llLastValidTransform = new Vector3();    // Holds the last valid transform
     double llLastValidTransformTime;
     public Vector3 llFusedPosition = new Vector3();  // Holds a transformed position
+    Servo led;
 
     // classificationId Defaults to 21.
     // Valid values are 21(GPP), 22(PGP), 23(PPG).
@@ -92,6 +95,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         limelight.pipelineSwitch(0);
         parent.opMode.telemetry.setMsTransmissionInterval(11);
         limelight.start();
+        led = parent.opMode.hardwareMap.get(Servo.class,"servo5B");
     }
 
     @Override
@@ -179,7 +183,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     }
 
     public void setLed(rgbIndicatorColor color) {
-        //servo setting code
+        led.setPosition(color.color);
     }
 
     public void applyTransform() {

@@ -120,6 +120,12 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             parent.opMode.telemetry.addData("Fused", llFusedPosition.toString());
         }
 
+        if (llLastValidTransformTime != 0 &&
+                System.currentTimeMillis()-llLastValidTransformTime > 5000) {
+            llLastValidTransformTime = 0;
+            setLed(rgbIndicatorColor.Off);
+        }
+
         if (llResult != null && llResult.isValid()) {
 
             // Get the robot position as calculated by MegaTag in the LL
@@ -167,13 +173,6 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
                 llLastValidTransform = llSmoothTransform.copy();
                 llLastValidTransformTime = System.currentTimeMillis();
                 setLed(rgbIndicatorColor.Green);
-            }
-            else {
-                if (llLastValidTransformTime != 0 &&
-                        System.currentTimeMillis()-llLastValidTransformTime > 5000) {
-                    llLastValidTransformTime = 0;
-                    setLed(rgbIndicatorColor.Off);
-                }
             }
 
             parent.opMode.telemetry.addData("Trans", llSavedTransform.toString());

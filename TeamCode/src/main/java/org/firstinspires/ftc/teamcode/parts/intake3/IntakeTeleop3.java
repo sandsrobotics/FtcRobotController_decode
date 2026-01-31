@@ -91,20 +91,6 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.setLaunchRPM(0);
         }
 
-
-//
-//        if (buttonMgr.getState(1, Buttons.left_trigger, State.wasPressed)) {
-//            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
-//            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
-//            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
-//        }
-//
-//        if (buttonMgr.getState(1, Buttons.right_trigger, State.wasPressed)) {
-//            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
-//            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
-//            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
-//        }
-
         // ============================================
         // CONTROLLER 2 (OPERATOR) CONTROLS
         // ============================================
@@ -115,7 +101,8 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         }
 
         // LEFT BUMPER - Auto-align to April tag
-        if (buttonMgr.getState(2, Buttons.left_bumper, State.isHeld)) {
+        if (buttonMgr.getState(2, Buttons.left_bumper, State.isHeld) ||
+                buttonMgr.getState(1, Buttons.left_bumper, State.isHeld)) {
             IntakeSettings3.alignTarget = true;
         } else {
             IntakeSettings3.alignTarget = false;
@@ -141,13 +128,13 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         }
 
         // X BUTTON - Move to blueshoot1 and launch (auto-starts launcher)
-        if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {
-            if (parent.getTargetLaunchRPM() < 500) {
-                parent.setLaunchRPM(IntakeSettings3.launchRPM);
-            }
-            parent.launchData = IntakeSettings3.launchPosiMap.get("blueshoot1");
-            parent.tasks.moveAndLaunch.restart();
-        }
+//        if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {
+//            if (parent.getTargetLaunchRPM() < 500) {
+//                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+//            }
+//            parent.launchData = IntakeSettings3.launchPosiMap.get("blueshoot1");
+//            parent.tasks.moveAndLaunch.restart();
+//        }
 
         // B BUTTON - Simultaneous launch (auto-starts launcher)
         if (buttonMgr.getState(2, Buttons.b, State.wasTapped)) {
@@ -171,9 +158,9 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         }
 
         // X BUTTON - Reverse shooter
-        if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {
-            parent.setLaunchRPM(-IntakeSettings3.launchRPM);
-        }
+//        if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {
+//            parent.setLaunchRPM(-IntakeSettings3.launchRPM);
+//        }
 
         // B BUTTON - Lock servo (tap to lock, double tap to unlock)
         if (buttonMgr.getState(2, Buttons.right_stick_button, State.wasTapped)) {

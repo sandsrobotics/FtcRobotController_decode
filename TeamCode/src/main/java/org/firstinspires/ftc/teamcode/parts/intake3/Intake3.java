@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.parts.intake3;
 
 import static org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3.*;
 
+import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.util.Range;
 
 import org.firstinspires.ftc.teamcode.Tools.DataTypes.Vector2D;
@@ -447,13 +448,14 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 
     @Override
     public void onInit() {
-        getHardware().pixel.setPosition(LEDColor.ORANGE.getLedPwm());
+//        getHardware().pixel.setPosition(LEDColor.ORANGE.getLedPwm());
         initializeServos();
         parent.opMode.sleep(1200);
         initializeServos();
         tasks = new Intake3Tasks(this, parent);
         tasks.constructAllIntakeTasks();
         setLaunchRPM(0);
+        getHardware().launchMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, IntakeSettings3.spinnerPID);
         getHardware().pixel.setPosition(LEDColor.GREEN.getLedPwm());
     }
 

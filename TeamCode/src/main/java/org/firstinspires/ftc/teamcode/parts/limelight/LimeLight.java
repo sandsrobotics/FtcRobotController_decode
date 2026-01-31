@@ -32,6 +32,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     Vector3 llStandardDeviation = new Vector3();     // Holds standard deviation of bugger
     public Vector3 llSavedTransform = new Vector3(); // Holds a transform once requested by driver
     Vector3 llLastValidTransform = new Vector3();    // Holds the last valid transform
+    double llLastValidTransformTime;
     public Vector3 llFusedPosition = new Vector3();  // Holds a transformed position
 
     // classificationId Defaults to 21.
@@ -158,7 +159,18 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
                     Math.abs(llStandardDeviation.X) <= acceptableStdDev.X &&
                     Math.abs(llStandardDeviation.Y) <= acceptableStdDev.Y &&
                     Math.abs(llStandardDeviation.Z) <= acceptableStdDev.Z;
-            if (stdDevValid) llLastValidTransform = llSmoothTransform.copy();
+            if (stdDevValid) {
+                llLastValidTransform = llSmoothTransform.copy();
+                llLastValidTransformTime = System.currentTimeMillis();
+                setLed(rgbIndicatorColor.Green);
+            }
+            else {
+                if (llLastValidTransformTime != 0 &&
+                        System.currentTimeMillis()-llLastValidTransformTime > 5000) {
+                    llLastValidTransformTime = 0;
+                    setLed(rgbIndicatorColor.Off);
+                }
+            }
 
             parent.opMode.telemetry.addData("Trans", llSavedTransform.toString());
             parent.opMode.telemetry.addData("LastV", llLastValidTransform.toString());
@@ -166,8 +178,13 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         }
     }
 
+    public void setLed(rgbIndicatorColor color) {
+        //servo setting code
+    }
+
     public void applyTransform() {
         llSavedTransform = llLastValidTransform.copy();
+        llLastValidTransformTime = 0;
     }
 
     public void applyTransformIfCurrent() {
@@ -214,6 +231,26 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         y = Math.sqrt(y / buffer.length);
         z = Math.sqrt(z / buffer.length);
         return new Vector3(x, y, z);
+    }
+
+    public enum rgbIndicatorColor {
+        Off (0.0),
+        Red (0.279),
+        Orange (0.333),
+        Yellow (0.388),
+        Sage (0.444),
+        Green (0.500),
+        Azure (0.555),
+        Blue (0.611),
+        Indigo (0.666),
+        Violet (0.715), //(0.722),
+        White (1.0);
+
+        private final double color;
+
+        rgbIndicatorColor(double color) {
+            this.color = color;
+        }
     }
 
 }

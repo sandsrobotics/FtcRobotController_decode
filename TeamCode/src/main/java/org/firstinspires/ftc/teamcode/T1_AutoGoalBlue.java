@@ -2,24 +2,24 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings;
 
+import org.firstinspires.ftc.teamcode.parts.intake1.DecodeSettings;
 
 import om.self.ezftc.utils.Vector3;
 
 @Config
-@Autonomous(name="14273.3 AutoFarBlue", group="14273")
-public class T1_AutoFarBlue  extends T1_AutoFarRed {
+@Autonomous(name="14273.1 AutoGoalBlue", group="14273")
+public class T1_AutoGoalBlue  extends T1_AutoGoalRed {
 
-    Integer launchRPM = 3200;
+    Integer launchRPM = 2800; // TODO: Needs Tuning.
 
     // Positions to travel in AutoFarBlue
     Vector3 p_targetGoal                 = new Vector3(-70.5, -70.5, 180);   // BlueGoal Position.
-    Vector3 p_fieldStart                = new Vector3(64,-16,-180);
-    Vector3 p_obeliskView               = new Vector3(58, -16, -180);  // Was: 56, 16, 180; // FarBlue: ObeliskView Position
-    Vector3 p_launchPosZero             = new Vector3(58,-16,-157);    // Was: 56, 16, 153; // FarBlue Launching Position.
-    Vector3 p_launchPosOne              = new Vector3(58,-16,-157);    // Was: 56, 16, 153; // FarBlue Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(58,-16,-160);    // FarBlue Launching Position for pinkServo. Z:160.
+    Vector3 p_fieldStart                = new Vector3(-39.0,-55,-180); // TODO: Confirm/Tune this position.
+    Vector3 p_obeliskView               = new Vector3(-39.0, -31, 160);  // GoalBlue: ObeliskView Position
+    Vector3 p_launchPosZero             = new Vector3(-18.0,-29,-130);    // GoalBlue Launching Position.
+    Vector3 p_launchPosOne              = new Vector3(-18.0,-29,-130);    // GoalBlue Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(-18.0,-29,-130);    // GoalBlue Launching Position for pinkServo. Z:???.
 
     Vector3 p_pre_intakeArtifactRow1    = new Vector3(-12, -28, 90);  // Blue: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1        = new Vector3(-12, -53, 90);  // Blue: Intake Artifacts in Row1
@@ -30,7 +30,7 @@ public class T1_AutoFarBlue  extends T1_AutoFarRed {
     Vector3 p_intakeArtifactRow3        = new Vector3(35.5, -60, 90);   // Blue: Intake Artifacts in Row3
 
     Vector3 p_leverOpen                 = new Vector3(0, -55, -180);    // Blue: Open Lever Position
-    Vector3 p_parkAfterAuto             = new Vector3(32,-16,-157);
+    Vector3 p_parkAfterAuto             = new Vector3(-12,-28,-180);
 
     @Override
     public void extraSettings() {
@@ -38,7 +38,7 @@ public class T1_AutoFarBlue  extends T1_AutoFarRed {
         DecodeSettings.setAuto();
         DecodeSettings.setAllianceBlue();
 
-        DecodeSettings.setCurrentOpMode("T1_AutoFarBlue");
+        DecodeSettings.setCurrentOpMode("T1_AutoGoalBlue");
         DecodeSettings.setTargetGoalPos(p_targetGoal);
         DecodeSettings.setRobotPosition(p_fieldStart);
         DecodeSettings.setObeliskViewPos(p_obeliskView);
@@ -57,3 +57,4 @@ public class T1_AutoFarBlue  extends T1_AutoFarRed {
         DecodeSettings.lkTestMode1 = false;
     }
 }
+

@@ -32,7 +32,7 @@ import om.self.task.core.Group;
 import om.self.task.other.TimedTask;
 
 @Config
-@Autonomous (name="14273 AutoFarRed", group="14273")
+@Autonomous (name="14273.4 AutoFarRed", group="14273")
 public class T1_AutoFarRed  extends LinearOpMode{
     public Function<Vector3, Vector3> transformFunc;
     public Vector3 customStartPos;

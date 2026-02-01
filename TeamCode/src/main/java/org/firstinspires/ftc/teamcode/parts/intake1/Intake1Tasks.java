@@ -350,17 +350,17 @@ public class Intake1Tasks {
         teleopFarRedLaunch.addStep(startFarLaunch::isDone);
         teleopFarRedLaunch.addStep(pinkServoLaunch::restart);
         teleopFarRedLaunch.addStep(pinkServoLaunch::isDone);
-        teleopFarRedLaunch.addDelay(200);
-        teleopFarRedLaunch.addStep(() -> intake.positionSolver.setNewTarget(Intake1Settings.p_teleopFarRedLaunch_2, true));
-        teleopFarRedLaunch.addStep(() -> intake.positionSolver.isDone());
+        teleopFarRedLaunch.addDelay(50);
+//        teleopFarRedLaunch.addStep(() -> intake.positionSolver.setNewTarget(Intake1Settings.p_teleopFarRedLaunch_2, true));
+//        teleopFarRedLaunch.addStep(() -> intake.positionSolver.isDone());
         teleopFarRedLaunch.addStep(blueServoLaunch::restart);
         teleopFarRedLaunch.addStep(blueServoLaunch::isDone);
-        teleopFarRedLaunch.addDelay(200);
-        teleopFarRedLaunch.addStep(() -> intake.positionSolver.setNewTarget(Intake1Settings.p_teleopFarRedLaunch_3, true));
-        teleopFarRedLaunch.addStep(() -> intake.positionSolver.isDone());
+        teleopFarRedLaunch.addDelay(50);
+//        teleopFarRedLaunch.addStep(() -> intake.positionSolver.setNewTarget(Intake1Settings.p_teleopFarRedLaunch_3, true));
+//        teleopFarRedLaunch.addStep(() -> intake.positionSolver.isDone());
         teleopFarRedLaunch.addStep(greenServoLaunch::restart);
         teleopFarRedLaunch.addStep(greenServoLaunch::isDone);
-        teleopFarRedLaunch.addDelay(200);
+        teleopFarRedLaunch.addDelay(50);
 
         // teleopFarBlueLaunch
         teleopFarBlueLaunch.autoStart = false;

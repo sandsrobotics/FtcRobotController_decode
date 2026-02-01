@@ -188,6 +188,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     public void applyTransform() {
         llSavedTransform = llLastValidTransform.copy();
         llLastValidTransformTime = 0;
+        setLed(rgbIndicatorColor.Off);
     }
 
     public void applyTransformIfCurrent() {

@@ -51,7 +51,7 @@ public class Intake1Settings {
     public double launchMotorVelocityStop =                      0;
 
 
-    public static Vector3 p_teleopFarRedLaunch_1 = new Vector3(58, -16, 150);
+    public static Vector3 p_teleopFarRedLaunch_1 = new Vector3(45.65, -5.5, 150);  // 58,-16,150;
     public static Vector3 p_teleopFarRedLaunch_2 = new Vector3(58, -16, 153);
     public static Vector3 p_teleopFarRedLaunch_3 = new Vector3(58, -16, 153);
 

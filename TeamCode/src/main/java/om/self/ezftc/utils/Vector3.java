@@ -49,6 +49,10 @@ public class Vector3 {
 		}
 	}
 
+    public Vector3 copy() {
+        return new Vector3(X, Y, Z);
+    }
+
 	public Vector3 switchXY(){
 		return new Vector3(Y, X, Z);
 	}
@@ -116,4 +120,27 @@ public class Vector3 {
 	public String toString() {
 		return toString(2);
 	}
+
+    // Following are LK Additions adapted from similar Position class
+
+    public boolean isEqualTo (Vector3 pos2) {
+        return ((X == pos2.X) && (Y == pos2.Y) && (Z == pos2.Z));
+    }
+
+    public Vector3 getOffset(Vector3 fieldPose) {
+        double offsetR = fieldPose.Z - Z;
+        return new Vector3 (
+                fieldPose.X - (X*Math.cos(Math.toRadians(offsetR)) - Y*Math.sin(Math.toRadians(offsetR))),
+                fieldPose.Y - (X*Math.sin(Math.toRadians(offsetR)) + Y*Math.cos(Math.toRadians(offsetR))),
+                AngleMath.scaleAngle(offsetR)
+        );
+    }
+
+    public Vector3 transformPosition(Vector3 pos2) {
+        return new Vector3(
+                X + (pos2.X*Math.cos(Math.toRadians(Z)) - pos2.Y*Math.sin(Math.toRadians(Z))),
+                Y + (pos2.X*Math.sin(Math.toRadians(Z)) + pos2.Y*Math.cos(Math.toRadians(Z))),
+                AngleMath.scaleAngle(Z + pos2.Z)
+        );
+    }
 }

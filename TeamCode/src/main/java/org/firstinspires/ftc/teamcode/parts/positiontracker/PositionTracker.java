@@ -1,3 +1,4 @@
+
 package org.firstinspires.ftc.teamcode.parts.positiontracker;
 
 import com.qualcomm.hardware.bosch.BHI260IMU;
@@ -34,6 +35,7 @@ public class PositionTracker extends LoopedPartImpl<Robot, PositionTrackerSettin
 
     public double lkRawImuAngle = 0; // LK
     public Vector3 lkStartPosition; // LK
+    private Vector3 overrideTransform = new Vector3();
 
     public PositionTracker(Robot robot) {
         super(robot, "position tracker", robot.startTaskManager);
@@ -54,6 +56,17 @@ public class PositionTracker extends LoopedPartImpl<Robot, PositionTrackerSettin
 
     public Vector3 getCurrentPosition() {
         return currentPosition;
+    }
+
+    public Vector3 getOverridePosition() {
+        if (overrideTransform != null && currentPosition != null) {
+            return overrideTransform.transformPosition(currentPosition);
+        }
+        else return currentPosition;
+    }
+
+    public void setOverrideTransform(Vector3 transform) {
+        this.overrideTransform = transform.copy();
     }
 
     /**

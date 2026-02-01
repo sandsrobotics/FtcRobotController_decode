@@ -58,6 +58,25 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         parent.setBaseControllerToDefault(parent.isControlActive());
     }
 
+    /* **********************************************************
+     *
+     * IMPORTANT NOTE FROM MR. KN:
+     *
+     * State.isPressed should not be used when controlling tasks (or triggering anything).
+     * It returns the current state of the button, not a rising or falling edge event.
+     * That means it triggers the task repeatedly for the entire duration it is pressed.
+     * Not good!
+     *
+     * Better choices would be:
+     *    wasPressed;       // Rise
+     *    wasReleased;      // Fall
+     *    wasHeld;          // Rise + Long Hold + Fall
+     *    wasTapped;        // Rise + Short Hold + Fall
+     *    wasSingleTapped;  // Rise + Short Hold + Fall + Gap  [note the gap/delay at end!]
+     *    wasDoubleTapped;  // Rise + Short Hold + Fall + Short Gap x2
+     *
+     * ***********************************************************/
+
     public void driverControls() {
 
         // ============================================

@@ -96,6 +96,7 @@ public class Intake1Tasks {
             intakeTask.addStep(allServoDock::isDone);
             intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeIn);
             intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoIn);
+            intake.getHardware().augerMotor.setPower(Intake1Settings.augerMotorRun);
         });
 
         /*   Artifact Intake Stop Task   */
@@ -103,6 +104,7 @@ public class Intake1Tasks {
         artifactIntakeStopTask.addStep(()-> {
             intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeStop);
             intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoOff);
+            intake.getHardware().augerMotor.setPower(Intake1Settings.augerMotorStop);
         });
         artifactIntakeStopTask.addStep(allServoStore::restart);
         artifactIntakeStopTask.addStep(allServoStore::isDone);

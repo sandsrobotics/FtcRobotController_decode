@@ -12,6 +12,7 @@ import om.self.ezftc.utils.hardware.motor.MotorSettings;
 
 public class Intake1Hardware {
     public final DcMotorEx            intakeMotor;
+    public final DcMotorEx            augerMotor;
     public final ServoSSR             intakeServo;
     public final ServoSSR             pinkServo;
     public final ServoSSR             blueServo;
@@ -19,9 +20,10 @@ public class Intake1Hardware {
     public final DcMotorEx            launchMotorLeft;
     public final DcMotorEx            launchMotorRight;
 
-    public Intake1Hardware(DcMotorEx intakeMotor, ServoSSR intakeServo, ServoSSR pinkServo, ServoSSR blueServo,
+    public Intake1Hardware(DcMotorEx intakeMotor, DcMotorEx augerMotor, ServoSSR intakeServo, ServoSSR pinkServo, ServoSSR blueServo,
                            ServoSSR greenServo, DcMotorEx launchMotorLeft, DcMotorEx launchMotorRight) {
         this.intakeMotor = intakeMotor;
+        this.augerMotor = augerMotor;
         this.intakeServo = intakeServo;
         this.pinkServo   = pinkServo;
         this.blueServo   = blueServo;
@@ -42,11 +44,13 @@ public class Intake1Hardware {
 //beans
     public static Intake1Hardware makeDefault(HardwareMap hardwareMap)  {
         MotorSettings intakeMotorSettings = new MotorSettings(MotorSettings.Number.ZERO_B, DcMotorEx.Direction.FORWARD, DcMotorEx.ZeroPowerBehavior.BRAKE, DcMotorEx.RunMode.RUN_USING_ENCODER, 1);
+        MotorSettings augerMotorSettings = new MotorSettings(MotorSettings.Number.THREE_B, DcMotorEx.Direction.REVERSE, DcMotorEx.ZeroPowerBehavior.BRAKE, DcMotorEx.RunMode.RUN_USING_ENCODER, 1);
         MotorSettings launchMotorLeftSettings = new MotorSettings(MotorSettings.Number.ONE_B, DcMotorEx.Direction.FORWARD, DcMotorEx.ZeroPowerBehavior.FLOAT, DcMotorEx.RunMode.RUN_USING_ENCODER, 1);
         MotorSettings launchMotorRightSettings = new MotorSettings(MotorSettings.Number.TWO_B, DcMotorEx.Direction.REVERSE, DcMotorEx.ZeroPowerBehavior.FLOAT, DcMotorEx.RunMode.RUN_USING_ENCODER, 1);
 
         return new Intake1Hardware(
                 intakeMotorSettings.makeExMotor(hardwareMap),
+                augerMotorSettings.makeExMotor(hardwareMap),
                 new ServoSSR(hardwareMap.get(Servo.class,"servo0")), // intakeServo
                 new ServoSSR(hardwareMap.get(Servo.class,"servo1")), // pink servo
                 new ServoSSR(hardwareMap.get(Servo.class,"servo2")),

@@ -33,6 +33,8 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     protected HeaderAimer headerAimer;      // LK New Test
 
     public int launchRPM;
+    public boolean autoRPM = false;
+    public boolean launchOff = false;
 
     public Artifacts artifacts;
     protected ArtifactDetectionPipeline artifactPipeline;
@@ -101,6 +103,13 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         return (int) ((launchMotorVelocity/Intake1Settings.ticksPerRevolution)*60);
     }
 
+    public void setLaunchMotors(int launchRPM) {
+        this.launchRPM = launchRPM;
+        launchOff = launchRPM == 0;
+        getHardware().launchMotorLeft.setVelocity(launchRPM / 60.0 * Intake1Settings.ticksPerRevolution);
+        getHardware().launchMotorRight.setVelocity(launchRPM / 60.0 * Intake1Settings.ticksPerRevolution);
+    }
+
     public void setLaunchRPM (int launchRPM) {
         this.launchRPM = launchRPM;
     }
@@ -110,6 +119,11 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     }
 
     public boolean launchRPMInTolerance() {
+        //TODO: Improve this to disallow overspeed and account for speed lower than setting
+//        int under = 100;  // expected undershoot
+//        int target = launchRPM - under;  // adjusted target speed accounting for undershoot
+//        int diff = Math.abs(getCurrentLaunchMotorRPM() - target);  // difference between actual and target
+//        return diff <= Intake1Settings.launchRPMTolerance;
         return ((getHardware().launchMotorLeft.getVelocity() * 60) / Intake1Settings.ticksPerRevolution) >= (this.launchRPM - Intake1Settings.launchRPMTolerance);
     }
 
@@ -253,6 +267,9 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     @Override
     public void onRun(Intake1Control control) {
         spinnerSliderPower = 0.0; // control.strafePower;
+        if (autoRPM && !launchOff) {
+            setLaunchMotors((int)calcSpinnerRPM());
+        }
     }
 
     @Override
@@ -316,6 +333,11 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 
     public static double interpolate(double x, double x1, double x2, double y1, double y2) {
         return y1 + (x-x1)*(y2-y1)/(x2-x1);
+    }
+
+    public void toggleAutoRPM() {
+        autoRPM = !autoRPM;
+        if (autoRPM) launchOff = false;
     }
 
 }

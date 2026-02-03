@@ -179,6 +179,8 @@ public class Intake1Tasks {
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().autoFarLaunchMotorVelocityStart);
         });
         startAutoFarLaunch.addStep(() -> intake.setLaunchRPM((int) Intake1Settings.autoFarLaunchMotorRPM));
+        //%%%
+        //startAutoFarLaunch.addStep(() -> intake.setLaunchMotors((int) Intake1Settings.autoFarLaunchMotorRPM));
         startAutoFarLaunch.addTimedStep(() -> {}, intake::launchRPMInTolerance, 3000);
 
         //    start Launch
@@ -196,6 +198,8 @@ public class Intake1Tasks {
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().farLaunchMotorVelocityStart);
         });
         startFarLaunch.addStep(() -> intake.setLaunchRPM((int) Intake1Settings.farLaunchMotorRPM));
+        //%%%
+        //startFarLaunch.addStep(() -> intake.setLaunchMotors((int) Intake1Settings.farLaunchMotorRPM));
         startFarLaunch.addTimedStep(() -> {}, intake::launchRPMInTolerance, 3000);
 
         startGoalLaunch.autoStart = false;
@@ -212,6 +216,8 @@ public class Intake1Tasks {
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().goalLaunchMotorVelocityStart);
         });
         startGoalLaunch.addStep(() -> intake.setLaunchRPM((int) Intake1Settings.goalLaunchMotorRPM));
+        //%%%
+        //startGoalLaunch.addStep(() -> intake.setLaunchMotors((int) Intake1Settings.goalLaunchMotorRPM));
         startGoalLaunch.addTimedStep(() -> {}, intake::launchRPMInTolerance, 3000);
 
         startThreeLaunch.autoStart = false;
@@ -228,6 +234,8 @@ public class Intake1Tasks {
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().threeLaunchMotorVelocityStart);
         });
         startThreeLaunch.addStep(() -> intake.setLaunchRPM((int) Intake1Settings.threeLaunchMotorRPM));
+        //%%%
+        //startThreeLaunch.addStep(() -> intake.setLaunchMotors((int) Intake1Settings.threeLaunchMotorRPM));
         startThreeLaunch.addTimedStep(() -> {}, intake::launchRPMInTolerance, 3000);
 
 
@@ -236,21 +244,29 @@ public class Intake1Tasks {
             intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().aLaunchMotorVelocityStart);
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().aLaunchMotorVelocityStart);
         });
+        //%%%
+        //startALaunch.addStep(() -> intake.setLaunchMotors((int) Intake1Settings.aLaunchMotorRPM));
         startBLaunch.autoStart = false;
         startBLaunch.addStep(() -> {
             intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().bLaunchMotorVelocityStart);
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().bLaunchMotorVelocityStart);
         });
+        //%%%
+        //startBLaunch.addStep(() -> intake.setLaunchMotors((int) Intake1Settings.bLaunchMotorRPM));
         startYLaunch.autoStart = false;
         startYLaunch.addStep(() -> {
             intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().yLaunchMotorVelocityStart);
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().yLaunchMotorVelocityStart);
         });
+        //%%%
+        //startYLaunch.addStep(() -> intake.setLaunchMotors((int) Intake1Settings.yLaunchMotorRPM));
         startXLaunch.autoStart = false;
         startXLaunch.addStep(() -> {
             intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().xLaunchMotorVelocityStart);
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().xLaunchMotorVelocityStart);
         });
+        //%%%
+        //startXLaunch.addStep(() -> intake.setLaunchMotors((int) Intake1Settings.xLaunchMotorRPM));
 
         //     stop launch
         stopLaunch.autoStart = false;
@@ -258,6 +274,8 @@ public class Intake1Tasks {
             intake.getHardware().launchMotorLeft.setVelocity(intake.getSettings().launchMotorVelocityStop);
             intake.getHardware().launchMotorRight.setVelocity(intake.getSettings().launchMotorVelocityStop);
         });
+        //%%%
+        //stopLaunch.addStep(() -> intake.setLaunchMotors((int) intake.getSettings().launchMotorVelocityStop));
 
         //     viewObelisk
         viewObelisk.autoStart = false;

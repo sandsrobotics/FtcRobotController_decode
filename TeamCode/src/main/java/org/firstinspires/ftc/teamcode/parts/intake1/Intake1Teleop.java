@@ -245,6 +245,9 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
                     parent.limeLight.acceptableStdDev = new Vector3(2,2,2);
                     parent.limeLight.setSizeOfBuffer(25);
                 }
+                if (buttonMgr.getState(1, Buttons.right_stick_button, State.wasTapped)) {
+                    parent.toggleAutoRPM();
+                }
             }
         }
     }

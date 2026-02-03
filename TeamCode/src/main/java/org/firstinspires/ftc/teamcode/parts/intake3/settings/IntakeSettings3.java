@@ -31,7 +31,7 @@ public class IntakeSettings3 {
     public static int launchServoSweepTime = 400;
     public static int lockServoSweepTime = 1500;
     public static int launchRPMTolerance = 100;
-    public static int launchRPMToleranceTime = 4000;
+    public static int launchRPMToleranceTime = 5000;
     public static final Map<String, LaunchData> launchPosiMap = new HashMap<String, LaunchData>();
     public static PIDFCoefficients spinnerPID = new PIDFCoefficients(100,0,0,12.4);
     public static int launchRPM = 3150; // for teleop tests

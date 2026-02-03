@@ -29,7 +29,11 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
         Vector3 aprilTag = transformFunc.apply(new Vector3(38.879, -24.293, 168));
         Vector3 parkingPosition = transformFunc.apply(new Vector3(38.879, -24.293, 168));
 
-        IntakeSettings3.LaunchData shootLaunchData = new IntakeSettings3.LaunchData(3400, transformFunc.apply(new Vector3(52.8, -13, -154.5 )));  //Z: 153.4 155.40
+        IntakeSettings3.LaunchData shootLaunchData = new IntakeSettings3.LaunchData
+        (
+                3300,
+                transformFunc.apply(new Vector3(52.8, -13, -156 ))  //Z: 153.4 155.40
+        );
         Vector3 blueSpikeReady1 = transformFunc.apply(new Vector3(-12,-28,-90));
         Vector3 blueSpike1 = transformFunc.apply(new Vector3(-12,-53,-90));
         Vector3 blueSpikeReady2 = transformFunc.apply(new Vector3(13,-28,-90));
@@ -76,7 +80,7 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
             MoveAndLaunch(autoTasks, shootLaunchData);
         }
 
-        // Spike 1
+        // Spike 3
         if(runSpikeCount >= 3) {
             autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
             positionSolver.addMoveToTaskEx(blueSpikeReady1, autoTasks);
@@ -102,16 +106,18 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
     private void MoveAndLaunch(TimedTask autoTasks, IntakeSettings3.LaunchData launchData, Boolean rejectExtraArtifacts) {
         int RPM = launchData.getRPM();
         Vector3 launchPos = launchData.getPosition();
-        if(rejectExtraArtifacts) autoTasks.addDelay(750); // tjk to let balls all get in
+        if(rejectExtraArtifacts) {
+            autoTasks.addDelay(1000); // tjk to let balls all get in
+        }
         positionSolver.addMoveToTaskExNoWait(launchPos, autoTasks);
-        autoTasks.addStep(() -> intake.setLaunchRPM(RPM));
+//        autoTasks.addStep(() -> intake.setLaunchRPM(RPM));
 
         // Reject extra artifacts
         if (rejectExtraArtifacts) {
             autoTasks.addTimedStep(
                     () -> intake.setIntakeRPM(-IntakeSettings3.intakeRPM),
                     () -> positionSolver.isDone(),
-                    1500
+                    3000
             );
         }
 

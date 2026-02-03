@@ -129,9 +129,11 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
 
         // RIGHT TRIGGER - Color-ordered launch (auto-starts launcher)
         if (buttonMgr.getState(2, Buttons.right_trigger, State.wasPressed)) {
+//            parent.setIntakeRPM(0);
             parent.computeLaunchOrderAndLaunchBlocking(
                     parent.limeLight.getClassificationPattern()
             );
+//            parent.setIntakeRPM(IntakeSettings3.intakeRPM);
             parent.getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
         }
 

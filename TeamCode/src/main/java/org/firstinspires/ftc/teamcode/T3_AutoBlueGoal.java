@@ -102,7 +102,7 @@ public class T3_AutoBlueGoal extends T3_AutoBase {
         Vector3 launchPos = launchData.getPosition();
         autoTasks.addDelay(750); // tjk to let balls all get in
         positionSolver.addMoveToTaskExNoWait(launchPos, autoTasks);
-        autoTasks.addStep(() -> intake.setLaunchRPM(RPM));
+        //autoTasks.addStep(() -> intake.setLaunchRPM(RPM));
 
         // Reject extra artifacts
         if (rejectExtraArtifacts) {

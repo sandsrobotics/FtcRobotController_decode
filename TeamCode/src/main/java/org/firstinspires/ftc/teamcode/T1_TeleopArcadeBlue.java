@@ -99,11 +99,13 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
             telemetry.update();
             //todo: What to do if it doesn't initialize?
         }
-        try {
-            odo.setPosition(DecodeSettings.getRobotPosition());
-        } catch (Exception e) {
-            telemetry.addLine("Exception while odo.setPosition; Ignoring");
-            telemetry.update();
+        if (DecodeSettings.odoFirstRun) {
+            try {
+                odo.setPosition(DecodeSettings.getRobotPosition());
+            } catch (Exception e) {
+                telemetry.addLine("Exception while odo.setPosition; Ignoring");
+                telemetry.update();
+            }
         }
 
 
@@ -151,6 +153,7 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         Vector3 tempPosition = DecodeSettings.getRobotPosition();
         if (tempPosition.X == 0.0 && tempPosition.Y == 0.0 && tempPosition.Z == 0.0)  {
             DecodeSettings.setRobotPosition(fieldStartPos);
+            DecodeSettings.odoFirstRun = true;
         }
         DecodeSettings.lkTestMode1 = true;  // This enables "headingSolver".
     }

@@ -25,6 +25,7 @@ public class T1_TeleopArcadeRed extends T1_TeleopArcadeBlue {
         Vector3 tempPosition = DecodeSettings.getRobotPosition();
         if (tempPosition.X == 0.0 && tempPosition.Y == 0.0 && tempPosition.Z == 0.0)  {
             DecodeSettings.setRobotPosition(fieldStartPos);
+            DecodeSettings.odoFirstRun = true;
         }
         DecodeSettings.lkTestMode1 = true;
     }

@@ -129,6 +129,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
             telemetry.addLine("Exception while odo.setPosition; Ignoring");
             telemetry.update();
         }
+        DecodeSettings.odoFirstRun = false;
 
         while (!isStarted()) {
             robot.buttonMgr.runLoop();

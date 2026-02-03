@@ -46,6 +46,7 @@ public class DecodeSettings {
    // --
 
    public static boolean autonomousDebugMode = false;
+   public static boolean odoFirstRun = true;
    public static boolean firstRun = true;
    static Vector3 controlGovernor = new Vector3(1,1,1);
    public static boolean isDemoMode = false;

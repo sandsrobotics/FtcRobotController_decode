@@ -24,19 +24,29 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         super(parent, "limelight");
     }
 
+    // public variables for configuration
+    int sizeOfBuffer = 50;                           // number of transforms for averaging & standard deviation
+    public double acceptableTx = 17.5;               // acceptable Tx (left/right) in degrees; edges less accurate
+    public Vector3 acceptableStdDev = new Vector3(1,1,1);  // Std Dev in x inches, y inches, z degrees
+    public long manualIndicatorTimeout = 5000;       // ms to wait before turning off LED
+    public long automaticIndicatorTimeout = 500;     // ms to wait before turning off LED
+    public boolean automaticTransform = false;       // apply the transform automatically? Otherwise manual
+    public String ledServoName = "servo5B";          // name of the servo for the LED indicator
+
+    // internal variables
     protected PositionTracker positionTracker;
     final Vector3 zero = new Vector3(0,0,0);
     int bufferPointer = 0;
     boolean transformValid = false;                  // Flips to true once buffer has filled
     public boolean stdDevValid = false;               // True when the standard deviation is acceptable
-    Vector3[] transformBuffer = new Vector3[50];     // Holds a buffer of transforms for smoothing
+    Vector3[] transformBuffer = new Vector3[sizeOfBuffer];     // Holds a buffer of transforms for smoothing
     Vector3 llSmoothTransform = new Vector3();       // Holds averaged transform
-    Vector3 llStandardDeviation = new Vector3();     // Holds standard deviation of bugger
+    Vector3 llStandardDeviation = new Vector3();     // Holds standard deviation of buffer
     public Vector3 llSavedTransform = new Vector3(); // Holds a transform once requested by driver
     Vector3 llLastValidTransform = new Vector3();    // Holds the last valid transform
     double llLastValidTransformTime;
     public Vector3 llFusedPosition = new Vector3();  // Holds a transformed position
-    Servo led;
+    Servo ledIndicator;
 
     // classificationId Defaults to 21.
     // Valid values are 21(GPP), 22(PGP), 23(PPG).
@@ -95,7 +105,8 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         limelight.pipelineSwitch(0);
         parent.opMode.telemetry.setMsTransmissionInterval(11);
         limelight.start();
-        led = parent.opMode.hardwareMap.get(Servo.class,"servo5B");
+        if (ledServoName != null && !ledServoName.isEmpty())
+            ledIndicator = parent.opMode.hardwareMap.get(Servo.class, ledServoName);
     }
 
     @Override
@@ -108,9 +119,14 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
 
     void positionTransformLoop (LLResult llResult) {
 
-        final double acceptableTx = 17.5;
-        final Vector3 acceptableStdDev = new Vector3(1,1,1);
         stdDevValid = false;
+
+        // Clear the LED indicator if timeout has passed
+        if (llLastValidTransformTime != 0 && System.currentTimeMillis()-llLastValidTransformTime >
+                (automaticTransform ? automaticIndicatorTimeout : manualIndicatorTimeout)) {
+            llLastValidTransformTime = 0;
+            setLedIndicator(rgbIndicatorColor.Off);
+        }
 
         // Calculate the fused position using the odo position and saved transform
         Vector3 currentPos = positionTracker.getCurrentPosition();
@@ -118,12 +134,6 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             llFusedPosition = llSavedTransform.transformPosition(currentPos);
             DecodeSettings.storeFusedPosition(llFusedPosition);
             parent.opMode.telemetry.addData("Fused", llFusedPosition.toString());
-        }
-
-        if (llLastValidTransformTime != 0 &&
-                System.currentTimeMillis()-llLastValidTransformTime > 5000) {
-            llLastValidTransformTime = 0;
-            setLed(rgbIndicatorColor.Off);
         }
 
         if (llResult != null && llResult.isValid()) {
@@ -144,23 +154,23 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             parent.opMode.telemetry.addData("LLPOS", llPosition.toString());
 
             // Ignore zero position such as when viewing the obelisk (or other reasons?)
-            if (llPosition.isEqualTo(zero)) return;
+            if (llPosition.isEqualTo(zero)) {finalTelemetry(); return;}
 
             // Don't use the position if the offset is unacceptable.
             // For now, this is based on Tx (left/right), but could add other parameters
-            if (Math.abs(llOffset.X) > acceptableTx) return;
+            if (Math.abs(llOffset.X) > acceptableTx) {finalTelemetry(); return;}
 
             // Calculate a transformation Vector3 for rotating the odometry position to the
             // Limelight position. This is a "transformation of coordinates" to rotate
             // xy-Cartesian positions. The odometry position will be rotated by this position
             // to match the Limelight position.
-            if (currentPos == null) return;
+            if (currentPos == null) {finalTelemetry(); return;}
             Vector3 llTransform = currentPos.getOffset(llPosition);
 
             // Add that transform to the buffer array for averaging (to smooth out noisy data)
             // and to calculate a standard deviation to determine if the buffer is good/stable.
             addTransformToArray(llTransform);
-            if (!transformValid) return;  // if the buffer isn't filled yet, leave
+            if (!transformValid) {finalTelemetry(); return;}  // if the buffer isn't filled yet, leave
             llSmoothTransform = getAverageTransform(transformBuffer);
             llStandardDeviation = getStandardDeviation(llSmoothTransform, transformBuffer);
 
@@ -172,28 +182,62 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             if (stdDevValid) {
                 llLastValidTransform = llSmoothTransform.copy();
                 llLastValidTransformTime = System.currentTimeMillis();
-                setLed(rgbIndicatorColor.Green);
+                if (automaticTransform) {
+                    setLedIndicator(rgbIndicatorColor.Blue);
+                    applyTransform();
+                }
+                else {
+                    setLedIndicator(rgbIndicatorColor.Green);
+                }
             }
 
-            parent.opMode.telemetry.addData("Trans", llSavedTransform.toString());
-            parent.opMode.telemetry.addData("LastV", llLastValidTransform.toString());
+            finalTelemetry();
 
+        }
+        else {
+            parent.opMode.telemetry.addData("LLPOS", "n/a");
+            finalTelemetry();
         }
     }
 
-    public void setLed(rgbIndicatorColor color) {
-        led.setPosition(color.color);
+    void finalTelemetry () {
+        parent.opMode.telemetry.addData("Accpt", acceptableStdDev.toString());
+        parent.opMode.telemetry.addData("StDev", llStandardDeviation.toString());
+        parent.opMode.telemetry.addData("Trans", llSavedTransform.toString());
+        parent.opMode.telemetry.addData("LastV", llLastValidTransform.toString());
+    }
+
+    void setLedIndicator(rgbIndicatorColor color) {
+        if (ledIndicator != null) ledIndicator.setPosition(color.color);
+    }
+
+    public void toggleAuto() {
+        automaticTransform = !automaticTransform;
+    }
+    public void setAuto(boolean auto) {
+        automaticTransform = auto;
+    }
+
+    public void setSizeOfBuffer(int size) {
+        if (size < 2 || size > 100) return;
+        sizeOfBuffer = size;
+        transformBuffer = new Vector3[sizeOfBuffer];
+        bufferPointer = 0;
+        transformValid = false;
     }
 
     public void applyTransform() {
         llSavedTransform = llLastValidTransform.copy();
-        llLastValidTransformTime = 0;
-        setLed(rgbIndicatorColor.Off);
+        positionTracker.setOverrideTransform(llSavedTransform);
+        if (!automaticTransform) {
+            setLedIndicator(rgbIndicatorColor.Off);
+            llLastValidTransformTime = 0;
+        }
     }
 
-    public void applyTransformIfCurrent() {
-        if (stdDevValid) llSavedTransform = llLastValidTransform.copy();
-    }
+//    public void applyTransformIfCurrent() {
+//        if (stdDevValid) llSavedTransform = llLastValidTransform.copy();
+//    }
 
     public Vector3 getFusedPosition() {
         return llFusedPosition;

@@ -7,6 +7,7 @@ import org.firstinspires.ftc.teamcode.lib.ButtonMgr.Buttons;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.State;
 
 import om.self.ezftc.core.part.LoopedPartImpl;
+import om.self.ezftc.utils.Vector3;
 
 public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings, ObjectUtils.Null> {
     private Intake1TeleopSettings settings;
@@ -231,7 +232,18 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
             if (DecodeSettings.lkTestMode1 || DecodeSettings.lkTestMode2) {
                 if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
                     parent.limeLight.applyTransform();
-                    parent.positionTracker.setOverrideTransform(parent.limeLight.llSavedTransform);
+//                    parent.positionTracker.setOverrideTransform(parent.limeLight.llSavedTransform);
+                }
+                if (buttonMgr.getState(1, Buttons.x, State.wasDoubleTapped)) {
+                    parent.limeLight.toggleAuto();
+                }
+                if (buttonMgr.getState(1, Buttons.left_bumper, State.wasDoubleTapped)) {
+                    parent.limeLight.acceptableStdDev = new Vector3(1,1,1);
+                    parent.limeLight.setSizeOfBuffer(50);
+                }
+                if (buttonMgr.getState(1, Buttons.right_bumper, State.wasDoubleTapped)) {
+                    parent.limeLight.acceptableStdDev = new Vector3(2,2,2);
+                    parent.limeLight.setSizeOfBuffer(25);
                 }
             }
         }

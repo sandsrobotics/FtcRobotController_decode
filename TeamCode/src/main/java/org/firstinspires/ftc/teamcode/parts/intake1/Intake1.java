@@ -297,9 +297,9 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 
     // LK demo additions
 
-    public static final double nearest = 48;  // 1 tile diagonally
-    public static final double farthest = 140;
-    public static final double spinNear = 1500;
+    public static final double nearest = 64;  // 1 tile diagonally
+    public static final double farthest = 152;
+    public static final double spinNear = 2500;
     public static final double spinFar = 3300;
 //    public static Vector3 storedTarget = new Vector3();
     public Vector3 storedTarget = DecodeSettings.targetBlue;

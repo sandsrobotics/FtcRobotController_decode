@@ -29,7 +29,7 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline {
      * The core values which define the location and size of the sample regions
      */
     static final double leftTagLeftTopLeft = 50;
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0, 300);
+    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(100, 300);
     static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(550, 400);
     static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(980, 300); // was x=1080
     static final int tpREGION_WIDTH = 200;

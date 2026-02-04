@@ -12,7 +12,7 @@ import om.self.ezftc.utils.Vector3;
 @Config
 public class IntakeSettings3 {
     public static  double launchServo0Launch = 0.441; //.367
-    public static  double launchServo0Rest = 0.637; //0.654 - ground, Qualifier - 0.62
+    public static  double launchServo0Rest = 0.627; //0.654 - ground, Qualifier - 0.62
     public static  double launchServo1Launch = 0.54;
     public static  double launchServo1Rest = 0.35; //.324 - ground, Qualifier - 0.35
     public static  double launchServo2Launch = 0.45; //.5

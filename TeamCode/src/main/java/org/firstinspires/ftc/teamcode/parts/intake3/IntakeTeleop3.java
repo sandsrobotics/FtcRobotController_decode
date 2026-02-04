@@ -200,5 +200,23 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
 //            parent.launchData = IntakeSettings3.launchPosiMap.get("bluefartriangle");
 //            parent.tasks.moveAndLaunch.restart();
 //        }
+
+        //TEST CODE BEGIN
+
+        if (buttonMgr.getState(1, Buttons.start, State.isPressed) &&
+                buttonMgr.getState(1, Buttons.left_trigger, State.wasTapped)) {
+            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
+            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
+            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
+        }
+
+        if (buttonMgr.getState(1, Buttons.start, State.isPressed) &&
+                buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
+            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
+            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
+            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
+        }
+
+        //TEST CODE END
     }
 }

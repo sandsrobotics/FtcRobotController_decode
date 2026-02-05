@@ -42,7 +42,6 @@ public class T3_Teleop extends LinearOpMode {
     Pinpoint odo;
     Artifacts artifacts;
     LimeLight limelight;
-    private boolean isRedAlliance = false;
 
     public void initTeleop()
     {
@@ -97,23 +96,20 @@ public class T3_Teleop extends LinearOpMode {
 
         while (!isStarted()) {
             robot.buttonMgr.runLoop();
-//            led.setMiddleGroup2(3); //set to purple
             telemetry.addData("position", odo.getPosition());
             telemetry.addData ("Press Red or Blue button to select alliance","");
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
-                isRedAlliance = false;
-                IntakeSettings3.isRedSide = false;
+                IntakeSettings3.isRedSide = false;  // Changed from isRedAlliance
             }
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.b, ButtonMgr.State.wasTapped)) {
-                isRedAlliance = true;
-                IntakeSettings3.isRedSide = true;
+                IntakeSettings3.isRedSide = true;   // Changed from isRedAlliance
             }
-            if (isRedAlliance) {
+            if (IntakeSettings3.isRedSide) {  // Changed from isRedAlliance
                 intake.getHardware().pixel.setPosition(Intake3.LEDColor.RED.getLedPwm());
             } else {
                 intake.getHardware().pixel.setPosition(Intake3.LEDColor.BLUE.getLedPwm());
             }
-            telemetry.addData("Alliance Color:",(isRedAlliance?"Red":"Blue"));
+            telemetry.addData("Alliance Color:",(IntakeSettings3.isRedSide?"Red":"Blue"));  // Changed from isRedAlliance
             telemetry.update();
         }
         robot.start();
@@ -129,13 +125,12 @@ public class T3_Teleop extends LinearOpMode {
             telemetry.addData("launch speed",intake.getCurrentLaunchRPM());
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();
-            if (isRedAlliance) {
+            if (IntakeSettings3.isRedSide) {  // Changed from isRedAlliance
                 intake.getHardware().pixel.setPosition(Intake3.LEDColor.RED.getLedPwm());
             } else {
                 intake.getHardware().pixel.setPosition(Intake3.LEDColor.BLUE.getLedPwm());
             }
-            telemetry.addData("Alliance Color:",(isRedAlliance?"Red":"Blue"));
-
+            telemetry.addData("Alliance Color:",(IntakeSettings3.isRedSide?"Red":"Blue"));  // Changed from isRedAlliance
         }
         robot.stop();
     }

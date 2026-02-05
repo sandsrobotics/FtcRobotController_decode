@@ -501,7 +501,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     @Override
     public void onStart() {
         getHardware().pixel.setPosition(LEDColor.OFF.getLedPwm());
-        getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Unlock);  // Unlock at start
+        getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock); // Lock at start
         drive.addController(Intake3.ControllerNames.alignController, this::alignToTarget);
     }
 

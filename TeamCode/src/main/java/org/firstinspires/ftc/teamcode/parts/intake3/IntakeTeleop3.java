@@ -10,6 +10,8 @@ import org.firstinspires.ftc.teamcode.lib.ButtonMgr.Buttons;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.State;
 import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
 import om.self.ezftc.core.part.LoopedPartImpl;
+import om.self.ezftc.utils.Vector3;
+
 
 //@Config
 public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, ObjectUtils.Null> {
@@ -109,6 +111,33 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             IntakeSettings3.launchArmed = false;
             parent.setLaunchRPM(0);
         }
+        // LEFT TRIGGER - Move to endgame position (hold to move, release to stop)
+        if (buttonMgr.getState(1, Buttons.left_trigger, State.isHeld)) {
+            // Select position based on alliance color
+            Vector3 endgamePosition = IntakeSettings3.isRedSide ?
+                    IntakeSettings3.endgameRed :
+                    IntakeSettings3.endgameBlue;
+
+            // Keep setting the target while held (position solver handles the rest)
+            parent.positionSolver.setNewTarget(endgamePosition, false);
+        } else if (buttonMgr.getState(1, Buttons.left_trigger, State.wasReleased)) {
+            // Stop when released
+            parent.positionSolver.stopSolver();
+        }
+
+        // AKHIL BACKUP
+//        if (buttonMgr.getState(1, Buttons.dpad_right, State.isHeld)) {
+//            // Select position based on alliance color
+//            Vector3 endgamePosition = IntakeSettings3.isRedSide ?
+//                    IntakeSettings3.endgameRed :
+//                    IntakeSettings3.endgameBlue;
+//
+//            // Keep setting the target while held (position solver handles the rest)
+//            parent.positionSolver.setNewTarget(endgamePosition, false);
+//        } else if (buttonMgr.getState(1, Buttons.dpad_right, State.wasReleased)) {
+//            // Stop when released
+//            parent.positionSolver.stopSolver();
+//        }
 
         // ============================================
         // CONTROLLER 2 (OPERATOR) CONTROLS
@@ -126,6 +155,14 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         } else {
             IntakeSettings3.alignTarget = false;
         }
+
+        // LEFT TRIGGER - Intake control (hold to turn off, release to turn on)
+        if (buttonMgr.getState(2, Buttons.left_trigger, State.isHeld)) {
+            parent.setIntakeRPM(0);  // Turn off while holding
+        } else if (buttonMgr.getState(2, Buttons.left_trigger, State.wasReleased)) {
+            parent.setIntakeRPM(IntakeSettings3.intakeRPM);  // Turn on when released
+        }
+
 
         // RIGHT TRIGGER - Color-ordered launch (auto-starts launcher)
         if (buttonMgr.getState(2, Buttons.right_trigger, State.wasPressed)) {
@@ -156,6 +193,8 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
 //            parent.launchData = IntakeSettings3.launchPosiMap.get("blueshoot1");
 //            parent.tasks.moveAndLaunch.restart();
 //        }
+
+
 
         // B BUTTON - Simultaneous launch (auto-starts launcher)
         if (buttonMgr.getState(2, Buttons.b, State.wasTapped)) {
@@ -203,19 +242,19 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
 
         //TEST CODE BEGIN
 
-        if (buttonMgr.getState(1, Buttons.start, State.isPressed) &&
-                buttonMgr.getState(1, Buttons.left_trigger, State.wasTapped)) {
-            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
-            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
-            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
-        }
-
-        if (buttonMgr.getState(1, Buttons.start, State.isPressed) &&
-                buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
-            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
-            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
-            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
-        }
+//        if (buttonMgr.getState(1, Buttons.start, State.isPressed) &&
+//                buttonMgr.getState(1, Buttons.left_trigger, State.wasTapped)) {
+//            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
+//            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
+//            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
+//        }
+//
+//        if (buttonMgr.getState(1, Buttons.start, State.isPressed) &&
+//                buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
+//            parent.getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
+//            parent.getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
+//            parent.getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
+//        }
 
         //TEST CODE END
     }

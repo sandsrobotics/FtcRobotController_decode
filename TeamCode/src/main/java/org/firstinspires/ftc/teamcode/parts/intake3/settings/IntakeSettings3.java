@@ -50,6 +50,10 @@ public class IntakeSettings3 {
 
     public static final Vector3 targetRed              = new Vector3(-70.5, 70.5, 0.0);
     public static final Vector3 targetBlue             = new Vector3(-70.5, -70.5, 0.0);
+    // Add these with your other position definitions (near targetRed, targetBlue, etc.)
+    // Add these with your other Vector3 positions
+    public static Vector3 endgameBlue = new Vector3(37.6, 33.8, 0); // End Game Blue ABHI: //X:36,Y:36
+    public static Vector3 endgameRed = new Vector3(37.6, -33.8, 0); // End Game Red ABHI: //X:36,Y:-36
     public static boolean isRedSide = false;
 
     public static final int redTagId = 24;

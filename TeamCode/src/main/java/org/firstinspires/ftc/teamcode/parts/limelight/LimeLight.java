@@ -38,13 +38,16 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     final Vector3 zero = new Vector3(0,0,0);
     int bufferPointer = 0;
     boolean transformValid = false;                  // Flips to true once buffer has filled
-    public boolean stdDevValid = false;               // True when the standard deviation is acceptable
+    public boolean stdDevValid = false;              // True when the standard deviation is acceptable
     Vector3[] transformBuffer = new Vector3[sizeOfBuffer];     // Holds a buffer of transforms for smoothing
+    Vector3 llPosition = new Vector3();              // Holds the robot position reported by the limelight
+    Vector3 llLastPosition = new Vector3();          // Holds the last valid position (to verify changing)
+    int llStuck = 0;                                 // Counter for determining if the position is changing
     Vector3 llSmoothTransform = new Vector3();       // Holds averaged transform
     Vector3 llStandardDeviation = new Vector3();     // Holds standard deviation of buffer
     public Vector3 llSavedTransform = new Vector3(); // Holds a transform once requested by driver
     Vector3 llLastValidTransform = new Vector3();    // Holds the last valid transform
-    double llLastValidTransformTime;
+    double llLastValidTransformTime;                 // Time for tracking LED behavior
     public Vector3 llFusedPosition = new Vector3();  // Holds a transformed position
     Servo ledIndicator;
 
@@ -139,10 +142,19 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         if (llResult != null && llResult.isValid()) {
 
             // Get the robot position as calculated by MegaTag in the LL
-            Vector3 llPosition = new Vector3(
+            llPosition = new Vector3(
                     llResult.getBotpose().getPosition().toUnit(DistanceUnit.INCH).x,
                     llResult.getBotpose().getPosition().toUnit(DistanceUnit.INCH).y,
                     llResult.getBotpose().getOrientation().getYaw(AngleUnit.DEGREES));
+
+            // Verify that the position is updating (not stuck) and abort if not;
+            // this deals with LL disconnects where the result stops updating
+            if (!isPositionChanging()) {
+                setLedIndicator(rgbIndicatorColor.Orange);
+                parent.opMode.telemetry.addData("LLPOS", "Stuck / Disconnect");
+                finalTelemetry();
+                return;
+            }
 
             // Calculate an "offset" for the tag in the image for the purpose of ignoring
             // positions that are less accurate (e.g., off to the edges of the video frame)
@@ -174,7 +186,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             llSmoothTransform = getAverageTransform(transformBuffer);
             llStandardDeviation = getStandardDeviation(llSmoothTransform, transformBuffer);
 
-            // If the standard deviation is acceptable, store the transform
+            // If the standard deviation is acceptable, store the transform (and apply it if auto is set)
             stdDevValid = llStandardDeviation != null &&
                     Math.abs(llStandardDeviation.X) <= acceptableStdDev.X &&
                     Math.abs(llStandardDeviation.Y) <= acceptableStdDev.Y &&
@@ -183,7 +195,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
                 llLastValidTransform = llSmoothTransform.copy();
                 llLastValidTransformTime = System.currentTimeMillis();
                 if (automaticTransform) {
-                    setLedIndicator(rgbIndicatorColor.Blue);
+                    setLedIndicator(rgbIndicatorColor.Violet);
                     applyTransform();
                 }
                 else {
@@ -195,12 +207,14 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
 
         }
         else {
+            // if there isn't a valid result, keep the telemetry consistent
             parent.opMode.telemetry.addData("LLPOS", "n/a");
             finalTelemetry();
         }
     }
 
     void finalTelemetry () {
+        // Used to keep the telemetry consistent each loop (not bouncing)
         parent.opMode.telemetry.addData("Accpt", acceptableStdDev.toString());
         parent.opMode.telemetry.addData("StDev", llStandardDeviation.toString());
         parent.opMode.telemetry.addData("Trans", llSavedTransform.toString());
@@ -208,10 +222,13 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     }
 
     void setLedIndicator(rgbIndicatorColor color) {
+        // Update the color of the LED if it exists
         if (ledIndicator != null) ledIndicator.setPosition(color.color);
     }
 
     public void toggleAuto() {
+        // With auto set, the last valid transform will always update the saved transform
+        // With auto not set (i.e., manual), the user must manually update the transform by calling applyTransform()
         automaticTransform = !automaticTransform;
     }
     public void setAuto(boolean auto) {
@@ -219,6 +236,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     }
 
     public void setSizeOfBuffer(int size) {
+        // Allows the user to change the size of the buffer array for averaging and standard deviation
         if (size < 2 || size > 100) return;
         sizeOfBuffer = size;
         transformBuffer = new Vector3[sizeOfBuffer];
@@ -227,6 +245,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     }
 
     public void applyTransform() {
+        // Updates the saved transform to the last valid transform
         llSavedTransform = llLastValidTransform.copy();
         positionTracker.setOverrideTransform(llSavedTransform);
         if (!automaticTransform) {
@@ -244,6 +263,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     }
     
     void addTransformToArray (Vector3 transform) {
+        // Adds transform to the buffer array and increments the pointer
         if (transform == null) return;  //never add null values to the array
         transformBuffer[bufferPointer] = transform;
         bufferPointer++;
@@ -266,7 +286,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     }
 
     Vector3 getStandardDeviation(Vector3 average, Vector3[] buffer) {
-        // calculate the standard deviation
+        // Calculate the standard deviation
         if (!transformValid || average == null) return null;
         double x = 0, y = 0, z = 0;
         for (Vector3 vector3 : buffer) {
@@ -279,6 +299,20 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         y = Math.sqrt(y / buffer.length);
         z = Math.sqrt(z / buffer.length);
         return new Vector3(x, y, z);
+    }
+
+    public boolean isPositionChanging() {
+        // Compares position to previous position to see if it's changing;
+        // consider it stuck after a certain number of repeats (currently 5)
+        if (llPosition.isEqualTo(llLastPosition)) {
+            llStuck++;  // rollover is not a danger
+            if (llStuck >= 5) return false;
+        }
+        else {
+            llStuck = 0;
+            llLastPosition = llPosition.copy();
+        }
+        return true;
     }
 
     public enum rgbIndicatorColor {

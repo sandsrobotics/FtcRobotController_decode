@@ -128,6 +128,11 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         headingSolver.setNewTarget(DecodeSettings.getTargetGoalPos(), true);
         headingSolver.stopSolver();
 
+        limelight.acceptableStdDev = new Vector3(2,2,2);
+        limelight.setSizeOfBuffer(25);
+        limelight.setAuto(true);
+        intake.storedTarget = DecodeSettings.getTargetGoalPos();
+
         while (opModeIsActive()) {
             startTime = System.currentTimeMillis();
             robot.run();

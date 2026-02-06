@@ -49,6 +49,9 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     Vector3 llLastValidTransform = new Vector3();    // Holds the last valid transform
     double llLastValidTransformTime;                 // Time for tracking LED behavior
     public Vector3 llFusedPosition = new Vector3();  // Holds a transformed position
+    double llTimeStamp = 0;                          //
+    double llLastTimeStamp = 0;                      //
+    boolean isStuck = false;                         //
     Servo ledIndicator;
 
     // classificationId Defaults to 21.
@@ -106,7 +109,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     public void onInit() {
         limelight = parent.opMode.hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
-        parent.opMode.telemetry.setMsTransmissionInterval(11);
+//        parent.opMode.telemetry.setMsTransmissionInterval(11);
         limelight.start();
         if (ledServoName != null && !ledServoName.isEmpty())
             ledIndicator = parent.opMode.hardwareMap.get(Servo.class, ledServoName);
@@ -139,6 +142,23 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             parent.opMode.telemetry.addData("Fused", llFusedPosition.toString());
         }
 
+        // Verify that the results are updating (not stuck) and abort if not;
+        // this deals with LL disconnects where the result stops updating
+        llTimeStamp = llResult.getTimestamp();
+        parent.opMode.telemetry.addData("LLTIME", llTimeStamp);
+        if (llTimeStamp != 0 && llTimeStamp == llLastTimeStamp) {
+            isStuck = true;
+            setLedIndicator(rgbIndicatorColor.Orange);
+            parent.opMode.telemetry.addData("LLPOS", "Stuck / Disconnect");
+            finalTelemetry();
+            return;
+        }
+        else if (isStuck) {
+            isStuck = false;
+            setLedIndicator(rgbIndicatorColor.Off);
+        }
+        llLastTimeStamp = llTimeStamp;
+
         if (llResult != null && llResult.isValid()) {
 
             // Get the robot position as calculated by MegaTag in the LL
@@ -147,14 +167,14 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
                     llResult.getBotpose().getPosition().toUnit(DistanceUnit.INCH).y,
                     llResult.getBotpose().getOrientation().getYaw(AngleUnit.DEGREES));
 
-            // Verify that the position is updating (not stuck) and abort if not;
-            // this deals with LL disconnects where the result stops updating
-            if (!isPositionChanging()) {
-                setLedIndicator(rgbIndicatorColor.Orange);
-                parent.opMode.telemetry.addData("LLPOS", "Stuck / Disconnect");
-                finalTelemetry();
-                return;
-            }
+//            // Verify that the position is updating (not stuck) and abort if not;
+//            // this deals with LL disconnects where the result stops updating
+//            if (!isPositionChanging()) {
+//                setLedIndicator(rgbIndicatorColor.Orange);
+//                parent.opMode.telemetry.addData("LLPOS", "Stuck / Disconnect");
+//                finalTelemetry();
+//                return;
+//            }
 
             // Calculate an "offset" for the tag in the image for the purpose of ignoring
             // positions that are less accurate (e.g., off to the edges of the video frame)
@@ -208,6 +228,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         }
         else {
             // if there isn't a valid result, keep the telemetry consistent
+//            parent.opMode.telemetry.addData("LLTIME", "n/a");
             parent.opMode.telemetry.addData("LLPOS", "n/a");
             finalTelemetry();
         }
@@ -301,19 +322,19 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         return new Vector3(x, y, z);
     }
 
-    public boolean isPositionChanging() {
-        // Compares position to previous position to see if it's changing;
-        // consider it stuck after a certain number of repeats (currently 5)
-        if (llPosition.isEqualTo(llLastPosition)) {
-            llStuck++;  // rollover is not a danger
-            if (llStuck >= 5) return false;
-        }
-        else {
-            llStuck = 0;
-            llLastPosition = llPosition.copy();
-        }
-        return true;
-    }
+//    public boolean isPositionChanging() {
+//        // Compares position to previous position to see if it's changing;
+//        // consider it stuck after a certain number of repeats (currently 5)
+//        if (llPosition.isEqualTo(llLastPosition) && !llPosition.isEqualTo(zero)) {
+//            llStuck++;  // rollover is not a danger
+//            if (llStuck >= 5) return false;
+//        }
+//        else {
+//            llStuck = 0;
+//            llLastPosition = llPosition.copy();
+//        }
+//        return true;
+//    }
 
     public enum rgbIndicatorColor {
         Off (0.0),

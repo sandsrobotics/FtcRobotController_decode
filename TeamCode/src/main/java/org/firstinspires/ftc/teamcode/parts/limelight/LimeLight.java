@@ -147,13 +147,17 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         llTimeStamp = llResult.getTimestamp();
         parent.opMode.telemetry.addData("LLTIME", llTimeStamp);
         if (llTimeStamp != 0 && llTimeStamp == llLastTimeStamp) {
-            isStuck = true;
-            setLedIndicator(rgbIndicatorColor.Orange);
-            parent.opMode.telemetry.addData("LLPOS", "Stuck / Disconnect");
-            finalTelemetry();
-            return;
+            llStuck++;
+            if (llStuck > 2) {
+                isStuck = true;
+                setLedIndicator(rgbIndicatorColor.Orange);
+                parent.opMode.telemetry.addData("LLPOS", "Stuck / Disconnect");
+                finalTelemetry();
+                return;
+            }
         }
         else if (isStuck) {
+            llStuck = 0;
             isStuck = false;
             setLedIndicator(rgbIndicatorColor.Off);
         }

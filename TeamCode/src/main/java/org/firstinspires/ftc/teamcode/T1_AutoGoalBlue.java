@@ -11,7 +11,7 @@ import om.self.ezftc.utils.Vector3;
 @Autonomous(name="14273.1 AutoGoalBlue", group="14273")
 public class T1_AutoGoalBlue  extends T1_AutoGoalRed {
 
-    Integer launchRPM = 2800; // TODO: Needs Tuning.
+    Integer launchRPM = 2500; // TODO: Needs Tuning.
 
     // Positions to travel in AutoFarBlue
     Vector3 p_targetGoal                 = new Vector3(-70.5, -70.5, 180);   // BlueGoal Position.

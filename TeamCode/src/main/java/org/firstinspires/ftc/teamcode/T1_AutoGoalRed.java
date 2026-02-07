@@ -13,7 +13,7 @@ import om.self.task.other.TimedTask;
 @Autonomous(name="14273.2 AutoGoalRed", group="14273")
 public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
-    Integer launchRPM = 2800; // TODO: Needs Tuning.
+    Integer launchRPM = 2500; // TODO: Needs Tuning.
 
     // Positions to travel in AutoGoalRed
     Vector3 p_targetGoal                 = new Vector3(-70.5, 70.5, 180);   // RedGoal Position.
@@ -61,24 +61,32 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
         autoTasks.addStep(() -> intake.tasks.startGoalLaunch.restart());   // TODO: Update startAutoGoalLaunch to use intake.launchRPM.
         autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
 
-//        // Move to Launch Position.
-//        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
-//        positionSolver.addMoveToTaskEx(p_LaunchPos, autoTasks);
-//
-        // Launch Pre-loaded Artifacts.
-        //      Determine LaunchOrder and Launch.
-//        autoTasks.addStep(() -> intake.computeLaunchOrderAndLaunch(DecodeSettings.getClassificationId()));
-//        autoTasks.addDelay(2500);
-        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
+        // Move to Launch Position.
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
         positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
-        autoTasks.addStep(() -> intake.tasks.pinkServoLaunch.restart());
+
+        // Launch Pre-loaded Artifacts.
+        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
+        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.restart());
+        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.isDone());
         autoTasks.addDelay(300);
-        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), autoTasks);
-        autoTasks.addStep(() -> intake.tasks.blueServoLaunch.restart());
-        autoTasks.addDelay(300);
-        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), autoTasks);
-        autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
-        autoTasks.addDelay(300);
+
+//        // Determine LaunchOrder and Launch
+//        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
+//        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
+//        autoTasks.addDelay(300);
+
+
+        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
+//        autoTasks.addStep(() -> intake.tasks.pinkServoLaunch.restart());
+//        autoTasks.addDelay(300);
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), autoTasks);
+//        autoTasks.addStep(() -> intake.tasks.blueServoLaunch.restart());
+//        autoTasks.addDelay(300);
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), autoTasks);
+//        autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
+//        autoTasks.addDelay(300);
 
         // Intake from Row1 and Launch.
         artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow1(), DecodeSettings.getIntakeArtifactRow1());
@@ -97,7 +105,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
     public void extraSettings() {
         DecodeSettings.isDemoMode = false;
         DecodeSettings.setAuto();
-        DecodeSettings.setAllianceBlue();
+        DecodeSettings.setAllianceRed();
 
         DecodeSettings.setCurrentOpMode("T1_AutoGoalRed");
         DecodeSettings.setTargetGoalPos(p_targetGoal);

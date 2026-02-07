@@ -162,6 +162,8 @@ public class Intake1Tasks {
         pinkBlueGreenServoLaunch.addStep(blueServoLaunch::isDone);
         pinkBlueGreenServoLaunch.addDelay(300);
         pinkBlueGreenServoLaunch.addStep(greenServoLaunch::restart);
+        pinkBlueGreenServoLaunch.addStep(greenServoLaunch::isDone);
+        pinkBlueGreenServoLaunch.addDelay(300);
 
         /*    Launch Tasks         */
         //    start Launch

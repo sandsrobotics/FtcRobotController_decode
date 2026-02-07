@@ -10,7 +10,7 @@ import om.self.ezftc.utils.Vector3;
 
 @TeleOp(name="14273 TeleArcadeRed", group="B14273")
 public class T1_TeleopArcadeRed extends T1_TeleopArcadeBlue {
-    protected Vector3 p_targetGoal  = new Vector3(-70.5, 70.5, 180);   // RedGoal Position.
+    protected Vector3 p_targetGoal  = new Vector3(-70.5, 60.5, 180);   // Y: 70.5 RedGoal Position.
     protected Vector3 fieldStartPos = new Vector3(64,16,180);
 
     @Override

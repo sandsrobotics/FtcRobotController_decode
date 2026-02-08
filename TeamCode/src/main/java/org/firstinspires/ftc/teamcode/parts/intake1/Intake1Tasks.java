@@ -10,6 +10,8 @@ public class Intake1Tasks {
     public final Group intakeTasksGroup;
     public final Group servoTasksGroup;
 
+    private TimedTask task;
+
     public final TimedTask intakeTask;
     public final TimedTask artifactIntakeStopTask;
     public final TimedTask outtakeTask;
@@ -17,6 +19,10 @@ public class Intake1Tasks {
     public final TimedTask blueServoLaunch;
     public final TimedTask greenServoLaunch;
     public final TimedTask allServoLaunch;
+    public final TimedTask pinkServoLaunchInTolerance;
+    public final TimedTask blueServoLaunchInTolerance;
+    public final TimedTask greenServoLaunchInTolerance;
+    public final TimedTask allServoLaunchInTolerance;
     public final TimedTask startAutoFarLaunch;
     public final TimedTask startFarLaunch;
     public final TimedTask startGoalLaunch;
@@ -61,6 +67,10 @@ public class Intake1Tasks {
         blueServoLaunch = new TimedTask(TaskNames.blueServoLaunch, intakeTasksGroup);
         greenServoLaunch = new TimedTask(TaskNames.greenServoLaunch, intakeTasksGroup);
         allServoLaunch = new TimedTask(TaskNames.allServoLaunch, intakeTasksGroup);
+        pinkServoLaunchInTolerance = new TimedTask("pink servo in tolerance", intakeTasksGroup);
+        blueServoLaunchInTolerance = new TimedTask("blue servo in tolerance", intakeTasksGroup);
+        greenServoLaunchInTolerance = new TimedTask("green servo in tolerance", intakeTasksGroup);
+        allServoLaunchInTolerance = new TimedTask("all servos in tolerance", intakeTasksGroup);
         pinkBlueGreenServoLaunch = new TimedTask(TaskNames.pinkBlueGreenLaunch, intakeTasksGroup);
         startAutoFarLaunch = new TimedTask(TaskNames.startAutoFarLaunch, intakeTasksGroup);
         startFarLaunch = new TimedTask(TaskNames.startFarLaunch, intakeTasksGroup);
@@ -152,6 +162,42 @@ public class Intake1Tasks {
         allServoLaunch.addStep(greenServoLaunch::isDone);
         allServoLaunch.addStep(blueServoLaunch::isDone);
         allServoLaunch.addStep(pinkServoLaunch::isDone);
+
+        /*    Servo Transfer Tasks IN TOLERANCE      */
+        //         pink
+        task = pinkServoLaunchInTolerance;
+        task.autoStart = false;
+        task.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);  // todo: pick appropriate time
+        task.addStep(() -> intake.getHardware().pinkServo.setPosition(Intake1Settings.servoPinkLaunch));
+        task.addStep(() -> intake.getHardware().pinkServo.isDone());
+        task.addStep(() -> intake.getHardware().pinkServo.setPosition(Intake1Settings.servoPinkDock));
+        task.addStep(() -> intake.getHardware().pinkServo.isDone());
+        //          blue
+        task = blueServoLaunchInTolerance;
+        task.autoStart = false;
+        task.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
+        task.addStep(() -> intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueLaunch));
+        task.addStep(() -> intake.getHardware().blueServo.isDone());
+        task.addStep(() -> intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueDock));
+        task.addStep(() -> intake.getHardware().blueServo.isDone());
+        //        green
+        task = greenServoLaunchInTolerance;
+        task.autoStart = false;
+        task.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
+        task.addStep(() -> intake.getHardware().greenServo.setPosition(Intake1Settings.servoGreenLaunch));
+        task.addStep(() -> intake.getHardware().greenServo.isDone());
+        task.addStep(() -> intake.getHardware().greenServo.setPosition(Intake1Settings.servoGreenDock));
+        task.addStep(() -> intake.getHardware().greenServo.isDone());
+        //        all
+        task = allServoLaunchInTolerance;
+        task.autoStart = false;
+        task.addStep(pinkServoLaunchInTolerance::restart);
+        task.addStep(pinkServoLaunchInTolerance::isDone);
+        task.addStep(blueServoLaunchInTolerance::restart);
+        task.addStep(blueServoLaunchInTolerance::isDone);
+        task.addStep(greenServoLaunchInTolerance::restart);
+        task.addStep(greenServoLaunchInTolerance::isDone);
+
 
         // pink, blue, green, with 300 delay.
         pinkBlueGreenServoLaunch.autoStart = false;

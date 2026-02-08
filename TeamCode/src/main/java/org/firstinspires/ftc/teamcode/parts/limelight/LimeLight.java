@@ -159,7 +159,12 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         else if (isStuck) {
             llStuck = 0;
             isStuck = false;
-            setLedIndicator(rgbIndicatorColor.Off);
+            ////setLedIndicator(rgbIndicatorColor.Off);
+            // The above was causing "disco lights" strobing because apparently the limelight on the
+            // real bot isn't updating as often as on the test bot?
+            // The following hack uses the led clear process above to delay turning off the LED.
+            llLastValidTransformTime = System.currentTimeMillis() + 350 -
+                    (automaticTransform ? automaticIndicatorTimeout : manualIndicatorTimeout);
         }
         llLastTimeStamp = llTimeStamp;
 

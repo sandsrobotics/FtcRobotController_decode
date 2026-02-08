@@ -127,6 +127,14 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         return ((getHardware().launchMotorLeft.getVelocity() * 60) / Intake1Settings.ticksPerRevolution) >= (this.launchRPM - Intake1Settings.launchRPMTolerance);
     }
 
+    public boolean launchRPMInToleranceV2() {
+        if (launchRPM == 0) return false;  // don't want to shoot if launcher speed is 0
+        int under = 100;  // expected undershoot
+        int target = launchRPM - under;  // adjusted target speed accounting for undershoot
+        int diff = Math.abs(getCurrentLaunchMotorRPM() - target);  // difference between actual and target
+        return diff <= Intake1Settings.launchRPMTolerance;
+    }
+
     // Based on GameClassificationId, compute Launch Order.
     public int[] computeLaunchOrder(Integer classificationId) {
 

@@ -121,28 +121,40 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
 
             /*      Launch Tasks          */
             if (buttonMgr.getState(2, Buttons.b, State.wasTapped)) {
-                parent.tasks.pinkServoLaunch.restart();
+//                parent.tasks.pinkServoLaunch.restart();
+                parent.tasks.pinkServoLaunchInTolerance.restart();
             }
             /*      Launch Tasks          */
             if (buttonMgr.getState(2, Buttons.y, State.wasTapped)) {
-                parent.tasks.blueServoLaunch.restart();
+//                parent.tasks.blueServoLaunch.restart();
+                parent.tasks.blueServoLaunchInTolerance.restart();
             }
             /*      Launch Tasks          */
             if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {
-                parent.tasks.greenServoLaunch.restart();
+//                parent.tasks.greenServoLaunch.restart();
+                parent.tasks.greenServoLaunchInTolerance.restart();
             }
             /*      Launch Tasks          */
             if (buttonMgr.getState(2, Buttons.a, State.wasTapped)) {
 //                parent.tasks.pinkBlueGreenServoLaunch.restart();
-                parent.tasks.allServoLaunch.restart();
+//                parent.tasks.allServoLaunch.restart();
+                parent.tasks.allServoLaunchInTolerance.restart();
             }
             /*      Launch ALL Servos Tasks          */
             if (buttonMgr.getState(2, Buttons.a, State.wasHeld)) {
                 parent.tasks.computeAndLaunchInOrder.restart();
             }
 
-            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasTapped)) {
-                parent.toggleAutoRPM();
+//            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasTapped)) {
+//                parent.toggleAutoRPM();
+//            }
+            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasPressed)) {
+                parent.autoRPM = true;
+                parent.launchOff = false;
+            }
+            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasReleased)) {
+                parent.autoRPM = false;
+                parent.setLaunchMotors(0);
             }
             if (buttonMgr.getState(2, Buttons.left_bumper, State.wasPressed)) {
                 parent.headingSolver.startSolver();

@@ -50,7 +50,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         );
     }
 
-    /**
+    /**  
      * Main alignment method
      */
     private void alignToTarget(DriveControl control) {
@@ -59,14 +59,38 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         if(IntakeSettings3.alignTarget) {
             if (limeLight.tv) {
                 boolean aligned = isAligned();
+                IntakeSettings3.isAligned = aligned;
 
                 if (!aligned) {
-                    turnPower = calculateTurnPower(limeLight.tx);
+                    turnPower = calculateTurnPower(adjustForDist(limeLight.tx));
                     control.power = control.power.addZ(turnPower / 3);
+                } else {
+                    control.power = control.power.withZ(0);
                 }
+            } else {
+                IntakeSettings3.isAligned = false;  // no target visible
             }
+        } else {
+            IntakeSettings3.isAligned = false;  //  alignment not active
         }
         displayTelemetry(turnPower);
+    }
+
+    /**
+     * // if Launching from tiny triangle half red or blue adjust tx to point to back corner of goal
+     * @param tx
+     * @return adjusted tx
+     */
+    private double adjustForDist(double tx) {
+        if (pt.getCurrentPosition().X > 40) { // position on tiny triangle half
+            if (IntakeSettings3.isRedSide) {
+                return tx + limelightFarXOffset; // adjust a bit right of april tag
+            } else {
+                return tx - limelightFarXOffset; // adjust a bit left of april tag
+            }
+        } else {
+            return tx;
+        }
     }
 
     public boolean isAligned() {
@@ -360,23 +384,6 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
             }
         }
     }
-    // Old Blocking Code, Remove this later.
-//    private void fireServoForIndexBlocking(int index) {
-//        waitForLauncherToleranceOrTimeout();
-//        getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Unlock);
-//
-//        switch (index) {
-//            case 0:
-//                getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Launch);
-//                break;
-//            case 1:
-//                getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
-//                break;
-//            case 2:
-//                getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
-//                break;
-//        }
-//    }
 
     private void resetServoByIndex(int index) {
         switch (index) {
@@ -424,7 +431,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         stopAllIntakeTasks();
         setLaunchRPM(0);
         setIntakeRPM(0);
-        getHardware().pixel.stop();
+//        getHardware().pixel.stop();
         getHardware().launchServo0.stop();
         getHardware().launchServo1.stop();
         getHardware().launchServo2.stop();
@@ -485,16 +492,23 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
             targetVector = getTargetVector(IntakeSettings3.targetBlue);
         }
         parent.opMode.telemetry.addData("Target Distance", targetVector.distance);
+
         // update launch RPM
         if (IntakeSettings3.launchArmed) {
             int launchRPM = (int) getSpinnerRPMfromDistance(targetVector.distance);
             setLaunchRPM(launchRPM);
             parent.opMode.telemetry.addData("Calc launch RPM", launchRPM);
         }
-//        if (launchRPM > 0 && launchRPMInTolerance()) {
-//            getHardware().pixel.setPosition(Intake3.LEDColor.VIOLET.getLedPwm());
+
+//        // Handle LED color
+//        if (IntakeSettings3.alignTarget && limeLight.tv && isAligned()) {
+//            // Show green when actively aligning and aligned
+//            getHardware().pixel.setPosition(LEDColor.GREEN.getLedPwm());
 //        } else {
-//            getHardware().pixel.setPosition(LEDColor.OFF.getLedPwm());
+//            // Show alliance color otherwise
+//            getHardware().pixel.setPosition(
+//                    IntakeSettings3.isRedSide ? LEDColor.RED.getLedPwm() : LEDColor.BLUE.getLedPwm()
+//            );
 //        }
     }
 

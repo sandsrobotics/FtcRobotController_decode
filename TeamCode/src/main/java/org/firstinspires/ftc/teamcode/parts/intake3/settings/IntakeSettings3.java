@@ -52,14 +52,31 @@ public class IntakeSettings3 {
     public static final Vector3 targetBlue             = new Vector3(-70.5, -70.5, 0.0);
     // Add these with your other position definitions (near targetRed, targetBlue, etc.)
     // Add these with your other Vector3 positions
+
+    // SHOOTING AUTOMATIONS ON CONTROLLER
     public static Vector3 endgameBlue = new Vector3(37.6, 33.8, 0); // End Game Blue ABHI: //X:36,Y:36
     public static Vector3 endgameRed = new Vector3(37.6, -33.8, 0); // End Game Red ABHI: //X:36,Y:-36
+
+    public static Vector3 shootingBlue = new Vector3(-26, -14, -128); // Shooting Pos Blue
+    public static Vector3 shootingRed = new Vector3(-26, 14, 128); // Shooting Pos Red
+
+
+    public static Vector3 shootingTriBlue = new Vector3(50.134, 8.027, -146.215); // Shooting Pos Blue
+    public static Vector3 shootingTriRed = new Vector3(50.134, -8.027, 146.215); // Shooting Pos Red
+
+
+    public static Vector3 shootingWallBlue = new Vector3(-57.064, -0.244, -89.097); // Shooting Pos Blue
+    public static Vector3 shootingWallRed = new Vector3(-57.064, 0.244, 89.097); // Shooting Pos Red
+
+    //
     public static boolean isRedSide = false;
+    public static double limelightFarXOffset = 2; // degrees to shift left on blue and right on red at tiny triangle
 
     public static final int redTagId = 24;
     public static final int blueTagId = 20;
     public static boolean launchArmed = false;
     public static boolean alignTarget = false;
+    public static boolean isAligned = false;
 
     // Alignment constants
     public static final double HEADING_TOLERANCE = 1.0;  // degrees

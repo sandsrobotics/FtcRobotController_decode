@@ -31,8 +31,8 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
 
         IntakeSettings3.LaunchData shootLaunchData = new IntakeSettings3.LaunchData
         (
-                3200,
-                transformFunc.apply(new Vector3(52.8, -13, -156 ))  //Z: 153.4 155.40
+                3345,
+                transformFunc.apply(new Vector3(57.642, -14.123, -160.948 ))  //Z: 153.4 155.40
         );
         Vector3 blueSpikeReady1 = transformFunc.apply(new Vector3(-12,-28,-90));
         Vector3 blueSpike1 = transformFunc.apply(new Vector3(-12,-53,-90));

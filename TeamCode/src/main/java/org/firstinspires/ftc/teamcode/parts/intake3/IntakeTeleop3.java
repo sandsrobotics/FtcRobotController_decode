@@ -111,7 +111,7 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             IntakeSettings3.launchArmed = false;
             parent.setLaunchRPM(0);
         }
-        // LEFT TRIGGER - Move to endgame position (hold to move, release to stop)
+        // LEFT TRIGGER- Move to endgame position (hold to move, release to stop)
         if (buttonMgr.getState(1, Buttons.left_trigger, State.isHeld)) {
             // Select position based on alliance color
             Vector3 endgamePosition = IntakeSettings3.isRedSide ?
@@ -124,6 +124,65 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             // Stop when released
             parent.positionSolver.stopSolver();
         }
+
+        // RIGHT TRIGGER- Move to SHOOTING position (hold to move, release to stop)
+        if (buttonMgr.getState(1, Buttons.right_trigger, State.isHeld)) {
+            // Select position based on alliance color
+            Vector3 endgamePosition = IntakeSettings3.isRedSide ?
+                    IntakeSettings3.shootingRed :
+                    IntakeSettings3.shootingBlue;
+
+            // Keep setting the target while held (position solver handles the rest)
+            parent.positionSolver.setNewTarget(endgamePosition, false);
+        } else if (buttonMgr.getState(1, Buttons.right_trigger, State.wasReleased)) {
+            // Stop when released
+            parent.positionSolver.stopSolver();
+        }
+
+        // LEFT BUMPER - Move to triangle SHOOTING position (hold to move, release to stop)
+        if (buttonMgr.getState(1, Buttons.left_bumper, State.isHeld)) {
+            // Select position based on alliance color
+            Vector3 endgamePosition = IntakeSettings3.isRedSide ?
+                    IntakeSettings3.shootingTriRed :
+                    IntakeSettings3.shootingTriBlue;
+
+            // Keep setting the target while held (position solver handles the rest)
+            parent.positionSolver.setNewTarget(endgamePosition, false);
+        } else if (buttonMgr.getState(1, Buttons.left_bumper, State.wasReleased)) {
+            // Stop when released
+            parent.positionSolver.stopSolver();
+        }
+
+        // RIGHT BUMPER - Move to wall SHOOTING position (hold to move, release to stop)
+        if (buttonMgr.getState(1, Buttons.right_bumper, State.isHeld)) {
+            // Select position based on alliance color
+            Vector3 endgamePosition = IntakeSettings3.isRedSide ?
+                    IntakeSettings3.shootingWallRed :
+                    IntakeSettings3.shootingWallBlue;
+
+            // Keep setting the target while held (position solver handles the rest)
+            parent.positionSolver.setNewTarget(endgamePosition, false);
+        } else if (buttonMgr.getState(1, Buttons.right_bumper, State.wasReleased)) {
+            // Stop when released
+            parent.positionSolver.stopSolver();
+        }
+
+        // INTAKE BY TRIGGERS (NOT GOOD)
+        // LEFT TRIGGER - TURN ON INTAKE
+        // RIGHT TRIGGER - REVERSE INTAKE
+        // Priority: Most recently pressed trigger wins
+//        if (buttonMgr.getState(1, Buttons.left_trigger, State.wasPressed)) {
+//            parent.setIntakeRPM(IntakeSettings3.intakeRPM);  // Left just pressed - forward
+//        } else if (buttonMgr.getState(1, Buttons.right_trigger, State.wasPressed)) {
+//            parent.setIntakeRPM(-IntakeSettings3.intakeRPM); // Right just pressed - reverse
+//        } else if (buttonMgr.getState(1, Buttons.left_trigger, State.isPressed)) {
+//            parent.setIntakeRPM(IntakeSettings3.intakeRPM);  // Left held - forward
+//        } else if (buttonMgr.getState(1, Buttons.right_trigger, State.isPressed)) {
+//            parent.setIntakeRPM(-IntakeSettings3.intakeRPM); // Right held - reverse
+//        } else {
+//            parent.setIntakeRPM(0);  // Neither pressed - stop
+//        }
+
 
         // AKHIL BACKUP
 //        if (buttonMgr.getState(1, Buttons.dpad_right, State.isHeld)) {
@@ -149,8 +208,7 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         }
 
         // LEFT BUMPER - Auto-align to April tag
-        if (buttonMgr.getState(2, Buttons.left_bumper, State.isHeld) ||
-                buttonMgr.getState(1, Buttons.left_bumper, State.isHeld)) {
+        if (buttonMgr.getState(2, Buttons.left_bumper, State.isHeld)) {
             IntakeSettings3.alignTarget = true;
         } else {
             IntakeSettings3.alignTarget = false;
@@ -162,6 +220,7 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         } else if (buttonMgr.getState(2, Buttons.left_trigger, State.wasReleased)) {
             parent.setIntakeRPM(IntakeSettings3.intakeRPM);  // Turn on when released
         }
+
 
 
         // RIGHT TRIGGER - Color-ordered launch (auto-starts launcher)

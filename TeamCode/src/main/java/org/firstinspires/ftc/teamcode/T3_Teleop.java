@@ -119,20 +119,26 @@ public class T3_Teleop extends LinearOpMode {
         while (opModeIsActive()) {
             start = System.currentTimeMillis();
             robot.run();
-//            telemetry.addData("position tracker", pt.getCurrentPosition());
+            // telemetry.addData("position tracker", pt.getCurrentPosition());
             telemetry.addData("time", System.currentTimeMillis() - start);
-//            telemetry.addData("Intake speed",intake.getHardware().intakeMotor.getVelocity());
+            // telemetry.addData("Intake speed",intake.getHardware().intakeMotor.getVelocity());
             telemetry.addData("launch speed",intake.getCurrentLaunchRPM());
             dashboard.sendTelemetryPacket(packet);
             telemetry.update();
-            if (IntakeSettings3.isRedSide) {  // Changed from isRedAlliance
-                intake.getHardware().pixel.setPosition(Intake3.LEDColor.RED.getLedPwm());
+
+            // LED LOGIC - Show green when aligned, alliance color otherwise
+            if (IntakeSettings3.isAligned) {
+                intake.getHardware().pixel.setPosition(Intake3.LEDColor.GREEN.getLedPwm());
             } else {
-                intake.getHardware().pixel.setPosition(Intake3.LEDColor.BLUE.getLedPwm());
+                if (IntakeSettings3.isRedSide) {
+                    intake.getHardware().pixel.setPosition(Intake3.LEDColor.RED.getLedPwm());
+                } else {
+                    intake.getHardware().pixel.setPosition(Intake3.LEDColor.BLUE.getLedPwm());
+                }
             }
-            telemetry.addData("Alliance Color:",(IntakeSettings3.isRedSide?"Red":"Blue"));  // Changed from isRedAlliance
+            telemetry.addData("Alliance Color:",(IntakeSettings3.isRedSide?"Red":"Blue"));
+            telemetry.addData("Aligned:", IntakeSettings3.isAligned ? "YES" : "NO");  // Optional: show alignment status
         }
-        robot.stop();
     }
 
     /************************* Utilities **************************/

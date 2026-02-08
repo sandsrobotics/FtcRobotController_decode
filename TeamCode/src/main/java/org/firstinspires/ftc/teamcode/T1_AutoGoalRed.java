@@ -13,15 +13,15 @@ import om.self.task.other.TimedTask;
 @Autonomous(name="14273.2 AutoGoalRed", group="14273")
 public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
-    Integer launchRPM = 2500; // TODO: Needs Tuning.
+    Integer launchRPM = 2350; // 2500; TODO: Needs Tuning.
 
     // Positions to travel in AutoGoalRed
-    Vector3 p_targetGoal                 = new Vector3(-70.5, 70.5, 180);   // RedGoal Position.
+    Vector3 p_targetGoal                = new Vector3(-70.5, 60.5, 180);   // Y: 70.5; RedGoal Position.
     Vector3 p_fieldStart                = new Vector3(-39.0,55,180); // TODO: Confirm/Tune this position.
     Vector3 p_obeliskView               = new Vector3(-39.0, 31, -160);  // GoalRed: ObeliskView Position
-    Vector3 p_launchPosZero             = new Vector3(-18.0,29,130);    // GoalRed Launching Position.
-    Vector3 p_launchPosOne              = new Vector3(-18.0,29,130);    // GoalRed Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(-18.0,29,130);    // GoalRed Launching Position for pinkServo. Z:???.
+    Vector3 p_launchPosZero             = new Vector3(-28.0,16,141);    // GoalRed Launching Position.
+    Vector3 p_launchPosOne              = new Vector3(-28.0,16,141);    // GoalRed Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(-28.0,16,141);    // Was: -18, 29, 130? GoalRed Launching Position for pinkServo.
 
     Vector3 p_pre_intakeArtifactRow1    = new Vector3(-12, 28, -90);  // Red: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1        = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
@@ -31,6 +31,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
     Vector3 p_pre_intakeArtifactRow3    = new Vector3(35.5, 28, -90);   // Red: Ready to collect in Row3
     Vector3 p_intakeArtifactRow3        = new Vector3(35.5, 60, -90);   // Red: Intake Artifacts in Row3
 
+    Vector3 p_pre_leverOpen             = new Vector3(0, 45, 180);    // Red: Open Lever Position
     Vector3 p_leverOpen                 = new Vector3(0, 55, 180);    // Red: Open Lever Position
     Vector3 p_parkAfterAuto             = new Vector3(-12,28,180);
 
@@ -65,17 +66,16 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
         positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
 
-        // Launch Pre-loaded Artifacts.
-        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
-        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.restart());
-        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.isDone());
-        autoTasks.addDelay(300);
-
-//        // Determine LaunchOrder and Launch
-//        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
-//        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
+//        // Launch Pre-loaded Artifacts.
+//        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
+//        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.restart());
+//        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.isDone());
 //        autoTasks.addDelay(300);
 
+        // Determine LaunchOrder and Launch
+        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
+        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
+        autoTasks.addDelay(100);
 
         //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
 //        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
@@ -88,19 +88,102 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 //        autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
 //        autoTasks.addDelay(300);
 
-        // Intake from Row1 and Launch.
-        artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow1(), DecodeSettings.getIntakeArtifactRow1());
+        // Intake from Row1.
+        artifactIntake(autoTasks, DecodeSettings.getPreIntakeArtifactRow1(), DecodeSettings.getIntakeArtifactRow1());
 
-        // Intake from Row2 and Launch.
+        // Clear Ramp?
+//        clearRamp(autoTasks);
+
+        // ArtifactLaunch.
+        artifactLaunch(autoTasks);
+
+        // Intake from Row2.
         artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow2(), DecodeSettings.getIntakeArtifactRow2());
+        // ArtifactLaunch.
+        artifactLaunch(autoTasks);
 
         // Intake from Row3 and Launch.
 //        artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow3(), DecodeSettings.getIntakeArtifactRow3());
+
+//        // ArtifactLaunch.
+//        artifactLaunch(autoTasks);
 
         // Move to ParkAfterAuto Position.
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
         positionSolver.addMoveToTaskEx(DecodeSettings.getParkAfterAutoPos(), autoTasks);
     }
+
+    // Artifact Intake.
+    protected void artifactIntake (TimedTask autoTasks,
+                                   Vector3 pos_pre_intake,
+                                   Vector3 pos_intake) {
+        // Move to pre_intake position.
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
+        positionSolver.addMoveToTaskEx(pos_pre_intake, autoTasks);
+
+        // Start "intake".
+        autoTasks.addStep(() -> intake.tasks.intakeTask.restart());
+        autoTasks.addStep(() -> intake.tasks.intakeTask.isDone());
+
+        // Set positionSolver to "ExtraSlow" to allow intake slowly.
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceExtraSlowSettings));
+
+        // Move to intake.
+        positionSolver.addMoveToTaskEx(pos_intake, autoTasks, 2000);
+        autoTasks.addDelay(1500); // 2500; Test with 1000.
+
+    }
+
+    // Artifact Launch.
+    protected void artifactLaunch (TimedTask autoTasks) {
+
+        // Move to launch.
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
+        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
+        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
+        //  Determine LaunchOrder and Launch
+        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
+        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
+        autoTasks.addDelay(100);
+
+//        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
+//        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.restart());
+//        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.isDone());
+//        autoTasks.addDelay(300);
+
+//        // Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
+//        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
+//        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
+//        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
+//        autoTasks.addStep(() -> intake.tasks.pinkServoLaunch.restart());
+//        autoTasks.addDelay(300);
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), autoTasks);
+//        autoTasks.addStep(() -> intake.tasks.blueServoLaunch.restart());
+//        autoTasks.addDelay(300);
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), autoTasks);
+//        autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
+//        autoTasks.addDelay(300);
+    }
+
+    // Artifact Launch.
+    protected void clearRamp (TimedTask autoTasks) {
+
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+        // Move to pre-clearRamp.
+        positionSolver.addMoveToTaskEx(DecodeSettings.getPreLeverOpenPos(), autoTasks);
+
+        // Move to clearRamp.
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLeverOpenPos(), autoTasks);
+
+        // Wait for Artifacts to Clear.
+        autoTasks.addDelay(1000);
+
+        // Move to pre-clearRamp.
+        positionSolver.addMoveToTaskEx(DecodeSettings.getPreLeverOpenPos(), autoTasks);
+    }
+
     @Override
     public void extraSettings() {
         DecodeSettings.isDemoMode = false;
@@ -120,6 +203,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
         DecodeSettings.setIntakeArtifactRow2(p_intakeArtifactRow2);
         DecodeSettings.setPreIntakeArtifactRow3(p_pre_intakeArtifactRow3);
         DecodeSettings.setIntakeArtifactRow3(p_intakeArtifactRow3);
+        DecodeSettings.setPreLeverOpenPos(p_pre_leverOpen);
         DecodeSettings.setLeverOpenPos(p_leverOpen);
         DecodeSettings.setParkAfterAutoPos(p_parkAfterAuto);
         DecodeSettings.setLaunchRPM(launchRPM);

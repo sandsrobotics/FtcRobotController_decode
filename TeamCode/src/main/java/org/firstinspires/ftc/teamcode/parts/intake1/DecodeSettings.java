@@ -28,6 +28,7 @@ public class DecodeSettings {
    static Vector3 pos_intakeArtifactRow3        = new Vector3();
 
    static Vector3 pos_parkAfterAuto             = new Vector3();
+   static Vector3 pos_pre_leverOpen             = new Vector3();
    static Vector3 pos_leverOpen                 = new Vector3();
 
    static int   launchRPM                       = 3200; // "RequiredRPM" for the currentLaunch.
@@ -205,6 +206,14 @@ public class DecodeSettings {
    }
    public static Vector3 getLeverOpenPos() {
       return pos_leverOpen;
+   }
+
+   public static void setPreLeverOpenPos(Vector3 position) {
+      if (position.X == 0 && position.Y == 0 && position.Z == 0) return;
+      pos_pre_leverOpen = position;
+   }
+   public static Vector3 getPreLeverOpenPos() {
+      return pos_pre_leverOpen;
    }
 
    public static void setTargetGoalPos(Vector3 position) {

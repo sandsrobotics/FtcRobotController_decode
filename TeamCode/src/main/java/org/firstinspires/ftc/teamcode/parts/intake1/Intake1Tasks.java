@@ -342,15 +342,15 @@ public class Intake1Tasks {
                 if (currLaunch == 0) {
                     intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), computeAndLaunchInOrder);
                     computeAndLaunchInOrder.addStep(() -> intake.tasks.greenServoLaunch.restart());
-                    computeAndLaunchInOrder.addDelay(300);
+                    computeAndLaunchInOrder.addDelay(100);
                 } else if (currLaunch == 1) {
                     intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), computeAndLaunchInOrder);
                     computeAndLaunchInOrder.addStep(() -> intake.tasks.blueServoLaunch.restart());
-                    computeAndLaunchInOrder.addDelay(300);
+                    computeAndLaunchInOrder.addDelay(100);
                 } else if (currLaunch == 2) {
                     intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), computeAndLaunchInOrder);
                     computeAndLaunchInOrder.addStep(() -> intake.tasks.pinkServoLaunch.restart());
-                    computeAndLaunchInOrder.addDelay(300);
+                    computeAndLaunchInOrder.addDelay(100);
                 }
             }
         });

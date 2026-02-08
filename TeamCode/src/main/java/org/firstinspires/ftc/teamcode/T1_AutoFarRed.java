@@ -205,24 +205,24 @@ public class T1_AutoFarRed  extends LinearOpMode{
         // Launch Pre-loaded Artifacts.
         // Determine LaunchOrder and Launch
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
-//        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
-//        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
-//        autoTasks.addDelay(300);
+        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
+        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
+        autoTasks.addDelay(100);
 //        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
 //        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.restart());
 //        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.isDone());
 //        autoTasks.addDelay(300);
 
-        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
-        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
-        autoTasks.addStep(() -> intake.tasks.pinkServoLaunch.restart());
-        autoTasks.addDelay(300);
-        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), autoTasks);
-        autoTasks.addStep(() -> intake.tasks.blueServoLaunch.restart());
-        autoTasks.addDelay(300);
-        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), autoTasks);
-        autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
-        autoTasks.addDelay(300);
+//        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
+//        autoTasks.addStep(() -> intake.tasks.pinkServoLaunch.restart());
+//        autoTasks.addDelay(300);
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), autoTasks);
+//        autoTasks.addStep(() -> intake.tasks.blueServoLaunch.restart());
+//        autoTasks.addDelay(300);
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), autoTasks);
+//        autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
+//        autoTasks.addDelay(300);
 
         // Intake from Row3 and Launch.
         artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow3(), DecodeSettings.getIntakeArtifactRow3());
@@ -260,32 +260,31 @@ public class T1_AutoFarRed  extends LinearOpMode{
         // Move to launch.
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
         positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
-//        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
-//        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
-        // Determine LaunchOrder and Launch
-//        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
-//        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
-//        autoTasks.addDelay(300);
+        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
+        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
+        //  Determine LaunchOrder and Launch
+        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
+        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
+        autoTasks.addDelay(100);
 
 //        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
 //        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.restart());
 //        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.isDone());
 //        autoTasks.addDelay(300);
 
-
-        // Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
-        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
-        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
-        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
-        autoTasks.addStep(() -> intake.tasks.pinkServoLaunch.restart());
-        autoTasks.addDelay(300);
-        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), autoTasks);
-        autoTasks.addStep(() -> intake.tasks.blueServoLaunch.restart());
-        autoTasks.addDelay(300);
-        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), autoTasks);
-        autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
-        autoTasks.addDelay(300);
+//        // Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
+//        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
+//        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
+//        autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
+//        autoTasks.addStep(() -> intake.tasks.pinkServoLaunch.restart());
+//        autoTasks.addDelay(300);
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), autoTasks);
+//        autoTasks.addStep(() -> intake.tasks.blueServoLaunch.restart());
+//        autoTasks.addDelay(300);
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), autoTasks);
+//        autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
+//        autoTasks.addDelay(300);
     }
 
     public void extraSettings() {

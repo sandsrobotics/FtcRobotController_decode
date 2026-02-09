@@ -13,22 +13,22 @@ import om.self.task.other.TimedTask;
 @Autonomous(name="14273.2 AutoGoalRed", group="14273")
 public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
-    Integer launchRPM = 2350; // 2500; TODO: Needs Tuning.
+    Integer launchRPM = 2000; // 2350; 2500; TODO: Needs Tuning.
 
     // Positions to travel in AutoGoalRed
     Vector3 p_targetGoal                = new Vector3(-70.5, 60.5, 180);   // Y: 70.5; RedGoal Position.
     Vector3 p_fieldStart                = new Vector3(-39.0,55,180); // TODO: Confirm/Tune this position.
     Vector3 p_obeliskView               = new Vector3(-39.0, 31, -160);  // GoalRed: ObeliskView Position
-    Vector3 p_launchPosZero             = new Vector3(-28.0,16,141);    // GoalRed Launching Position.
-    Vector3 p_launchPosOne              = new Vector3(-28.0,16,141);    // GoalRed Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(-28.0,16,141);    // Was: -18, 29, 130? GoalRed Launching Position for pinkServo.
+    Vector3 p_launchPosZero             = new Vector3(-28.0,16,135);    // GoalRed Launching Position.
+    Vector3 p_launchPosOne              = new Vector3(-28.0,16,135);    // GoalRed Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(-28.0,16,135);    // Was: -18, 29, 130? GoalRed Launching Position for pinkServo.
 
-    Vector3 p_pre_intakeArtifactRow1    = new Vector3(-12, 28, -90);  // Red: Ready to collect on Row1
+    Vector3 p_pre_intakeArtifactRow1    = new Vector3(-12, 22, -90);  // Red: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1        = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
-    Vector3 p_pre_intakeArtifactRow2    = new Vector3(12, 28, -90);   // Red: Ready to collect on Row2
-    Vector3 p_intakeArtifactRow2        = new Vector3(12, 60, -90);   // Red: Intake Artifacts in Row2
+    Vector3 p_pre_intakeArtifactRow2    = new Vector3(13, 22, -90);   // Red: Ready to collect on Row2
+    Vector3 p_intakeArtifactRow2        = new Vector3(13, 60, -90);   // Red: Intake Artifacts in Row2
 
-    Vector3 p_pre_intakeArtifactRow3    = new Vector3(35.5, 28, -90);   // Red: Ready to collect in Row3
+    Vector3 p_pre_intakeArtifactRow3    = new Vector3(35.5, 22, -90);   // Red: Ready to collect in Row3
     Vector3 p_intakeArtifactRow3        = new Vector3(35.5, 60, -90);   // Red: Intake Artifacts in Row3
 
     Vector3 p_pre_leverOpen             = new Vector3(0, 45, 180);    // Red: Open Lever Position
@@ -118,7 +118,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
                                    Vector3 pos_pre_intake,
                                    Vector3 pos_intake) {
         // Move to pre_intake position.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceExtraSlowSettings));
         positionSolver.addMoveToTaskEx(pos_pre_intake, autoTasks);
 
         // Start "intake".

@@ -129,10 +129,12 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 
     public boolean launchRPMInToleranceV2() {
         if (launchRPM == 0) return false;  // don't want to shoot if launcher speed is 0
-        int under = 100;  // expected undershoot
-        int target = launchRPM - under;  // adjusted target speed accounting for undershoot
+        // todo: figure out if undershoot is consistent or should be a multiplier
+        int target = launchRPM - Intake1Settings.launchRPMToleranceV2Undershoot;  // adjusted target speed accounting for undershoot
         int diff = Math.abs(getCurrentLaunchMotorRPM() - target);  // difference between actual and target
-        return diff <= Intake1Settings.launchRPMTolerance;
+        return diff <= Intake1Settings.launchRPMToleranceV2;
+        // below does the same thing, but isn't the above easier to read?
+        // return Math.abs(getCurrentLaunchMotorRPM() - (launchRPM - Intake1Settings.launchRPMToleranceV2Undershoot)) <= Intake1Settings.launchRPMToleranceV2;
     }
 
     // Based on GameClassificationId, compute Launch Order.

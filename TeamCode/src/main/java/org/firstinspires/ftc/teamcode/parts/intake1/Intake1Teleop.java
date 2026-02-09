@@ -148,11 +148,20 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
 //            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasTapped)) {
 //                parent.toggleAutoRPM();
 //            }
-            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasPressed)) {
+//            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasPressed)) {
+//                parent.autoRPM = true;
+//                parent.launchOff = false;
+//            }
+//            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasReleased)) {
+//                parent.autoRPM = false;
+//                parent.setLaunchMotors(0);
+//            }
+            // todo: does driver2 prefer press/release or tap/hold for autoRPM?
+            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasTapped)) {
                 parent.autoRPM = true;
                 parent.launchOff = false;
             }
-            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasReleased)) {
+            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasHeld)) {
                 parent.autoRPM = false;
                 parent.setLaunchMotors(0);
             }

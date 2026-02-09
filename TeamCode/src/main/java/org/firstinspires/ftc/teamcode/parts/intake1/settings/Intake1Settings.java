@@ -19,6 +19,8 @@ public class Intake1Settings {
     public static int launchServoDelay                          = 200;
     public static int launchServoSweepTime                      = 1000;
     public static int launchRPMTolerance                        = 100;
+    public static int launchRPMToleranceV2                      = 75;
+    public static int launchRPMToleranceV2Undershoot            = 100;
 
     public static double servoGreenDock =                           0.463; // 0.500; 0.463;
     public static double servoGreenLaunch =                         0.183; //.243

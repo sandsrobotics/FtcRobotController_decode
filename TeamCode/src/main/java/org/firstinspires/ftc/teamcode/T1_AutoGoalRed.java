@@ -47,10 +47,10 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
         // Reset and Get Ready.
         autoTasks.addStep(() -> intake.stopAllIntakeTasks());
-        autoTasks.addDelay(250);
+        autoTasks.addDelay(100);
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
         autoTasks.addStep(() -> intake.tasks.allServoStore.restart());
-        autoTasks.addTimedStep(() -> {}, () -> intake.tasks.allServoStore.isDone(), 250);
+//        autoTasks.addTimedStep(() -> {}, () -> intake.tasks.allServoStore.isDone(), 250);
 
         //Move to ObeliskView position.
         positionSolver.addMoveToTaskEx(DecodeSettings.getObeliskViewPos(), autoTasks, 1000);
@@ -59,12 +59,12 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
         // Prep "Launch Motor".
         autoTasks.addStep(() -> intake.setLaunchRPM((int) DecodeSettings.getLaunchRPM()));
-        autoTasks.addStep(() -> intake.tasks.startGoalLaunch.restart());   // TODO: Update startAutoGoalLaunch to use intake.launchRPM.
+        autoTasks.addStep(() -> intake.tasks.startGoalLaunch.restart());   // TODO: Create/Update startAutoGoalLaunch to use intake.launchRPM.
         autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
 
         // Move to Launch Position.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
-        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings));
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
 
 //        // Launch Pre-loaded Artifacts.
 //        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
@@ -75,7 +75,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
         // Determine LaunchOrder and Launch
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
-        autoTasks.addDelay(100);
+//        autoTasks.addDelay(100);
 
         //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
 //        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
@@ -118,7 +118,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
                                    Vector3 pos_pre_intake,
                                    Vector3 pos_intake) {
         // Move to pre_intake position.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceExtraSlowSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings));
         positionSolver.addMoveToTaskEx(pos_pre_intake, autoTasks);
 
         // Start "intake".
@@ -130,7 +130,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
         // Move to intake.
         positionSolver.addMoveToTaskEx(pos_intake, autoTasks, 2000);
-        autoTasks.addDelay(1500); // 2500; Test with 1000.
+        autoTasks.addDelay(1000); // 1500; 2500; Test with 1000.
 
     }
 
@@ -138,14 +138,14 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
     protected void artifactLaunch (TimedTask autoTasks) {
 
         // Move to launch.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings));
         positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
         //  Determine LaunchOrder and Launch
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
-        autoTasks.addDelay(100);
+//        autoTasks.addDelay(100);
 
 //        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
 //        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.restart());

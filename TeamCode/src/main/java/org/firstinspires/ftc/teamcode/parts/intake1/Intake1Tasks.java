@@ -336,19 +336,22 @@ public class Intake1Tasks {
         computeAndLaunchInOrder.addStep( () -> {
             int[] currLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
 
+            // Try using a Single Position for greenServo, blueServo and pinkServo Launches.
+            intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), computeAndLaunchInOrder);
+
             for (int i = 0; i < 3; i++) {
                 int currLaunch = currLaunchOrder[i];
 
                 if (currLaunch == 0) {
-                    intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), computeAndLaunchInOrder);
+//                    intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), computeAndLaunchInOrder);
                     computeAndLaunchInOrder.addStep(() -> intake.tasks.greenServoLaunch.restart());
                     computeAndLaunchInOrder.addDelay(100);
                 } else if (currLaunch == 1) {
-                    intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), computeAndLaunchInOrder);
+//                    intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), computeAndLaunchInOrder);
                     computeAndLaunchInOrder.addStep(() -> intake.tasks.blueServoLaunch.restart());
                     computeAndLaunchInOrder.addDelay(100);
                 } else if (currLaunch == 2) {
-                    intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), computeAndLaunchInOrder);
+//                    intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), computeAndLaunchInOrder);
                     computeAndLaunchInOrder.addStep(() -> intake.tasks.pinkServoLaunch.restart());
                     computeAndLaunchInOrder.addDelay(100);
                 }

@@ -53,7 +53,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
     Vector3 p_obeliskView               = new Vector3(58, 16, 180);  // Was: 56, 16, 180; // FarRed: ObeliskView Position
     Vector3 p_launchPosZero             = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
     Vector3 p_launchPosOne              = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(58,16,160);    // FarRed Launching Position for pinkServo. Z:160.
+    Vector3 p_launchPosTwo              = new Vector3(58,16,158);    // Z: 160; FarRed Launching Position for pinkServo. Z:160.
 
     Vector3 p_pre_intakeArtifactRow1 = new Vector3(-12, 28, -90);  // Was Y: 28; Red: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1     = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
@@ -63,7 +63,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
     Vector3 p_intakeArtifactRow3     = new Vector3(35.5, 60, -90);   // Red: Intake Artifacts in Row3
 
     Vector3 p_leverOpen                 = new Vector3(0, 55, 180);    // Red: Open Lever Position
-    Vector3 p_parkAfterAuto             = new Vector3(32,16,157);
+    Vector3 p_parkAfterAuto             = new Vector3(46,16,157);    // X:32;
 
     //  DASHBOARD VARIABLES (static public)
     static public int shortDelay = 1000;
@@ -143,7 +143,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
             }
             if(startDelay > maxDelay) startDelay = maxDelay;
 
-            telemetry.addData("START POSITION:", odo.getPosition());
+            telemetry.addData("START_P", odo.getPosition());
             telemetry.addData("START DELAY:", startDelay / 1000);
             telemetry.update();
             sleep(50);
@@ -187,10 +187,10 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Reset and Get Ready.
         autoTasks.addStep(() -> intake.stopAllIntakeTasks());
-        autoTasks.addDelay(250);
+        autoTasks.addDelay(100);
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
         autoTasks.addStep(() -> intake.tasks.allServoStore.restart());
-        autoTasks.addTimedStep(() -> {}, () -> intake.tasks.allServoStore.isDone(), 250);
+//        autoTasks.addTimedStep(() -> {}, () -> intake.tasks.allServoStore.isDone(), 100);
 
         //Move to ObeliskView position.
         positionSolver.addMoveToTaskEx(DecodeSettings.getObeliskViewPos(), autoTasks, 1000);
@@ -204,10 +204,10 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Launch Pre-loaded Artifacts.
         // Determine LaunchOrder and Launch
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings));
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
-        autoTasks.addDelay(100);
+//        autoTasks.addDelay(100);
 //        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
 //        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.restart());
 //        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.isDone());
@@ -243,7 +243,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
                                             Vector3 pos_pre_intake,
                                             Vector3 pos_intake) {
         // Move to pre_intake position.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings));
         positionSolver.addMoveToTaskEx(pos_pre_intake, autoTasks);
 
         // Start "intake".
@@ -255,17 +255,17 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Move to intake.
         positionSolver.addMoveToTaskEx(pos_intake, autoTasks, 2000);
-        autoTasks.addDelay(1500); // 2500; Test with 1000.
+        autoTasks.addDelay(1000); // 1500; 2500; Test with 1000.
 
         // Move to launch.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings));
         positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
         //  Determine LaunchOrder and Launch
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
-        autoTasks.addDelay(100);
+//        autoTasks.addDelay(100);
 
 //        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
 //        autoTasks.addStep(() -> intake.tasks.pinkBlueGreenServoLaunch.restart());

@@ -129,7 +129,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
      * Returns an array of servo indices in the order they should fire.
      * Colored artifacts matching the pattern fire first, then NONE artifacts.
      */
-    public int[] computeLaunchOrderAndLaunch(ArtifactDetectionPipeline.ArtifactColor[] desiredOrder) {
+    public int[] computeLaunchOrder(ArtifactDetectionPipeline.ArtifactColor[] desiredOrder) {
         ArtifactDetectionPipeline.Artifact[] current = artifacts.getArtifactList();
 
         // Separate colored and NONE artifacts
@@ -207,16 +207,22 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         return combined.stream().mapToInt(Integer::intValue).toArray();
     }
 
+    private double index0Rpm = 0;
+    private double index1Rpm = 0;
+    private double index2Rpm = 0;
 
     public void launchServoByIndex(int index) {
         switch (index) {
             case 0:
+                index0Rpm = getCurrentLaunchRPM();
                 getHardware().launchServo0.setPosition(launchServo0Launch);
                 break;
             case 1:
+                index1Rpm = getCurrentLaunchRPM();
                 getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Launch);
                 break;
             case 2:
+                index2Rpm = getCurrentLaunchRPM();
                 getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Launch);
                 break;
         }
@@ -499,6 +505,8 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
             setLaunchRPM(launchRPM);
             parent.opMode.telemetry.addData("Calc launch RPM", launchRPM);
         }
+
+        parent.opMode.telemetry.addData("Launch Servos", (int)index0Rpm + "," + (int)index1Rpm + "," + (int)index2Rpm);
 
 //        // Handle LED color
 //        if (IntakeSettings3.alignTarget && limeLight.tv && isAligned()) {

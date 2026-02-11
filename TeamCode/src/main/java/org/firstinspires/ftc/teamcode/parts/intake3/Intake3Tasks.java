@@ -62,7 +62,7 @@ public class Intake3Tasks {
         ballLaunchTask.addDelay(intake.getSettings().launchServoDelay);
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Launch));
         ballLaunchTask.addStep(()-> intake.getHardware().launchServo2.isDone());
-        ballLaunchTask.addDelay(intake.getSettings().launchServoDelay);
+//        ballLaunchTask.addDelay(intake.getSettings().launchServoDelay);
 
         //launch reset
         ballLaunchTask.addStep(()-> resetLaunchServos.restart());
@@ -109,7 +109,7 @@ public class Intake3Tasks {
 // Compute order using the ONE method
         orderedColorLaunchTask.addStep(() -> {
             ArtifactDetectionPipeline.ArtifactColor[] desiredOrder = intake.limeLight.getClassificationPattern();
-            currentLaunchOrder = intake.computeLaunchOrderAndLaunch(desiredOrder);
+            currentLaunchOrder = intake.computeLaunchOrder(desiredOrder);
         });
 
 // Ball 1

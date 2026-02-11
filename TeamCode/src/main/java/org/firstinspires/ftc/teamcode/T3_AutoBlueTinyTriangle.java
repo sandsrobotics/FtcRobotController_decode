@@ -31,8 +31,8 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
 
         IntakeSettings3.LaunchData shootLaunchData = new IntakeSettings3.LaunchData
         (
-                3345,
-                transformFunc.apply(new Vector3(57.642, -14.123, -160.948 ))  //Z: 153.4 155.40
+                3000, // now lower say 3200 ish tjk was 3345
+                transformFunc.apply(new Vector3(48, -14, -158 ))  //Z: 153.4 155.40
         );
         Vector3 blueSpikeReady1 = transformFunc.apply(new Vector3(-12,-28,-90));
         Vector3 blueSpike1 = transformFunc.apply(new Vector3(-12,-53,-90));
@@ -103,7 +103,7 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
         int RPM = launchData.getRPM();
         Vector3 launchPos = launchData.getPosition();
         if(rejectExtraArtifacts) {
-            autoTasks.addDelay(1000); // tjk to let balls all get in
+            autoTasks.addDelay(600); // tjk to let balls all get in
         }
         positionSolver.addMoveToTaskExNoWait(launchPos, autoTasks);
 

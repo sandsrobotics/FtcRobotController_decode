@@ -37,7 +37,7 @@ public class T3_AutoBlueGoal extends T3_AutoBase {
         Vector3 start = fieldStartPos; //new Vector3(-51, -50, 140);
         Vector3 aprilTag = transformFunc.apply(new Vector3(-42, -41, 140)); //z=122
 
-        LaunchData shootLaunchData = new LaunchData(2500, transformFunc.apply(new Vector3(-26, -14, -128 )));
+        LaunchData shootLaunchData = new LaunchData(2450, transformFunc.apply(new Vector3(-26, -14, -128 )));
 
         Vector3 blueSpikeReady1 = transformFunc.apply(new Vector3(-12,-28,-90));
         Vector3 blueSpike1 = transformFunc.apply(new Vector3(-12,-53,-90));
@@ -60,7 +60,7 @@ public class T3_AutoBlueGoal extends T3_AutoBase {
         if(runSpikeCount >= 1) {
             autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
             positionSolver.addMoveToTaskEx(blueSpikeReady1, autoTasks);
-            autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
+            autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.superSlowSettings));
             positionSolver.addMoveToTaskEx(blueSpike1, autoTasks, SPIKE_PICKUP_TIMEOUT);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultSettings));
             MoveAndLaunch(autoTasks, shootLaunchData);
@@ -70,7 +70,7 @@ public class T3_AutoBlueGoal extends T3_AutoBase {
         if(runSpikeCount >= 2) {
             autoTasks.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
             positionSolver.addMoveToTaskEx(blueSpikeReady2, autoTasks);
-            autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.ultraSlowSettings));
+            autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.superSlowSettings));
             positionSolver.addMoveToTaskEx(blueSpike2, autoTasks, SPIKE_PICKUP_TIMEOUT);
             autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.loseSettings));
             positionSolver.addMoveToTaskEx(blueSpikeReady2, autoTasks);
@@ -90,7 +90,6 @@ public class T3_AutoBlueGoal extends T3_AutoBase {
 
         positionSolver.addMoveToTaskEx(blueSpike1, autoTasks); //Goes off launch line
         autoTasks.addStep(() -> intake.setIntakeRPM(0));
-        autoTasks.addStep(() -> intake.setLaunchRPM(0));
     }
 
     /************************************************************/
@@ -101,7 +100,7 @@ public class T3_AutoBlueGoal extends T3_AutoBase {
         int RPM = launchData.getRPM();
         Vector3 launchPos = launchData.getPosition();
         if(rejectExtraArtifacts) {
-            autoTasks.addDelay(750); // tjk to let balls all get in
+            autoTasks.addDelay(600); // tjk to let balls all get in
         }
         positionSolver.addMoveToTaskExNoWait(launchPos, autoTasks);
         //autoTasks.addStep(() -> intake.setLaunchRPM(RPM));

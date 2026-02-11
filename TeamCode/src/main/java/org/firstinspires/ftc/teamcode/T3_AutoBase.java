@@ -47,7 +47,7 @@ public class T3_AutoBase extends LinearOpMode{
     static public int midDelay = 2000;
     static public int longDelay = 3000;
     public static int maxDelay = 3000;
-    static public int runSpikeCount = 3; // - Default to all 3 spikes
+    static public int runSpikeCount = 2; // - Default to all 3 spikes
     /**************************/
     Vector3 fieldStartPos;
 
@@ -106,11 +106,11 @@ public class T3_AutoBase extends LinearOpMode{
             telemetry.addData("Press D-PAD UP/DOWN to change spike count from closest to farthest","");
 
             // D-pad controls for spike count
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasHeld))
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasTapped))
             {
                 runSpikeCount = Math.min(3, runSpikeCount + 1);
             }
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasHeld))
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped))
             {
                 runSpikeCount = Math.max(1, runSpikeCount - 1);
             }

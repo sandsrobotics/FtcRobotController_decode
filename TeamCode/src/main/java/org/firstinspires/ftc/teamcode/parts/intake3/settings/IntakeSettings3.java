@@ -27,11 +27,11 @@ public class IntakeSettings3 {
     public static int launchServoResetSettleTime = 300;  // Time to wait for servo to fully reset before locking
 
     // launch servo values
-    public static int launchServoDelay = 150;
+    public static int launchServoDelay = 100; //use tolerance not delay
     public static int launchServoSweepTime = 400;
-    public static int lockServoSweepTime = 1500;
-    public static int launchRPMTolerance = 100;
-    public static int launchRPMToleranceTime = 5000;
+    public static int lockServoSweepTime = 400;
+    public static int launchRPMTolerance = 75;
+    public static int launchRPMToleranceTime = 4500;
     public static final Map<String, LaunchData> launchPosiMap = new HashMap<String, LaunchData>();
     public static PIDFCoefficients spinnerPID = new PIDFCoefficients(100,0,0,12.4);
     public static int launchRPM = 3150; // for teleop tests
@@ -40,13 +40,13 @@ public class IntakeSettings3 {
     public static final double ticksPerRev = 28;
     public static final double ticksPerRev1150 = 145.1;
 
-    public static double spinNear                 = 2500; // 3300 2900
-    public static final double spinMiddle               = 0;// 3900
-    public static double spinFar                  = 3250; // 4500 needs to be within 100 tolerance
+    public static double spinNear                 = 2400; // 2500 at 72
+    public static final double spinMiddle               = 0;//
+    public static double spinFar                  = 3050; // 3250 at 137
 
-    public static double nearTest      = 72;  // 1 tile diagonally 40
+    public static double nearTest      = 76;  // 1 tile diagonally 40
     public static final double midTest       = 98; //98
-    public static double farTest       = 137; // 140
+    public static double farTest       = 148; // 140
 
     public static final Vector3 targetRed              = new Vector3(-70.5, 70.5, 0.0);
     public static final Vector3 targetBlue             = new Vector3(-70.5, -70.5, 0.0);

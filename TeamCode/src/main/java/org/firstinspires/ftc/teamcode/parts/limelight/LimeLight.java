@@ -70,12 +70,14 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
                 // ===============================
                 // FOCUSED TAGS (21 / 22 / 23)
                 // ===============================
-                if (id == 21 || id == 22 || id == 23) {
-                    sawFocusTag = true;
+                if(!sawFocusTag) {
+                    if (id == 21 || id == 22 || id == 23) {
+                        sawFocusTag = true;
 
-                    if (focusedAprilTagId == null || focusedAprilTagId != id) {
-                        focusedAprilTagId = id;
-                        updatePatternFromTag(id);
+                        if (focusedAprilTagId == null || focusedAprilTagId != id) {
+                            focusedAprilTagId = id;
+                            updatePatternFromTag(id);
+                        }
                     }
                 }
 

@@ -167,37 +167,6 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.positionSolver.stopSolver();
         }
 
-        // INTAKE BY TRIGGERS (NOT GOOD)
-        // LEFT TRIGGER - TURN ON INTAKE
-        // RIGHT TRIGGER - REVERSE INTAKE
-        // Priority: Most recently pressed trigger wins
-//        if (buttonMgr.getState(1, Buttons.left_trigger, State.wasPressed)) {
-//            parent.setIntakeRPM(IntakeSettings3.intakeRPM);  // Left just pressed - forward
-//        } else if (buttonMgr.getState(1, Buttons.right_trigger, State.wasPressed)) {
-//            parent.setIntakeRPM(-IntakeSettings3.intakeRPM); // Right just pressed - reverse
-//        } else if (buttonMgr.getState(1, Buttons.left_trigger, State.isPressed)) {
-//            parent.setIntakeRPM(IntakeSettings3.intakeRPM);  // Left held - forward
-//        } else if (buttonMgr.getState(1, Buttons.right_trigger, State.isPressed)) {
-//            parent.setIntakeRPM(-IntakeSettings3.intakeRPM); // Right held - reverse
-//        } else {
-//            parent.setIntakeRPM(0);  // Neither pressed - stop
-//        }
-
-
-        // AKHIL BACKUP
-//        if (buttonMgr.getState(1, Buttons.dpad_right, State.isHeld)) {
-//            // Select position based on alliance color
-//            Vector3 endgamePosition = IntakeSettings3.isRedSide ?
-//                    IntakeSettings3.endgameRed :
-//                    IntakeSettings3.endgameBlue;
-//
-//            // Keep setting the target while held (position solver handles the rest)
-//            parent.positionSolver.setNewTarget(endgamePosition, false);
-//        } else if (buttonMgr.getState(1, Buttons.dpad_right, State.wasReleased)) {
-//            // Stop when released
-//            parent.positionSolver.stopSolver();
-//        }
-
         // ============================================
         // CONTROLLER 2 (OPERATOR) CONTROLS
         // ============================================
@@ -221,16 +190,14 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.setIntakeRPM(IntakeSettings3.intakeRPM);  // Turn on when released
         }
 
-
-
         // RIGHT TRIGGER - Color-ordered launch (auto-starts launcher)
         if (buttonMgr.getState(2, Buttons.right_trigger, State.wasPressed)) {
-//            parent.setIntakeRPM(0);
-            parent.computeLaunchOrderAndLaunchBlocking(
-                    parent.limeLight.getClassificationPattern()
-            );
-//            parent.setIntakeRPM(IntakeSettings3.intakeRPM);
-            parent.getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
+            if (parent.getTargetLaunchRPM() < 500) {
+                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+                IntakeSettings3.launchArmed = true;
+            }
+            parent.stopAllIntakeTasks();
+            parent.tasks.orderedColorLaunchTask.restart();
         }
 
         // Y BUTTON - Start/Stop launcher
@@ -270,10 +237,9 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             if (parent.getTargetLaunchRPM() < 500) {
                 parent.setLaunchRPM(IntakeSettings3.launchRPM);
                 IntakeSettings3.launchArmed = true;
-
             }
             parent.stopAllIntakeTasks();
-            parent.tasks.ballLaunchTask.restart();
+            parent.tasks.orderedColorLaunchTask.restart();
         }
 
         // X BUTTON - Reverse shooter

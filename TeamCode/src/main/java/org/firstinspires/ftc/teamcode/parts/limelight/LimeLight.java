@@ -148,7 +148,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
         parent.opMode.telemetry.addData("LLTIME", llTimeStamp);
         if (llTimeStamp != 0 && llTimeStamp == llLastTimeStamp) {
             llStuck++;
-            if (llStuck > 2) {
+            if (llStuck > 5) {
                 isStuck = true;
                 setLedIndicator(rgbIndicatorColor.Orange);
                 parent.opMode.telemetry.addData("LLPOS", "Stuck / Disconnect");
@@ -166,9 +166,12 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
             llLastValidTransformTime = System.currentTimeMillis() + 350 -
                     (automaticTransform ? automaticIndicatorTimeout : manualIndicatorTimeout);
         }
+        else {
+            llStuck = 0;
+        }
         llLastTimeStamp = llTimeStamp;
 
-        if (llResult != null && llResult.isValid()) {
+        if (llResult != null && llResult.isValid() && llStuck == 0) {
 
             // Get the robot position as calculated by MegaTag in the LL
             llPosition = new Vector3(

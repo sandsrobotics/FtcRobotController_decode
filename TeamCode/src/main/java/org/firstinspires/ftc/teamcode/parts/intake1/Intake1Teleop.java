@@ -107,15 +107,19 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
             // Driver 2
             // Manual launchSpeed Tasks.
             if (buttonMgr.getState(2, Buttons.dpad_down, State.wasTapped)) {
+                parent.autoRPM = false;
                 parent.tasks.startFarLaunch.restart();
             }
             if (buttonMgr.getState(2, Buttons.dpad_right, State.wasTapped)) {
+                parent.autoRPM = false;
                 parent.tasks.startThreeLaunch.restart();
             }
             if (buttonMgr.getState(2, Buttons.dpad_up, State.wasTapped)) {
+                parent.autoRPM = false;
                 parent.tasks.startGoalLaunch.restart();
             }
             if (buttonMgr.getState(2, Buttons.dpad_left, State.wasTapped)) {
+                parent.autoRPM = false;
                 parent.tasks.stopLaunch.restart();
             }
 

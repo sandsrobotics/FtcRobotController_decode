@@ -278,7 +278,9 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     public void onRun(Intake1Control control) {
         spinnerSliderPower = 0.0; // control.strafePower;
         if (autoRPM && !launchOff) {
-            setLaunchMotors((int)calcSpinnerRPM());
+            int rpm = (int)(calcSpinnerRPM());
+            if (rpm > 0) setLaunchMotors(rpm);
+//            setLaunchMotors((int)calcSpinnerRPM());
         }
     }
 

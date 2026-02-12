@@ -20,6 +20,12 @@ public class PositionSolverSettings {
             new SolverSettings(2.5, 5, true, 10000, new PIDCoefficients(0.0125, 0, 0), 1)
     );
 
+    public static PositionSolverSettings speedySettings = new PositionSolverSettings(
+            new SolverSettings(1, 5, true, 10000, new PIDCoefficients(0.05, 0, 0), 1),
+            new SolverSettings(1, 5, true, 10000, new PIDCoefficients(0.05, 0, 0), 1),
+            new SolverSettings(2, 5, true, 10000, new PIDCoefficients(0.0125, 0, 0), 1)
+    );
+
     public static PositionSolverSettings extraLoseSettings = new PositionSolverSettings(
             new SolverSettings(10, 1, true, 10000, new PIDCoefficients(0.5, 0, 0), 1),
             new SolverSettings(10, 1, true, 10000, new PIDCoefficients(0.5, 0, 0), 1),

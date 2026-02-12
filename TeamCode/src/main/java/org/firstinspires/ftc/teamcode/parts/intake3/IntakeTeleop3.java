@@ -9,6 +9,8 @@ import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.Buttons;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr.State;
 import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
+import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
+
 import om.self.ezftc.core.part.LoopedPartImpl;
 import om.self.ezftc.utils.Vector3;
 
@@ -111,60 +113,121 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             IntakeSettings3.launchArmed = false;
             parent.setLaunchRPM(0);
         }
+//        // LEFT TRIGGER- Move to endgame position (hold to move, release to stop)
+//        if (buttonMgr.getState(1, Buttons.left_trigger, State.isHeld)) {
+//            // Select position based on alliance color
+//            Vector3 endgamePosition = IntakeSettings3.isRedSide ?
+//                    IntakeSettings3.endgameRed :
+//                    IntakeSettings3.endgameBlue;
+//
+//            // Keep setting the target while held (position solver handles the rest)
+//            parent.positionSolver.setNewTarget(endgamePosition, false);
+//        } else if (buttonMgr.getState(1, Buttons.left_trigger, State.wasReleased)) {
+//            // Stop when released
+//            parent.positionSolver.stopSolver();
+//        }
+//
+//        // RIGHT TRIGGER- Move to SHOOTING position (hold to move, release to stop)
+//        if (buttonMgr.getState(1, Buttons.right_trigger, State.isHeld)) {
+//            // Select position based on alliance color
+//            Vector3 endgamePosition = IntakeSettings3.isRedSide ?
+//                    IntakeSettings3.shootingRed :
+//                    IntakeSettings3.shootingBlue;
+//
+//            // Keep setting the target while held (position solver handles the rest)
+//            parent.positionSolver.setNewTarget(endgamePosition, false);
+//        } else if (buttonMgr.getState(1, Buttons.right_trigger, State.wasReleased)) {
+//            // Stop when released
+//            parent.positionSolver.stopSolver();
+//        }
+//
+//        // LEFT BUMPER - Move to triangle SHOOTING position (hold to move, release to stop)
+//        if (buttonMgr.getState(1, Buttons.left_bumper, State.isHeld)) {
+//            // Select position based on alliance color
+//            Vector3 endgamePosition = IntakeSettings3.isRedSide ?
+//                    IntakeSettings3.shootingTriRed :
+//                    IntakeSettings3.shootingTriBlue;
+//
+//            // Keep setting the target while held (position solver handles the rest)
+//            parent.positionSolver.setNewTarget(endgamePosition, false);
+//        } else if (buttonMgr.getState(1, Buttons.left_bumper, State.wasReleased)) {
+//            // Stop when released
+//            parent.positionSolver.stopSolver();
+//        }
+//
+//        // RIGHT BUMPER - Move to wall SHOOTING position (hold to move, release to stop)
+//        if (buttonMgr.getState(1, Buttons.right_bumper, State.isHeld)) {
+//            // Select position based on alliance color
+//            Vector3 endgamePosition = IntakeSettings3.isRedSide ?
+//                    IntakeSettings3.shootingWallRed :
+//                    IntakeSettings3.shootingWallBlue;
+//
+//            // Keep setting the target while held (position solver handles the rest)
+//            parent.positionSolver.setNewTarget(endgamePosition, false);
+//        } else if (buttonMgr.getState(1, Buttons.right_bumper, State.wasReleased)) {
+//            // Stop when released
+//            parent.positionSolver.stopSolver();
+//        }
+
+
         // LEFT TRIGGER- Move to endgame position (hold to move, release to stop)
+        if (buttonMgr.getState(1, Buttons.left_trigger, State.wasPressed)) {
+            parent.positionSolver.setSettings(PositionSolverSettings.speedySettings);
+            parent.positionSolver.setMaxPower(1.0, 1.0, 0.8);
+        }
         if (buttonMgr.getState(1, Buttons.left_trigger, State.isHeld)) {
-            // Select position based on alliance color
             Vector3 endgamePosition = IntakeSettings3.isRedSide ?
                     IntakeSettings3.endgameRed :
                     IntakeSettings3.endgameBlue;
-
-            // Keep setting the target while held (position solver handles the rest)
             parent.positionSolver.setNewTarget(endgamePosition, false);
         } else if (buttonMgr.getState(1, Buttons.left_trigger, State.wasReleased)) {
-            // Stop when released
             parent.positionSolver.stopSolver();
+            parent.positionSolver.setSettings(PositionSolverSettings.defaultSettings);
         }
 
-        // RIGHT TRIGGER- Move to SHOOTING position (hold to move, release to stop)
+// RIGHT TRIGGER- Move to SHOOTING position (hold to move, release to stop)
+        if (buttonMgr.getState(1, Buttons.right_trigger, State.wasPressed)) {
+            parent.positionSolver.setSettings(PositionSolverSettings.speedySettings);
+            parent.positionSolver.setMaxPower(1.0, 1.0, 0.8);
+        }
         if (buttonMgr.getState(1, Buttons.right_trigger, State.isHeld)) {
-            // Select position based on alliance color
             Vector3 endgamePosition = IntakeSettings3.isRedSide ?
                     IntakeSettings3.shootingRed :
                     IntakeSettings3.shootingBlue;
-
-            // Keep setting the target while held (position solver handles the rest)
             parent.positionSolver.setNewTarget(endgamePosition, false);
         } else if (buttonMgr.getState(1, Buttons.right_trigger, State.wasReleased)) {
-            // Stop when released
             parent.positionSolver.stopSolver();
+            parent.positionSolver.setSettings(PositionSolverSettings.defaultSettings);
         }
 
-        // LEFT BUMPER - Move to triangle SHOOTING position (hold to move, release to stop)
+// LEFT BUMPER - Move to triangle SHOOTING position (hold to move, release to stop)
+        if (buttonMgr.getState(1, Buttons.left_bumper, State.wasPressed)) {
+            parent.positionSolver.setSettings(PositionSolverSettings.speedySettings);
+            parent.positionSolver.setMaxPower(1.0, 1.0, 0.8);
+        }
         if (buttonMgr.getState(1, Buttons.left_bumper, State.isHeld)) {
-            // Select position based on alliance color
             Vector3 endgamePosition = IntakeSettings3.isRedSide ?
                     IntakeSettings3.shootingTriRed :
                     IntakeSettings3.shootingTriBlue;
-
-            // Keep setting the target while held (position solver handles the rest)
             parent.positionSolver.setNewTarget(endgamePosition, false);
         } else if (buttonMgr.getState(1, Buttons.left_bumper, State.wasReleased)) {
-            // Stop when released
             parent.positionSolver.stopSolver();
+            parent.positionSolver.setSettings(PositionSolverSettings.defaultSettings);
         }
 
-        // RIGHT BUMPER - Move to wall SHOOTING position (hold to move, release to stop)
+// RIGHT BUMPER - Move to wall SHOOTING position (hold to move, release to stop)
+        if (buttonMgr.getState(1, Buttons.right_bumper, State.wasPressed)) {
+            parent.positionSolver.setSettings(PositionSolverSettings.speedySettings);
+            parent.positionSolver.setMaxPower(1.0, 1.0, 0.8);
+        }
         if (buttonMgr.getState(1, Buttons.right_bumper, State.isHeld)) {
-            // Select position based on alliance color
             Vector3 endgamePosition = IntakeSettings3.isRedSide ?
                     IntakeSettings3.shootingWallRed :
                     IntakeSettings3.shootingWallBlue;
-
-            // Keep setting the target while held (position solver handles the rest)
             parent.positionSolver.setNewTarget(endgamePosition, false);
         } else if (buttonMgr.getState(1, Buttons.right_bumper, State.wasReleased)) {
-            // Stop when released
             parent.positionSolver.stopSolver();
+            parent.positionSolver.setSettings(PositionSolverSettings.defaultSettings);
         }
 
         // ============================================
@@ -251,6 +314,7 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         if (buttonMgr.getState(2, Buttons.right_stick_button, State.wasTapped)) {
             parent.getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
         }
+
 
         if (buttonMgr.getState(2, Buttons.right_stick_button, State.wasDoubleTapped)) {
             parent.getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Unlock);

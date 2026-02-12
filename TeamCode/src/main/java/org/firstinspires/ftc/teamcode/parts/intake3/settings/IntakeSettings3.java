@@ -40,11 +40,11 @@ public class IntakeSettings3 {
     public static final double ticksPerRev = 28;
     public static final double ticksPerRev1150 = 145.1;
 
-    public static double spinNear                 = 2400; // 2500 at 72
+    public static double spinNear                 = 2450; // 2500 at 72
     public static final double spinMiddle               = 0;//
     public static double spinFar                  = 3050; // 3250 at 137
 
-    public static double nearTest      = 76;  // 1 tile diagonally 40
+    public static double nearTest      = 71.9;  // 1 tile diagonally 40
     public static final double midTest       = 98; //98
     public static double farTest       = 148; // 140
 
@@ -57,12 +57,12 @@ public class IntakeSettings3 {
     public static Vector3 endgameBlue = new Vector3(37.6, 33.8, 0); // End Game Blue ABHI: //X:36,Y:36
     public static Vector3 endgameRed = new Vector3(37.6, -33.8, 0); // End Game Red ABHI: //X:36,Y:-36
 
-    public static Vector3 shootingBlue = new Vector3(-26, -14, -128); // Shooting Pos Blue
-    public static Vector3 shootingRed = new Vector3(-26, 14, 128); // Shooting Pos Red
+    public static Vector3 shootingBlue = new Vector3(-20.3, -8.67, -133.667); // Shooting Pos Blue // -26, -14, -128
+    public static Vector3 shootingRed = new Vector3(-20.3, 8.67, 133.667); // Shooting Pos Red
 
 
-    public static Vector3 shootingTriBlue = new Vector3(50.134, 8.027, -146.215); // Shooting Pos Blue
-    public static Vector3 shootingTriRed = new Vector3(50.134, -8.027, 146.215); // Shooting Pos Red
+    public static Vector3 shootingTriBlue = new Vector3(43.51, 3.603, -150.479); // Shooting Pos Blue
+    public static Vector3 shootingTriRed = new Vector3(43.51, -3.603, 150.479); // Shooting Pos Red
 
 
     public static Vector3 shootingWallBlue = new Vector3(-57.064, -0.244, -89.097); // Shooting Pos Blue

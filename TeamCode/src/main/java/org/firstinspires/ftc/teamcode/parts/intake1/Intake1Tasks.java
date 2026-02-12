@@ -361,9 +361,9 @@ public class Intake1Tasks {
                 launchOrderTwo.restart();
            }
         });
-        computeAndLaunchInOrder.addStep( launchOrderZero::isDone);
-        computeAndLaunchInOrder.addStep( launchOrderOne::isDone);
-        computeAndLaunchInOrder.addStep( launchOrderTwo::isDone);
+        computeAndLaunchInOrder.addTimedStep( launchOrderZero::isDone, 500);
+        computeAndLaunchInOrder.addTimedStep( launchOrderOne::isDone, 500);
+        computeAndLaunchInOrder.addTimedStep( launchOrderTwo::isDone, 500);
         // LaunchOrderOne
         computeAndLaunchInOrder.addStep( () -> {
             int currLaunch = currentLaunchOrder[1];
@@ -376,9 +376,9 @@ public class Intake1Tasks {
                 launchOrderTwo.restart();
             }
         });
-        computeAndLaunchInOrder.addStep( launchOrderZero::isDone);
-        computeAndLaunchInOrder.addStep( launchOrderOne::isDone);
-        computeAndLaunchInOrder.addStep( launchOrderTwo::isDone);
+        computeAndLaunchInOrder.addTimedStep( launchOrderZero::isDone, 500);
+        computeAndLaunchInOrder.addTimedStep( launchOrderOne::isDone, 500);
+        computeAndLaunchInOrder.addTimedStep( launchOrderTwo::isDone, 500);
         // LaunchOrderTwo
         computeAndLaunchInOrder.addStep( () -> {
             int currLaunch = currentLaunchOrder[2];
@@ -391,9 +391,9 @@ public class Intake1Tasks {
                 launchOrderTwo.restart();
             }
         });
-        computeAndLaunchInOrder.addStep( launchOrderZero::isDone);
-        computeAndLaunchInOrder.addStep( launchOrderOne::isDone);
-        computeAndLaunchInOrder.addStep( launchOrderTwo::isDone);
+        computeAndLaunchInOrder.addTimedStep( launchOrderZero::isDone, 500);
+        computeAndLaunchInOrder.addTimedStep( launchOrderOne::isDone, 500);
+        computeAndLaunchInOrder.addTimedStep( launchOrderTwo::isDone, 500);
 
         // launchOrderZero
         launchOrderZero.autoStart = false;

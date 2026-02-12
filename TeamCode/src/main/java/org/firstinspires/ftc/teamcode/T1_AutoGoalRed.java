@@ -89,24 +89,32 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 //        autoTasks.addDelay(300);
 
         // Intake from Row1.
-        artifactIntake(autoTasks, DecodeSettings.getPreIntakeArtifactRow1(), DecodeSettings.getIntakeArtifactRow1());
+        if (runSpikeCount >=1 ) {
+            artifactIntake(autoTasks, DecodeSettings.getPreIntakeArtifactRow1(), DecodeSettings.getIntakeArtifactRow1());
 
-        // Clear Ramp?
-//        clearRamp(autoTasks);
+            // Clear Ramp?
+            if (runLeverOpen == 1) {
+                clearRamp(autoTasks);
+            }
 
-        // ArtifactLaunch.
-        artifactLaunch(autoTasks);
+            // ArtifactLaunch.
+            artifactLaunch(autoTasks);
+        }
+
 
         // Intake from Row2.
-        artifactIntake(autoTasks, DecodeSettings.getPreIntakeArtifactRow2(), DecodeSettings.getIntakeArtifactRow2());
-        // ArtifactLaunch.
-        artifactLaunch(autoTasks);
+        if (runSpikeCount >=2 ) {
+            artifactIntake(autoTasks, DecodeSettings.getPreIntakeArtifactRow2(), DecodeSettings.getIntakeArtifactRow2());
+            // ArtifactLaunch.
+            artifactLaunch(autoTasks);
+        }
 
         // Intake from Row3 and Launch.
-//        artifactIntake(autoTasks, DecodeSettings.getPreIntakeArtifactRow3(), DecodeSettings.getIntakeArtifactRow3());
-
-//        // ArtifactLaunch.
-//        artifactLaunch(autoTasks);
+        if (runSpikeCount >=3) {
+            artifactIntake(autoTasks, DecodeSettings.getPreIntakeArtifactRow3(), DecodeSettings.getIntakeArtifactRow3());
+            // ArtifactLaunch.
+            artifactLaunch(autoTasks);
+        }
 
         // Move to ParkAfterAuto Position.
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));

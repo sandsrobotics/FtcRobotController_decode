@@ -47,6 +47,9 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
     Integer launchRPM = 3200;
 
+    static public int runSpikeCount = 2; // Default to 2 spikes
+    static public int runLeverOpen = 0; // Default to false.
+
     // Positions to travel in AutoFarRed
     Vector3 p_targetGoal                 = new Vector3(-70.5, 70.5, 180);   // RedGoal Position.
     Vector3 p_fieldStart                 = new Vector3(64,16,180);
@@ -71,7 +74,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
     static public int longDelay = 3000;
     public static int maxDelay = 10000;
     /**************************/
-    public int startDelay;
+    public int startDelay = 0;
     public long startTime;
 
     public void initAuto(){
@@ -133,7 +136,42 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         while (!isStarted()) {
             robot.buttonMgr.runLoop();
-            telemetry.addData("CurrOpMode: ", DecodeSettings.getCurrentOpMode());
+            telemetry.addData("CurrOpMode", DecodeSettings.getCurrentOpMode());
+            telemetry.addData("START_P", odo.getPosition());
+            // LED color indicator
+            if (DecodeSettings.isAllianceRed()) {
+                intake.getHardware().ledServo.setPosition(0.279); // Red (0.279),
+            } else {
+                intake.getHardware().ledServo.setPosition(0.611); //Blue (0.611),
+            }
+            telemetry.addData("Alliance Color",(DecodeSettings.isAllianceRed()?"Red":"Blue"));
+
+            telemetry.addData("D-PAD UP/DOWN to change spike count","");
+            // D-pad controls for spike count
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasTapped))
+            {
+                runSpikeCount = Math.min(3, runSpikeCount + 1);
+            }
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped))
+            {
+                runSpikeCount = Math.max(1, runSpikeCount - 1);
+            }
+            telemetry.addData("             Spikes to run", runSpikeCount);
+
+            telemetry.addData("D-PAD LEFT / RIGHT to disable/enable Lever Open","");
+            // D-pad controls for LeverOpen
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_left, ButtonMgr.State.wasTapped))
+            {
+                runLeverOpen = 0;
+            }
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_right, ButtonMgr.State.wasTapped))
+            {
+                runLeverOpen = 1;
+            }
+            telemetry.addData("             Lever Open:", (runLeverOpen == 1) ? "Enabled" : "Disabled");
+
+            telemetry.addData("RB (+) / LB (-) to change Start Delay","");
+
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.right_bumper, ButtonMgr.State.wasTapped)) {
                 startDelay += 1000;
             }
@@ -143,8 +181,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
             }
             if(startDelay > maxDelay) startDelay = maxDelay;
 
-            telemetry.addData("START_P", odo.getPosition());
-            telemetry.addData("START DELAY:", startDelay / 1000);
+            telemetry.addData("             START DELAY (Seconds):", startDelay / 1000);
             telemetry.update();
             sleep(50);
         }
@@ -158,6 +195,10 @@ public class T1_AutoFarRed  extends LinearOpMode{
         TimedTask autoTasks = new TimedTask("auto task", container);
         //positionSolver.setNewTarget(pt.getCurrentPosition(), true);
 
+        if (startDelay > 0) {
+            autoTasks.addDelay(startDelay);
+        }
+
         // Here is where we schedule the tasks for the autonomous run (testNewAuto function below run loop)
         // testNewAuto - Successfully Tested!
         testNewAuto(autoTasks);
@@ -167,10 +208,12 @@ public class T1_AutoFarRed  extends LinearOpMode{
         while (opModeIsActive()) {
             robot.run();
             DecodeSettings.setRobotPosition(pt.getCurrentPosition());
-            telemetry.addData("Position:", odo.getPosition());
-            telemetry.addData("Current Launch Motor RPM:", intake.getCurrentLaunchMotorRPM());
-            telemetry.addData("ClassificationId:", DecodeSettings.getClassificationId());
-            telemetry.addData("time:", System.currentTimeMillis() - startTime);
+            telemetry.addData("Position", odo.getPosition());
+            telemetry.addData("Current Launch Motor RPM", intake.getCurrentLaunchMotorRPM());
+            telemetry.addData("ClassificationId", DecodeSettings.getClassificationId());
+            telemetry.addData("time", System.currentTimeMillis() - startTime);
+            if (startDelay > 0)
+                telemetry.addData("Delayed Start", startDelay - (System.currentTimeMillis() - startTime));
             telemetry.update();
         }
         robot.stop();
@@ -226,14 +269,19 @@ public class T1_AutoFarRed  extends LinearOpMode{
 //        autoTasks.addDelay(300);
 
         // Intake from Row3 and Launch.
-        artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow3(), DecodeSettings.getIntakeArtifactRow3());
+        if (runSpikeCount >= 1) {
+            artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow3(), DecodeSettings.getIntakeArtifactRow3());
+        }
 
         // Intake from Row2 and Launch.
-        artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow2(), DecodeSettings.getIntakeArtifactRow2());
+        if (runSpikeCount >= 2) {
+            artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow2(), DecodeSettings.getIntakeArtifactRow2());
+        }
 
         // Intake from Row1 and Launch.
-//        artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow1(), DecodeSettings.getIntakeArtifactRow1());
-
+        if (runSpikeCount >= 3) {
+            artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow1(), DecodeSettings.getIntakeArtifactRow1());
+        }
         // Move to ParkAfterAuto Position.
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
         positionSolver.addMoveToTaskEx(DecodeSettings.getParkAfterAutoPos(), autoTasks);

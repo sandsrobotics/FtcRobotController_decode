@@ -53,12 +53,12 @@ public class T1_AutoFarRed  extends LinearOpMode{
     Vector3 p_obeliskView               = new Vector3(58, 16, 180);  // Was: 56, 16, 180; // FarRed: ObeliskView Position
     Vector3 p_launchPosZero             = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
     Vector3 p_launchPosOne              = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(58,16,158);    // Z: 160; FarRed Launching Position for pinkServo. Z:160.
+    Vector3 p_launchPosTwo              = new Vector3(58,16,160);    // Z: 160; FarRed Launching Position for pinkServo. Z:160.
 
     Vector3 p_pre_intakeArtifactRow1 = new Vector3(-12, 28, -90);  // Was Y: 28; Red: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1     = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
-    Vector3 p_pre_intakeArtifactRow2 = new Vector3(12, 28, -90);   // Was Y:28; Red: Ready to collect on Row2
-    Vector3 p_intakeArtifactRow2     = new Vector3(12, 60, -90);   // Red: Intake Artifacts in Row2
+    Vector3 p_pre_intakeArtifactRow2 = new Vector3(14, 28, -90);   // Was Y:28; Red: Ready to collect on Row2
+    Vector3 p_intakeArtifactRow2     = new Vector3(14, 60, -90);   // Red: Intake Artifacts in Row2
     Vector3 p_pre_intakeArtifactRow3 = new Vector3(35.5, 28, -90);   // Was Y:28; Red: Ready to collect in Row3
     Vector3 p_intakeArtifactRow3     = new Vector3(35.5, 60, -90);   // Red: Intake Artifacts in Row3
 
@@ -195,7 +195,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
         //Move to ObeliskView position.
         positionSolver.addMoveToTaskEx(DecodeSettings.getObeliskViewPos(), autoTasks, 1000);
         // Look at Obelisk, determine classificationId and Store it.
-        DecodeSettings.setClassificationId(limelight.getClassificationId());
+        autoTasks.addStep(intake.tasks.viewObelisk::restart);
 
         // Prep "Launch Motor".
         autoTasks.addStep(() -> intake.setLaunchRPM((int) DecodeSettings.getLaunchRPM()));
@@ -204,7 +204,8 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Launch Pre-loaded Artifacts.
         // Determine LaunchOrder and Launch
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
 //        autoTasks.addDelay(100);
@@ -243,7 +244,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
                                             Vector3 pos_pre_intake,
                                             Vector3 pos_intake) {
         // Move to pre_intake position.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
         positionSolver.addMoveToTaskEx(pos_pre_intake, autoTasks);
 
         // Start "intake".
@@ -258,10 +259,11 @@ public class T1_AutoFarRed  extends LinearOpMode{
         autoTasks.addDelay(1000); // 1500; 2500; Test with 1000.
 
         // Move to launch.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
         positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
+
         //  Determine LaunchOrder and Launch
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());

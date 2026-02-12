@@ -109,7 +109,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     public void onInit() {
         limelight = parent.opMode.hardwareMap.get(Limelight3A.class, "limelight");
         limelight.pipelineSwitch(0);
-//        parent.opMode.telemetry.setMsTransmissionInterval(11);
+        parent.opMode.telemetry.setMsTransmissionInterval(11);
         limelight.start();
         if (ledServoName != null && !ledServoName.isEmpty())
             ledIndicator = parent.opMode.hardwareMap.get(Servo.class, ledServoName);

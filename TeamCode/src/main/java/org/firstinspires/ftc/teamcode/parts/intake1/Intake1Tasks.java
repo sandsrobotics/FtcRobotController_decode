@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode.parts.intake1;
 
 import org.firstinspires.ftc.teamcode.parts.intake1.settings.Intake1Settings;
+import org.firstinspires.ftc.teamcode.parts.positionsolver.settings.PositionSolverSettings;
 
 import om.self.ezftc.core.Robot;
 import om.self.task.core.Group;
@@ -34,6 +35,10 @@ public class Intake1Tasks {
     public final TimedTask startXLaunch;
     public final TimedTask viewObelisk;
     public final TimedTask computeAndLaunchInOrder;
+    public final TimedTask launchOrderZero;
+    public final TimedTask launchOrderOne;
+    public final TimedTask launchOrderTwo;
+
     public final TimedTask allServoStore;
     public final TimedTask allServoDock;
     public final TimedTask pinkBlueGreenServoLaunch;
@@ -53,6 +58,7 @@ public class Intake1Tasks {
     private final Intake1 intake;
     private final Robot robot;
 
+    private int[] currentLaunchOrder = null;  // Stores computed launch order
 
     public Intake1Tasks(Intake1 intake, Robot robot) {
         this.intake = intake;
@@ -83,6 +89,10 @@ public class Intake1Tasks {
         startXLaunch = new TimedTask(TaskNames.startXLaunch, intakeTasksGroup);
         viewObelisk = new TimedTask(TaskNames.viewObelisk, intakeTasksGroup);
         computeAndLaunchInOrder = new TimedTask(TaskNames.computeAndLaunchInOrder, intakeTasksGroup);
+        launchOrderZero = new TimedTask(TaskNames.launchOrderZero, intakeTasksGroup);
+        launchOrderOne = new TimedTask(TaskNames.launchOrderOne, intakeTasksGroup);
+        launchOrderTwo = new TimedTask(TaskNames.launchOrderTwo, intakeTasksGroup);
+
         allServoStore = new TimedTask(TaskNames.allServoStore, intakeTasksGroup);
         allServoDock = new TimedTask(TaskNames.allServoDock, intakeTasksGroup);
         teleopFarRedLaunch = new TimedTask(TaskNames.teleopFarRedLaunch, intakeTasksGroup);
@@ -334,29 +344,74 @@ public class Intake1Tasks {
         //     computeAndLaunchInOrder
         computeAndLaunchInOrder.autoStart = false;
         computeAndLaunchInOrder.addStep( () -> {
-            int[] currLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
+            currentLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
+        });
+        computeAndLaunchInOrder.addStep(() -> {
+            intake.positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings);
+        });
+        // LaunchOrderZero
+        computeAndLaunchInOrder.addStep( () -> {
+           int currLaunch = currentLaunchOrder[0];
 
-            // Try using a Single Position for greenServo, blueServo and pinkServo Launches.
-            intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), computeAndLaunchInOrder);
+           if (currLaunch == 0) {
+                launchOrderZero.restart();
+           } else if (currLaunch == 1) {
+                launchOrderOne.restart();
+           } else if (currLaunch == 2) {
+                launchOrderTwo.restart();
+           }
+        });
+        computeAndLaunchInOrder.addStep( launchOrderZero::isDone);
+        computeAndLaunchInOrder.addStep( launchOrderOne::isDone);
+        computeAndLaunchInOrder.addStep( launchOrderTwo::isDone);
+        // LaunchOrderOne
+        computeAndLaunchInOrder.addStep( () -> {
+            int currLaunch = currentLaunchOrder[1];
 
-            for (int i = 0; i < 3; i++) {
-                int currLaunch = currLaunchOrder[i];
-
-                if (currLaunch == 0) {
-//                    intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), computeAndLaunchInOrder);
-                    computeAndLaunchInOrder.addStep(() -> intake.tasks.greenServoLaunch.restart());
-                    computeAndLaunchInOrder.addDelay(100);
-                } else if (currLaunch == 1) {
-//                    intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), computeAndLaunchInOrder);
-                    computeAndLaunchInOrder.addStep(() -> intake.tasks.blueServoLaunch.restart());
-                    computeAndLaunchInOrder.addDelay(100);
-                } else if (currLaunch == 2) {
-//                    intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), computeAndLaunchInOrder);
-                    computeAndLaunchInOrder.addStep(() -> intake.tasks.pinkServoLaunch.restart());
-                    computeAndLaunchInOrder.addDelay(100);
-                }
+            if (currLaunch == 0) {
+                launchOrderZero.restart();
+            } else if (currLaunch == 1) {
+                launchOrderOne.restart();
+            } else if (currLaunch == 2) {
+                launchOrderTwo.restart();
             }
         });
+        computeAndLaunchInOrder.addStep( launchOrderZero::isDone);
+        computeAndLaunchInOrder.addStep( launchOrderOne::isDone);
+        computeAndLaunchInOrder.addStep( launchOrderTwo::isDone);
+        // LaunchOrderTwo
+        computeAndLaunchInOrder.addStep( () -> {
+            int currLaunch = currentLaunchOrder[2];
+
+            if (currLaunch == 0) {
+                launchOrderZero.restart();
+            } else if (currLaunch == 1) {
+                launchOrderOne.restart();
+            } else if (currLaunch == 2) {
+                launchOrderTwo.restart();
+            }
+        });
+        computeAndLaunchInOrder.addStep( launchOrderZero::isDone);
+        computeAndLaunchInOrder.addStep( launchOrderOne::isDone);
+        computeAndLaunchInOrder.addStep( launchOrderTwo::isDone);
+
+        // launchOrderZero
+        launchOrderZero.autoStart = false;
+        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), launchOrderZero, 300);
+        launchOrderZero.addStep(() -> intake.tasks.greenServoLaunch.restart());
+        launchOrderZero.addDelay(100);
+
+        // launchOrderOne
+        launchOrderOne.autoStart = false;
+        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), launchOrderOne, 300);
+        launchOrderOne.addStep(() -> intake.tasks.blueServoLaunch.restart());
+        launchOrderOne.addDelay(100);
+
+        // launchOrderTwo
+        launchOrderTwo.autoStart = false;
+        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), launchOrderTwo, 300);
+        launchOrderTwo.addStep(() -> intake.tasks.pinkServoLaunch.restart());
+        launchOrderTwo.addDelay(100);
 
         //.         allServoStore
         allServoStore.autoStart = false;
@@ -378,40 +433,6 @@ public class Intake1Tasks {
         allServoDock.addStep(() -> intake.getHardware().blueServo.isDone());
         allServoDock.addStep(() -> intake.getHardware().greenServo.isDone());
 
-
-//        // teleopFarLaunch. -- Not working.
-//        teleopFarLaunch.addStep(() -> {
-//            intake.positionSolver.addMoveToTaskEx(
-//                    DecodeSettings.isAllianceBlue() ?
-//                            Intake1Settings.p_teleopFarBlueLaunch_1 :
-//                            Intake1Settings.p_teleopFarRedLaunch_1,
-//                    teleopFarLaunch);
-//              });
-//        teleopFarLaunch.addStep(startFarLaunch::restart);
-//        teleopFarLaunch.addStep(startFarLaunch::isDone);
-//        teleopFarLaunch.addStep(pinkServoLaunch::restart);
-//        teleopFarLaunch.addStep(pinkServoLaunch::isDone);
-//        teleopFarLaunch.addDelay(200);
-//        teleopFarLaunch.addStep(() -> {
-//            intake.positionSolver.addMoveToTaskEx(
-//                    DecodeSettings.isAllianceBlue() ?
-//                            Intake1Settings.p_teleopFarBlueLaunch_2 :
-//                            Intake1Settings.p_teleopFarRedLaunch_2,
-//                    teleopFarLaunch);
-//        });
-//        teleopFarLaunch.addStep(blueServoLaunch::restart);
-//        teleopFarLaunch.addStep(blueServoLaunch::isDone);
-//        teleopFarLaunch.addDelay(200);
-//        teleopFarLaunch.addStep(() -> {
-//            intake.positionSolver.addMoveToTaskEx(
-//                    DecodeSettings.isAllianceBlue() ?
-//                            Intake1Settings.p_teleopFarBlueLaunch_3 :
-//                            Intake1Settings.p_teleopFarRedLaunch_3,
-//                    teleopFarLaunch);
-//        });
-//        teleopFarLaunch.addStep(greenServoLaunch::restart);
-//        teleopFarLaunch.addStep(greenServoLaunch::isDone);
-//        teleopFarLaunch.addDelay(200);
 
         // teleopFarRedLaunch
         teleopFarRedLaunch.autoStart = false;
@@ -550,6 +571,10 @@ public class Intake1Tasks {
         public final static String startXLaunch = "start X-Launch";
         public final static String viewObelisk = "view Obelisk";
         public final static String computeAndLaunchInOrder = "compute and LaunchInOrder";
+        public final static String launchOrderZero = "launchOrderZero";
+        public final static String launchOrderOne = "launchOrderOne";
+        public final static String launchOrderTwo = "launchOrderTwo";
+
         public final static String allServoStore = "all servos store";
         public final static String allServoDock = "all servos Dock";
         public final static String pinkBlueGreenLaunch = "pink green blue servo Launch";

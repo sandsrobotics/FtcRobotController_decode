@@ -25,8 +25,8 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
     Vector3 p_pre_intakeArtifactRow1    = new Vector3(-12, 22, -90);  // Red: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1        = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
-    Vector3 p_pre_intakeArtifactRow2    = new Vector3(13, 22, -90);   // Red: Ready to collect on Row2
-    Vector3 p_intakeArtifactRow2        = new Vector3(13, 60, -90);   // Red: Intake Artifacts in Row2
+    Vector3 p_pre_intakeArtifactRow2    = new Vector3(14, 22, -90);   // Red: Ready to collect on Row2
+    Vector3 p_intakeArtifactRow2        = new Vector3(14, 60, -90);   // Red: Intake Artifacts in Row2
 
     Vector3 p_pre_intakeArtifactRow3    = new Vector3(35.5, 22, -90);   // Red: Ready to collect in Row3
     Vector3 p_intakeArtifactRow3        = new Vector3(35.5, 60, -90);   // Red: Intake Artifacts in Row3
@@ -55,7 +55,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
         //Move to ObeliskView position.
         positionSolver.addMoveToTaskEx(DecodeSettings.getObeliskViewPos(), autoTasks, 1000);
         // Look at Obelisk, determine classificationId and Store it.
-        DecodeSettings.setClassificationId(limelight.getClassificationId());
+        autoTasks.addStep(intake.tasks.viewObelisk::restart);
 
         // Prep "Launch Motor".
         autoTasks.addStep(() -> intake.setLaunchRPM((int) DecodeSettings.getLaunchRPM()));
@@ -63,8 +63,8 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
         autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
 
         // Move to Launch Position.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings));
-//        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
 
 //        // Launch Pre-loaded Artifacts.
 //        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
@@ -98,12 +98,12 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
         artifactLaunch(autoTasks);
 
         // Intake from Row2.
-        artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow2(), DecodeSettings.getIntakeArtifactRow2());
+        artifactIntake(autoTasks, DecodeSettings.getPreIntakeArtifactRow2(), DecodeSettings.getIntakeArtifactRow2());
         // ArtifactLaunch.
         artifactLaunch(autoTasks);
 
         // Intake from Row3 and Launch.
-//        artifactIntakeAndLaunch(autoTasks, DecodeSettings.getPreIntakeArtifactRow3(), DecodeSettings.getIntakeArtifactRow3());
+//        artifactIntake(autoTasks, DecodeSettings.getPreIntakeArtifactRow3(), DecodeSettings.getIntakeArtifactRow3());
 
 //        // ArtifactLaunch.
 //        artifactLaunch(autoTasks);
@@ -118,7 +118,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
                                    Vector3 pos_pre_intake,
                                    Vector3 pos_intake) {
         // Move to pre_intake position.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
         positionSolver.addMoveToTaskEx(pos_pre_intake, autoTasks);
 
         // Start "intake".
@@ -138,7 +138,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
     protected void artifactLaunch (TimedTask autoTasks) {
 
         // Move to launch.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
         positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());

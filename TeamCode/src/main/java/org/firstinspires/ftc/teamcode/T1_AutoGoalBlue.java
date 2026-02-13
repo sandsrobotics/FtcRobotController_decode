@@ -11,15 +11,15 @@ import om.self.ezftc.utils.Vector3;
 @Autonomous(name="14273.1 AutoGoalBlue", group="14273")
 public class T1_AutoGoalBlue  extends T1_AutoGoalRed {
 
-    Integer launchRPM = 2000; // TODO: Needs Tuning.
+    Integer launchRPM = 2450; // TODO: Needs Tuning.
 
     // Positions to travel in AutoFarBlue
     Vector3 p_targetGoal                 = new Vector3(-70.5, -60.5, 180);   // Y: -70.5; BlueGoal Position.
-    Vector3 p_fieldStart                = new Vector3(-39.0,-55,-180); // TODO: Confirm/Tune this position.
+    Vector3 p_fieldStart                = new Vector3(-62.5,-39,-180); // (-40.0, -55, -180) TODO: Confirm/Tune this position.
     Vector3 p_obeliskView               = new Vector3(-39.0, -31, 160);  // GoalBlue: ObeliskView Position
-    Vector3 p_launchPosZero             = new Vector3(-28.0,-16,-135);    // GoalBlue Launching Position.
-    Vector3 p_launchPosOne              = new Vector3(-28.0,-16,-135);    // GoalBlue Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(-28.0,-16,-135);    // GoalBlue Launching Position for pinkServo. Z:???.
+    Vector3 p_launchPosZero             = new Vector3(-28.0,-16,-128);    // GoalBlue Launching Position.
+    Vector3 p_launchPosOne              = new Vector3(-28.0,-16,-128);    // Z:131; GoalBlue Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(-28.0,-16,-128);    // Z:131; GoalBlue Launching Position for pinkServo.
 
     Vector3 p_pre_intakeArtifactRow1    = new Vector3(-12, -22, 90);  // Blue: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1        = new Vector3(-12, -53, 90);  // Blue: Intake Artifacts in Row1

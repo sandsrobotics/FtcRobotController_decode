@@ -348,7 +348,7 @@ public class Intake1Tasks {
         nearComputeAndLaunchInOrder.addStep(() -> {
             intake.positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings);
         });
-        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), nearComputeAndLaunchInOrder, 100);
+        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), nearComputeAndLaunchInOrder, 200);
         nearComputeAndLaunchInOrder.addStep( () -> {
             currentLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
             for (int i=0; i<3; i++) {

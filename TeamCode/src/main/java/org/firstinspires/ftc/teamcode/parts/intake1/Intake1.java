@@ -367,7 +367,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         }
         // Wait for the ServoLaunch to finish.
         try {
-            wait(100);
+            wait(150);
         } catch (InterruptedException e) {
             throw new RuntimeException(e);
         }

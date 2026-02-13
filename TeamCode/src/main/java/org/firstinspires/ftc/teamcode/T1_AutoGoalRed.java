@@ -13,15 +13,15 @@ import om.self.task.other.TimedTask;
 @Autonomous(name="14273.2 AutoGoalRed", group="14273")
 public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
-    Integer launchRPM = 2000; // 2350; 2500; TODO: Needs Tuning.
+    Integer launchRPM = 2450; // 2350; 2500; TODO: Needs Tuning.
 
     // Positions to travel in AutoGoalRed
     Vector3 p_targetGoal                = new Vector3(-70.5, 60.5, 180);   // Y: 70.5; RedGoal Position.
-    Vector3 p_fieldStart                = new Vector3(-40.0,55,180); // X: -39.0; TODO: Confirm/Tune this position.
+    Vector3 p_fieldStart                = new Vector3(-62.5,39,180); // (-40.0, 55, 180); X: -39.0; TODO: Confirm/Tune this position.
     Vector3 p_obeliskView               = new Vector3(-39.0, 31, -160);  // GoalRed: ObeliskView Position
-    Vector3 p_launchPosZero             = new Vector3(-28.0,16,131);    // GoalRed Launching Position.
-    Vector3 p_launchPosOne              = new Vector3(-28.0,16,131);    // 135; GoalRed Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(-28.0,16,131);    // 135; Was: -18, 29, 130? GoalRed Launching Position for pinkServo.
+    Vector3 p_launchPosZero             = new Vector3(-28.0,16,128);    // GoalRed Launching Position.
+    Vector3 p_launchPosOne              = new Vector3(-28.0,16,128);    // 135; GoalRed Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(-28.0,16,128);    // Z: 131; 135; Was: -18, 29, 130? GoalRed Launching Position for pinkServo.
 
     Vector3 p_pre_intakeArtifactRow1    = new Vector3(-12, 22, -90);  // Red: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1        = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
@@ -59,7 +59,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
         // Prep "Launch Motor".
         autoTasks.addStep(() -> intake.setLaunchRPM((int) DecodeSettings.getLaunchRPM()));
-        autoTasks.addStep(() -> intake.tasks.startGoalLaunch.restart());   // TODO: Create/Update startAutoGoalLaunch to use intake.launchRPM.
+        autoTasks.addStep(() -> intake.tasks.startGoalLaunch.restart());   // TODO: Create/Update startGoalLaunch to use intake.launchRPM.
         autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
 
         // Move to Launch Position.
@@ -175,7 +175,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 //        autoTasks.addDelay(300);
     }
 
-    // Artifact Launch.
+    // clearRamp.
     protected void clearRamp (TimedTask autoTasks) {
 
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));

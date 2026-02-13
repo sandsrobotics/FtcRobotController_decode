@@ -73,8 +73,8 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 //        autoTasks.addDelay(300);
 
         // Determine LaunchOrder and Launch
-        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
-        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
+        autoTasks.addStep(() -> intake.tasks.nearComputeAndLaunchInOrder.restart());
+        autoTasks.addStep(() -> intake.tasks.nearComputeAndLaunchInOrder.isDone());
 //        autoTasks.addDelay(100);
 
         //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).
@@ -151,8 +151,8 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.restart());
         autoTasks.addStep(() -> intake.tasks.artifactIntakeStopTask.isDone());
         //  Determine LaunchOrder and Launch
-        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
-        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
+        autoTasks.addStep(() -> intake.tasks.nearComputeAndLaunchInOrder.restart());
+        autoTasks.addStep(() -> intake.tasks.nearComputeAndLaunchInOrder.isDone());
 //        autoTasks.addDelay(100);
 
 //        //      Move to LaunchPositions and launchServos in defaultOrder. (pink, blue, green).

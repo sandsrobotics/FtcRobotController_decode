@@ -34,6 +34,7 @@ public class Intake1Tasks {
     public final TimedTask startYLaunch;
     public final TimedTask startXLaunch;
     public final TimedTask viewObelisk;
+    public final TimedTask nearComputeAndLaunchInOrder;
     public final TimedTask computeAndLaunchInOrder;
     public final TimedTask launchOrderZero;
     public final TimedTask launchOrderOne;
@@ -88,6 +89,7 @@ public class Intake1Tasks {
         startYLaunch = new TimedTask(TaskNames.startYLaunch, intakeTasksGroup);
         startXLaunch = new TimedTask(TaskNames.startXLaunch, intakeTasksGroup);
         viewObelisk = new TimedTask(TaskNames.viewObelisk, intakeTasksGroup);
+        nearComputeAndLaunchInOrder = new TimedTask(TaskNames.nearComputeAndLaunchInOrder, intakeTasksGroup);
         computeAndLaunchInOrder = new TimedTask(TaskNames.computeAndLaunchInOrder, intakeTasksGroup);
         launchOrderZero = new TimedTask(TaskNames.launchOrderZero, intakeTasksGroup);
         launchOrderOne = new TimedTask(TaskNames.launchOrderOne, intakeTasksGroup);
@@ -341,77 +343,46 @@ public class Intake1Tasks {
             DecodeSettings.setClassificationId(intake.limeLight.getClassificationId());
         });
 
+        //     nearComputeAndLaunchInOrder
+        nearComputeAndLaunchInOrder.autoStart = false;
+        nearComputeAndLaunchInOrder.addStep(() -> {
+            intake.positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings);
+        });
+        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), nearComputeAndLaunchInOrder, 100);
+        nearComputeAndLaunchInOrder.addStep( () -> {
+            currentLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
+            for (int i=0; i<3; i++) {
+                intake.nearLaunchInOrder(currentLaunchOrder[i]);
+            }
+        });
+
         //     computeAndLaunchInOrder
         computeAndLaunchInOrder.autoStart = false;
+        computeAndLaunchInOrder.addStep(() -> {
+            intake.positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings);
+        });
         computeAndLaunchInOrder.addStep( () -> {
             currentLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
-        });
-//        computeAndLaunchInOrder.addStep(() -> {
-//            intake.positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings);
-//        });
-        // LaunchOrderZero
-        computeAndLaunchInOrder.addStep( () -> {
-           int currLaunch = currentLaunchOrder[0];
-
-           if (currLaunch == 0) {
-                launchOrderZero.restart();
-           } else if (currLaunch == 1) {
-                launchOrderOne.restart();
-           } else if (currLaunch == 2) {
-                launchOrderTwo.restart();
-           }
-        });
-        computeAndLaunchInOrder.addTimedStep( launchOrderZero::isDone, 300);
-        computeAndLaunchInOrder.addTimedStep( launchOrderOne::isDone, 300);
-        computeAndLaunchInOrder.addTimedStep( launchOrderTwo::isDone, 300);
-        // LaunchOrderOne
-        computeAndLaunchInOrder.addStep( () -> {
-            int currLaunch = currentLaunchOrder[1];
-
-            if (currLaunch == 0) {
-                launchOrderZero.restart();
-            } else if (currLaunch == 1) {
-                launchOrderOne.restart();
-            } else if (currLaunch == 2) {
-                launchOrderTwo.restart();
+            for (int i=0; i<3; i++) {
+                intake.launchInOrder(currentLaunchOrder[i]);
             }
         });
-        computeAndLaunchInOrder.addTimedStep( launchOrderZero::isDone, 300);
-        computeAndLaunchInOrder.addTimedStep( launchOrderOne::isDone, 300);
-        computeAndLaunchInOrder.addTimedStep( launchOrderTwo::isDone, 300);
-        // LaunchOrderTwo
-        computeAndLaunchInOrder.addStep( () -> {
-            int currLaunch = currentLaunchOrder[2];
-
-            if (currLaunch == 0) {
-                launchOrderZero.restart();
-            } else if (currLaunch == 1) {
-                launchOrderOne.restart();
-            } else if (currLaunch == 2) {
-                launchOrderTwo.restart();
-            }
-        });
-        computeAndLaunchInOrder.addDelay(250);
-
-//        computeAndLaunchInOrder.addTimedStep( launchOrderZero::isDone, 300);
-//        computeAndLaunchInOrder.addTimedStep( launchOrderOne::isDone, 300);
-//        computeAndLaunchInOrder.addTimedStep( launchOrderTwo::isDone, 300);
 
         // launchOrderZero
         launchOrderZero.autoStart = false;
-        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), launchOrderZero, 100);
+        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), launchOrderZero, 200);
         launchOrderZero.addStep(() -> intake.tasks.greenServoLaunch.restart());
         launchOrderZero.addDelay(100);
 
         // launchOrderOne
         launchOrderOne.autoStart = false;
-        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), launchOrderOne, 100);
+        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), launchOrderOne, 200);
         launchOrderOne.addStep(() -> intake.tasks.blueServoLaunch.restart());
         launchOrderOne.addDelay(100);
 
         // launchOrderTwo
         launchOrderTwo.autoStart = false;
-        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), launchOrderTwo, 100);
+        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), launchOrderTwo, 200);
         launchOrderTwo.addStep(() -> intake.tasks.pinkServoLaunch.restart());
         launchOrderTwo.addDelay(100);
 
@@ -572,6 +543,7 @@ public class Intake1Tasks {
         public final static String startYLaunch = "start Y-Launch";
         public final static String startXLaunch = "start X-Launch";
         public final static String viewObelisk = "view Obelisk";
+        public final static String nearComputeAndLaunchInOrder = "near compute and LaunchInOrder";
         public final static String computeAndLaunchInOrder = "compute and LaunchInOrder";
         public final static String launchOrderZero = "launchOrderZero";
         public final static String launchOrderOne = "launchOrderOne";

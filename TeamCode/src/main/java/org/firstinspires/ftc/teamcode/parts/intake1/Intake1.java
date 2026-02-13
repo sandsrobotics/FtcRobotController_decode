@@ -352,5 +352,47 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         if (autoRPM) launchOff = false;
     }
 
+    // Helper to nearLaunch Servo in Order.
+    public void nearLaunchInOrder (int index) {
+        switch (index) {
+            case 0:
+                this.tasks.greenServoLaunch.restart();
+                break;
+            case 1:
+                this.tasks.blueServoLaunch.restart();
+                break;
+            case 2:
+                this.tasks.pinkServoLaunch.restart();
+                break;
+        }
+        // Wait for the ServoLaunch to finish.
+        try {
+            wait(100);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
+    // Helper to launch Servo in Order.
+    public void launchInOrder (int index) {
+        switch (index) {
+            case 0:
+                this.tasks.launchOrderZero.restart();
+                break;
+            case 1:
+                this.tasks.launchOrderOne.restart();
+                break;
+            case 2:
+                this.tasks.launchOrderTwo.restart();
+                break;
+        }
+        // Wait for the launchOrder tasks to finish.
+        try {
+            wait(300);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }
 

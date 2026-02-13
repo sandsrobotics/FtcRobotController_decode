@@ -17,11 +17,11 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
     // Positions to travel in AutoGoalRed
     Vector3 p_targetGoal                = new Vector3(-70.5, 60.5, 180);   // Y: 70.5; RedGoal Position.
-    Vector3 p_fieldStart                = new Vector3(-39.0,55,180); // TODO: Confirm/Tune this position.
+    Vector3 p_fieldStart                = new Vector3(-40.0,55,180); // X: -39.0; TODO: Confirm/Tune this position.
     Vector3 p_obeliskView               = new Vector3(-39.0, 31, -160);  // GoalRed: ObeliskView Position
-    Vector3 p_launchPosZero             = new Vector3(-28.0,16,135);    // GoalRed Launching Position.
-    Vector3 p_launchPosOne              = new Vector3(-28.0,16,135);    // GoalRed Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(-28.0,16,135);    // Was: -18, 29, 130? GoalRed Launching Position for pinkServo.
+    Vector3 p_launchPosZero             = new Vector3(-28.0,16,131);    // GoalRed Launching Position.
+    Vector3 p_launchPosOne              = new Vector3(-28.0,16,131);    // 135; GoalRed Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(-28.0,16,131);    // 135; Was: -18, 29, 130? GoalRed Launching Position for pinkServo.
 
     Vector3 p_pre_intakeArtifactRow1    = new Vector3(-12, 22, -90);  // Red: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1        = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1

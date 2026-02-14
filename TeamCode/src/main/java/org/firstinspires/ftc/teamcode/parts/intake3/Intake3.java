@@ -451,14 +451,16 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         getHardware().launchServo2.setSweepTime(IntakeSettings3.launchServoSweepTime);
         getHardware().lockServo0.setSweepTime(IntakeSettings3.lockServoSweepTime); //testing if the servos stall on init.
 
+        Launchers[0] = new IntakeSettings3.Launcher(getHardware().launchServo0, launchServo0Launch, launchServo0Rest);
+        Launchers[1] = new IntakeSettings3.Launcher(getHardware().launchServo1, launchServo1Launch, launchServo1Rest);
+        Launchers[2] = new IntakeSettings3.Launcher(getHardware().launchServo2, launchServo2Launch, launchServo2Rest);
+    }
+
+    public void setInitialServoPositions() {
         getHardware().launchServo0.setPosition(IntakeSettings3.launchServo0Rest);
         getHardware().launchServo1.setPosition(IntakeSettings3.launchServo1Rest);
         getHardware().launchServo2.setPosition(IntakeSettings3.launchServo2Rest);
         getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
-
-        Launchers[0] = new IntakeSettings3.Launcher(getHardware().launchServo0, launchServo0Launch, launchServo0Rest);
-        Launchers[1] = new IntakeSettings3.Launcher(getHardware().launchServo1, launchServo1Launch, launchServo1Rest);
-        Launchers[2] = new IntakeSettings3.Launcher(getHardware().launchServo2, launchServo2Launch, launchServo2Rest);
     }
 
     @Override
@@ -507,23 +509,12 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         }
 
         parent.opMode.telemetry.addData("Launch Servos", (int)index0Rpm + "," + (int)index1Rpm + "," + (int)index2Rpm);
-
-//        // Handle LED color
-//        if (IntakeSettings3.alignTarget && limeLight.tv && isAligned()) {
-//            // Show green when actively aligning and aligned
-//            getHardware().pixel.setPosition(LEDColor.GREEN.getLedPwm());
-//        } else {
-//            // Show alliance color otherwise
-//            getHardware().pixel.setPosition(
-//                    IntakeSettings3.isRedSide ? LEDColor.RED.getLedPwm() : LEDColor.BLUE.getLedPwm()
-//            );
-//        }
     }
 
     @Override
     public void onStart() {
         getHardware().pixel.setPosition(LEDColor.OFF.getLedPwm());
-        getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock); // Lock at start
+        setInitialServoPositions();
         drive.addController(Intake3.ControllerNames.alignController, this::alignToTarget);
     }
 

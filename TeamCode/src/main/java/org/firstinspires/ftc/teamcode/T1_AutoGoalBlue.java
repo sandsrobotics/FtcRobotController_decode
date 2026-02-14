@@ -29,8 +29,8 @@ public class T1_AutoGoalBlue  extends T1_AutoGoalRed {
     Vector3 p_pre_intakeArtifactRow3    = new Vector3(35.5, -22, 90);   // Blue: Ready to collect in Row3
     Vector3 p_intakeArtifactRow3        = new Vector3(35.5, -60, 90);   // Blue: Intake Artifacts in Row3
 
-    Vector3 p_pre_leverOpen                 = new Vector3(0, -45, -180);    // Blue: Pre-Open Lever Position
-    Vector3 p_leverOpen                 = new Vector3(0, -55, -180);    // Blue: Open Lever Position
+    Vector3 p_pre_leverOpen             = new Vector3(-4, -45, -180);    // X:0; Blue: Pre-Open Lever Position
+    Vector3 p_leverOpen                 = new Vector3(-4, -55, -180);    // X:0; Blue: Open Lever Position
     Vector3 p_parkAfterAuto             = new Vector3(-9,-28,-180);
 
     @Override

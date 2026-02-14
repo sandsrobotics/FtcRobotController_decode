@@ -31,8 +31,8 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
     Vector3 p_pre_intakeArtifactRow3    = new Vector3(35.5, 22, -90);   // Red: Ready to collect in Row3
     Vector3 p_intakeArtifactRow3        = new Vector3(35.5, 60, -90);   // Red: Intake Artifacts in Row3
 
-    Vector3 p_pre_leverOpen             = new Vector3(0, 45, 180);    // Red: Open Lever Position
-    Vector3 p_leverOpen                 = new Vector3(0, 55, 180);    // Red: Open Lever Position
+    Vector3 p_pre_leverOpen             = new Vector3(-4, 45, 180);    // X:0; Red: Open Lever Position
+    Vector3 p_leverOpen                 = new Vector3(-4, 55, 180);    // X:0; Red: Open Lever Position
     Vector3 p_parkAfterAuto             = new Vector3(-9,28,180);
 
     // testNewAuto
@@ -181,15 +181,16 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
         // Move to pre-clearRamp.
         positionSolver.addMoveToTaskEx(DecodeSettings.getPreLeverOpenPos(), autoTasks, 2000);
+        autoTasks.addStep(()-> intake.tasks.artifactIntakeStopTask.restart());
 
         // Move to clearRamp.
-        positionSolver.addMoveToTaskEx(DecodeSettings.getLeverOpenPos(), autoTasks, 2000);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLeverOpenPos(), autoTasks, 1000);
 
         // Wait for Artifacts to Clear.
-        autoTasks.addDelay(1000);
+        autoTasks.addDelay(1500);
 
         // Move to pre-clearRamp.
-        positionSolver.addMoveToTaskEx(DecodeSettings.getPreLeverOpenPos(), autoTasks, 2000);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getPreLeverOpenPos(), autoTasks, 1500);
     }
 
     @Override

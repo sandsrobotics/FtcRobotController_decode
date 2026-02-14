@@ -167,6 +167,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_right, ButtonMgr.State.wasTapped))
             {
                 runLeverOpen = 1;
+                runSpikeCount = 1; // re-set runSpikeCount to 1 whenever runLeverOpen is true.
             }
             telemetry.addData("             Lever Open:", (runLeverOpen == 1) ? "Enabled" : "Disabled");
 

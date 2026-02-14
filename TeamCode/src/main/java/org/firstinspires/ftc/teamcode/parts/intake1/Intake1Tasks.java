@@ -160,12 +160,12 @@ public class Intake1Tasks {
         // all at once
         allServoLaunch.autoStart = false;
         allServoLaunch.addStep(()->{
-//            pinkServoLaunch.restart();
-//            blueServoLaunch.restart();
-//            greenServoLaunch.restart();
-            greenServoLaunch.restart();
-            blueServoLaunch.restart();
             pinkServoLaunch.restart();
+            blueServoLaunch.restart();
+            greenServoLaunch.restart();
+//            greenServoLaunch.restart();
+//            blueServoLaunch.restart();
+//            pinkServoLaunch.restart();
 
         });
 //        allServoLaunch.addStep(pinkServoLaunch::isDone);
@@ -366,8 +366,9 @@ public class Intake1Tasks {
         nearComputeAndLaunchInOrder.addStep( () -> {
             intake.nearLaunchInOrder(currentLaunchOrder[2]);
         });
+        nearComputeAndLaunchInOrder.addDelay(200);
         nearComputeAndLaunchInOrder.addStep( () -> intake.tasks.allServoLaunch.restart());
-        nearComputeAndLaunchInOrder.addDelay(400);
+        nearComputeAndLaunchInOrder.addDelay(200);
 
         //     computeAndLaunchInOrder
         computeAndLaunchInOrder.autoStart = false;
@@ -386,7 +387,9 @@ public class Intake1Tasks {
         computeAndLaunchInOrder.addStep( () -> {
             intake.launchInOrder(currentLaunchOrder[2]);
         });
-        computeAndLaunchInOrder.addDelay(700);
+        computeAndLaunchInOrder.addDelay(400);
+        computeAndLaunchInOrder.addStep( () -> intake.tasks.allServoLaunch.restart());
+        computeAndLaunchInOrder.addDelay(300);
 
         // launchOrderZero
         launchOrderZero.autoStart = false;

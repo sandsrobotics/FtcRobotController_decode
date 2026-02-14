@@ -365,12 +365,6 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
                 this.tasks.pinkServoLaunch.restart();
                 break;
         }
-//        // Wait for the ServoLaunch to finish.
-//        try {
-//            wait(150);
-//        } catch (InterruptedException e) {
-////            throw new RuntimeException(e);
-//        }
     }
 
     // Helper to launch Servo in Order.
@@ -386,12 +380,6 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
                 this.tasks.launchOrderTwo.restart();
                 break;
         }
-        // Wait for the launchOrder tasks to finish.
-//        try {
-//            wait(300);
-//        } catch (InterruptedException e) {
-////            throw new RuntimeException(e);
-//        }
     }
 
 }

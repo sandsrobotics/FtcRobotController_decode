@@ -241,7 +241,7 @@ public class Intake1Tasks {
         startAutoFarLaunch.addStep(() -> intake.setLaunchRPM((int) Intake1Settings.autoFarLaunchMotorRPM));
         //%%%
         //startAutoFarLaunch.addStep(() -> intake.setLaunchMotors((int) Intake1Settings.autoFarLaunchMotorRPM));
-        startAutoFarLaunch.addTimedStep(() -> {}, intake::launchRPMInTolerance, 3000);
+        startAutoFarLaunch.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
 
         //    start Launch
         startFarLaunch.autoStart = false;
@@ -351,10 +351,23 @@ public class Intake1Tasks {
         intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), nearComputeAndLaunchInOrder, 200);
         nearComputeAndLaunchInOrder.addStep( () -> {
             currentLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
-            for (int i=0; i<3; i++) {
-                intake.nearLaunchInOrder(currentLaunchOrder[i]);
-            }
         });
+        nearComputeAndLaunchInOrder.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
+        nearComputeAndLaunchInOrder.addStep( () -> {
+            intake.nearLaunchInOrder(currentLaunchOrder[0]);
+        });
+        nearComputeAndLaunchInOrder.addDelay(400);
+        nearComputeAndLaunchInOrder.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
+        nearComputeAndLaunchInOrder.addStep( () -> {
+            intake.nearLaunchInOrder(currentLaunchOrder[1]);
+        });
+        nearComputeAndLaunchInOrder.addDelay(400);
+        nearComputeAndLaunchInOrder.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
+        nearComputeAndLaunchInOrder.addStep( () -> {
+            intake.nearLaunchInOrder(currentLaunchOrder[2]);
+        });
+        nearComputeAndLaunchInOrder.addStep( () -> intake.tasks.allServoLaunch.restart());
+        nearComputeAndLaunchInOrder.addDelay(400);
 
         //     computeAndLaunchInOrder
         computeAndLaunchInOrder.autoStart = false;
@@ -363,26 +376,36 @@ public class Intake1Tasks {
         });
         computeAndLaunchInOrder.addStep( () -> {
             currentLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
-            for (int i=0; i<3; i++) {
-                intake.launchInOrder(currentLaunchOrder[i]);
-            }
+            intake.launchInOrder(currentLaunchOrder[0]);
         });
+        computeAndLaunchInOrder.addDelay(600);
+        computeAndLaunchInOrder.addStep( () -> {
+            intake.launchInOrder(currentLaunchOrder[1]);
+        });
+        computeAndLaunchInOrder.addDelay(600);
+        computeAndLaunchInOrder.addStep( () -> {
+            intake.launchInOrder(currentLaunchOrder[2]);
+        });
+        computeAndLaunchInOrder.addDelay(700);
 
         // launchOrderZero
         launchOrderZero.autoStart = false;
         intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), launchOrderZero, 200);
+        launchOrderZero.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
         launchOrderZero.addStep(() -> intake.tasks.greenServoLaunch.restart());
         launchOrderZero.addDelay(100);
 
         // launchOrderOne
         launchOrderOne.autoStart = false;
         intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), launchOrderOne, 200);
+        launchOrderOne.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
         launchOrderOne.addStep(() -> intake.tasks.blueServoLaunch.restart());
         launchOrderOne.addDelay(100);
 
         // launchOrderTwo
         launchOrderTwo.autoStart = false;
         intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), launchOrderTwo, 200);
+        launchOrderTwo.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
         launchOrderTwo.addStep(() -> intake.tasks.pinkServoLaunch.restart());
         launchOrderTwo.addDelay(100);
 

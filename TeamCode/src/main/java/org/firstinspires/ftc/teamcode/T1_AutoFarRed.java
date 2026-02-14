@@ -54,9 +54,9 @@ public class T1_AutoFarRed  extends LinearOpMode{
     Vector3 p_targetGoal                 = new Vector3(-70.5, 70.5, 180);   // RedGoal Position.
     Vector3 p_fieldStart                 = new Vector3(64,16,180);
     Vector3 p_obeliskView               = new Vector3(58, 16, 180);  // Was: 56, 16, 180; // FarRed: ObeliskView Position
-    Vector3 p_launchPosZero             = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_launchPosOne              = new Vector3(58,16,157);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(58,16,160);    // Z: 160; FarRed Launching Position for pinkServo. Z:160.
+    Vector3 p_launchPosZero             = new Vector3(58,16,154);    // Was: 56, 16, 153; // FarRed Launching Position.
+    Vector3 p_launchPosOne              = new Vector3(58,16,156);    // Was: 56, 16, 153; // FarRed Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(58,16,156);    // Z: 160; FarRed Launching Position for pinkServo. Z:160.
 
     Vector3 p_pre_intakeArtifactRow1 = new Vector3(-12, 28, -90);  // Was Y: 28; Red: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1     = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
@@ -229,26 +229,27 @@ public class T1_AutoFarRed  extends LinearOpMode{
     protected void testNewAuto(TimedTask autoTasks) {
 
         // Reset and Get Ready.
-        autoTasks.addStep(() -> intake.stopAllIntakeTasks());
-        autoTasks.addDelay(100);
+//        autoTasks.addStep(() -> intake.stopAllIntakeTasks());
+//        autoTasks.addDelay(100);
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
         autoTasks.addStep(() -> intake.tasks.allServoStore.restart());
 //        autoTasks.addTimedStep(() -> {}, () -> intake.tasks.allServoStore.isDone(), 100);
 
         //Move to ObeliskView position.
-        positionSolver.addMoveToTaskEx(DecodeSettings.getObeliskViewPos(), autoTasks, 1000);
+//        positionSolver.addMoveToTaskEx(DecodeSettings.getObeliskViewPos(), autoTasks, 1000);
         // Look at Obelisk, determine classificationId and Store it.
         autoTasks.addStep(intake.tasks.viewObelisk::restart);
 
         // Prep "Launch Motor".
         autoTasks.addStep(() -> intake.setLaunchRPM((int) DecodeSettings.getLaunchRPM()));
         autoTasks.addStep(() -> intake.tasks.startAutoFarLaunch.restart());   // TODO: Update startAutoFarLaunch to use intake.launchRPM.
-        autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
+//        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
+        autoTasks.addStep(() -> intake.tasks.startAutoFarLaunch.isDone());
+//        autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
 
         // Launch Pre-loaded Artifacts.
         // Determine LaunchOrder and Launch
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
-        positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), autoTasks);
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
         autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
 //        autoTasks.addDelay(100);

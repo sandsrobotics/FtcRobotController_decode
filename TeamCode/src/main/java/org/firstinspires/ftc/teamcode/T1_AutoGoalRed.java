@@ -17,11 +17,11 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
     // Positions to travel in AutoGoalRed
     Vector3 p_targetGoal                = new Vector3(-70.5, 60.5, 180);   // Y: 70.5; RedGoal Position.
-    Vector3 p_fieldStart                = new Vector3(-62.5,39,180); // (-40.0, 55, 180); X: -39.0; TODO: Confirm/Tune this position.
+    Vector3 p_fieldStart                = new Vector3(-41.5,55,180); // (-40.0, 55, 180); X: -39.0; TODO: Confirm/Tune this position.
     Vector3 p_obeliskView               = new Vector3(-39.0, 31, -160);  // GoalRed: ObeliskView Position
-    Vector3 p_launchPosZero             = new Vector3(-28.0,16,128);    // GoalRed Launching Position.
-    Vector3 p_launchPosOne              = new Vector3(-28.0,16,128);    // 135; GoalRed Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(-28.0,16,128);    // Z: 131; 135; Was: -18, 29, 130? GoalRed Launching Position for pinkServo.
+    Vector3 p_launchPosZero             = new Vector3(-16.0,16,127);    // GoalRed Launching Position.
+    Vector3 p_launchPosOne              = new Vector3(-16.0,16,127);    // 135; GoalRed Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(-16.0,16,127);    // (-28,16,124) Z: 131; 135; Was: -18, 29, 130? GoalRed Launching Position for pinkServo.
 
     Vector3 p_pre_intakeArtifactRow1    = new Vector3(-12, 22, -90);  // Red: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1        = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
@@ -33,7 +33,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
     Vector3 p_pre_leverOpen             = new Vector3(0, 45, 180);    // Red: Open Lever Position
     Vector3 p_leverOpen                 = new Vector3(0, 55, 180);    // Red: Open Lever Position
-    Vector3 p_parkAfterAuto             = new Vector3(-12,28,180);
+    Vector3 p_parkAfterAuto             = new Vector3(-9,28,180);
 
     // testNewAuto
     //     Look at Obelisk, Determine Game Classification Pattern and Store it.
@@ -60,7 +60,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
         // Prep "Launch Motor".
         autoTasks.addStep(() -> intake.setLaunchRPM((int) DecodeSettings.getLaunchRPM()));
         autoTasks.addStep(() -> intake.tasks.startGoalLaunch.restart());   // TODO: Create/Update startGoalLaunch to use intake.launchRPM.
-        autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
+//        autoTasks.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), 3000);
 
         // Move to Launch Position.
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
@@ -180,16 +180,16 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
 
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
         // Move to pre-clearRamp.
-        positionSolver.addMoveToTaskEx(DecodeSettings.getPreLeverOpenPos(), autoTasks);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getPreLeverOpenPos(), autoTasks, 2000);
 
         // Move to clearRamp.
-        positionSolver.addMoveToTaskEx(DecodeSettings.getLeverOpenPos(), autoTasks);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getLeverOpenPos(), autoTasks, 2000);
 
         // Wait for Artifacts to Clear.
         autoTasks.addDelay(1000);
 
         // Move to pre-clearRamp.
-        positionSolver.addMoveToTaskEx(DecodeSettings.getPreLeverOpenPos(), autoTasks);
+        positionSolver.addMoveToTaskEx(DecodeSettings.getPreLeverOpenPos(), autoTasks, 2000);
     }
 
     @Override

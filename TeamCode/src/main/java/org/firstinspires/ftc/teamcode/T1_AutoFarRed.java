@@ -306,7 +306,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Move to intake.
         positionSolver.addMoveToTaskEx(pos_intake, autoTasks, 2000);
-        autoTasks.addDelay(1000); // 1500; 2500; Test with 1000.
+        autoTasks.addDelay(1500); // 1500; 2500; Test with 1000.
 
         // Move to launch.
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));

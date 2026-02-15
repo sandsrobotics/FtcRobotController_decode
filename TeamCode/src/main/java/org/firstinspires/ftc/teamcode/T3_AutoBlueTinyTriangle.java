@@ -116,6 +116,16 @@ public class T3_AutoBlueTinyTriangle extends T3_AutoBase {
             );
         }
 
+//        autoTasks.addTimedStep(
+//                () -> IntakeSettings3.alignTarget = true,
+//                () -> intake.isAligned(),
+//                IntakeSettings3.alignmentTimeout
+//
+//        );
+//        autoTasks.addStep((()->IntakeSettings3.alignTarget = false));
+//
+//
+
         autoTasks.addStep(() -> intake.setIntakeRPM(0));
 
         // Use ordered color launch instead of regular ball launch

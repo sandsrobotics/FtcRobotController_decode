@@ -18,6 +18,7 @@ public class Intake3Tasks {
     public final TimedTask resetLaunchServos;
     public final TimedTask alignTarget;
     public final TimedTask orderedColorLaunchTask;
+    public final TimedTask orderedColorLaunchTaskClose;
     public final TimedTask launchOneArtifact;
     private final Intake3 intake;
     private int[] currentLaunchOrder = null;  // Stores computed launch order
@@ -35,6 +36,7 @@ public class Intake3Tasks {
         resetLaunchServos = new TimedTask(TaskNames.ResetLaunch, movementTask);
         alignTarget = new TimedTask(TaskNames.AlignTarget, movementTask);
         orderedColorLaunchTask = new TimedTask(TaskNames.OrderedColorLaunch, movementTask);
+        orderedColorLaunchTaskClose = new TimedTask(TaskNames.OrderedColorLaunchClose, movementTask);
         launchOneArtifact = new TimedTask(TaskNames.LaunchOneArtifact, movementTask);
     }
 
@@ -94,6 +96,56 @@ public class Intake3Tasks {
 
         //launch reset
         sameTimeBallLaunchTask.addStep(()-> resetLaunchServos.restart());
+
+        /* End */
+
+        /* Begin */
+
+// Ordered color launch
+        orderedColorLaunchTaskClose.autoStart = false;
+
+// Unlock
+        orderedColorLaunchTaskClose.addStep(() -> intake.getHardware().lockServo0.setPosition(intake.getSettings().lockServo0Unlock));
+        orderedColorLaunchTaskClose.addStep(() -> intake.getHardware().lockServo0.isDone());
+
+// Compute order using the ONE method
+        orderedColorLaunchTaskClose.addStep(() -> {
+            ArtifactDetectionPipeline.ArtifactColor[] desiredOrder = intake.limeLight.getClassificationPattern();
+            currentLaunchOrder = intake.computeLaunchOrder(desiredOrder);
+        });
+
+// Ball 1
+        orderedColorLaunchTaskClose.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), intake.getSettings().launchRPMToleranceTime);
+        orderedColorLaunchTaskClose.addStep(() -> {
+            if (currentLaunchOrder != null && currentLaunchOrder.length > 0) {
+                intake.launchServoByIndex(currentLaunchOrder[0]);
+            }
+        });
+        orderedColorLaunchTaskClose.addStep(() -> currentLaunchOrder != null && currentLaunchOrder.length > 0 ? intake.servoIsDoneByIndex(currentLaunchOrder[0]) : true);
+        orderedColorLaunchTaskClose.addDelay(intake.getSettings().launchServoDelayforA);
+
+// Ball 2
+//        orderedColorLaunchTask.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), intake.getSettings().launchRPMToleranceTime);
+        orderedColorLaunchTaskClose.addStep(() -> {
+            if (currentLaunchOrder != null && currentLaunchOrder.length > 1) {
+                intake.launchServoByIndex(currentLaunchOrder[1]);
+            }
+        });
+        orderedColorLaunchTaskClose.addStep(() -> currentLaunchOrder != null && currentLaunchOrder.length > 1 ? intake.servoIsDoneByIndex(currentLaunchOrder[1]) : true);
+        orderedColorLaunchTaskClose.addDelay(intake.getSettings().launchServoDelayforA);
+
+// Ball 3
+//        orderedColorLaunchTask.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), intake.getSettings().launchRPMToleranceTime);
+        orderedColorLaunchTaskClose.addStep(() -> {
+            if (currentLaunchOrder != null && currentLaunchOrder.length > 2) {
+                intake.launchServoByIndex(currentLaunchOrder[2]);
+            }
+        });
+        orderedColorLaunchTaskClose.addStep(() -> currentLaunchOrder != null && currentLaunchOrder.length > 2 ? intake.servoIsDoneByIndex(currentLaunchOrder[2]) : true);
+        orderedColorLaunchTaskClose.addDelay(intake.getSettings().launchServoDelayforA);
+
+// Reset
+        orderedColorLaunchTaskClose.addStep(() -> resetLaunchServos.restart());
 
         /* End */
 
@@ -191,6 +243,7 @@ public class Intake3Tasks {
         public final static String MoveAndLaunch = "auto move and launch";
         public final static String ResetLaunch = "auto reset launch servos";
         public final static String OrderedColorLaunch = "auto ordered color launch";
+        public final static String OrderedColorLaunchClose = "auto ordered close color launch";
         public final static String AlignTarget = "auto align to april tag";
         public final static String LaunchOneArtifact = "auto launch just one ball by index";
     }

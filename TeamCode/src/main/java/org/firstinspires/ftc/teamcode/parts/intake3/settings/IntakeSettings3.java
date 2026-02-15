@@ -25,9 +25,11 @@ public class IntakeSettings3 {
     public static int lockServoUnlockDelay = 300;        // Time to wait for lock servo to fully unlock
     public static int launchServoSettleTime = 100;       // Extra time for servo to settle at launch position
     public static int launchServoResetSettleTime = 300;  // Time to wait for servo to fully reset before locking
+    public static int alignmentTimeout = 300; // milliseconds to wait for alignment
 
     // launch servo values
     public static int launchServoDelay = 100; //use tolerance not delay
+    public static int launchServoDelayforA = 600; //use tolerance not delay
     public static int launchServoSweepTime = 400;
     public static int lockServoSweepTime = 400;
     public static int launchRPMTolerance = 75;

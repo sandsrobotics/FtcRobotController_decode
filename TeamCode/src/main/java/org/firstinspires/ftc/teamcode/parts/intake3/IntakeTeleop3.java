@@ -263,6 +263,17 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.tasks.orderedColorLaunchTask.restart();
         }
 
+
+        // RIGHT TRIGGER - Color-ordered launch close up (auto-starts launcher)
+        if (buttonMgr.getState(2, Buttons.a, State.wasPressed)) {
+            if (parent.getTargetLaunchRPM() < 500) {
+                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+                IntakeSettings3.launchArmed = true;
+            }
+            parent.stopAllIntakeTasks();
+            parent.tasks.orderedColorLaunchTaskClose.restart();
+        }
+
         // Y BUTTON - Start/Stop launcher
         if (buttonMgr.getState(2, Buttons.y, State.wasTapped)) {
             parent.setLaunchRPM(IntakeSettings3.launchRPM);
@@ -296,14 +307,14 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         }
 
         // A BUTTON - Sequential launch (auto-starts launcher)
-        if (buttonMgr.getState(2, Buttons.a, State.wasTapped)) {
-            if (parent.getTargetLaunchRPM() < 500) {
-                parent.setLaunchRPM(IntakeSettings3.launchRPM);
-                IntakeSettings3.launchArmed = true;
-            }
-            parent.stopAllIntakeTasks();
-            parent.tasks.orderedColorLaunchTask.restart();
-        }
+//        if (buttonMgr.getState(2, Buttons.a, State.wasTapped)) {
+//            if (parent.getTargetLaunchRPM() < 500) {
+//                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+//                IntakeSettings3.launchArmed = true;
+//            }
+//            parent.stopAllIntakeTasks();
+//            parent.tasks.orderedColorLaunchTask.restart();
+//        }
 
         // X BUTTON - Reverse shooter
 //        if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {

@@ -290,8 +290,10 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 
         // Unlock servos before firing
         getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Unlock);
-        parent.opMode.sleep(IntakeSettings3.lockServoUnlockDelay);
-
+        long start = System.currentTimeMillis();
+        while (System.currentTimeMillis() - start < IntakeSettings3.lockServoUnlockDelay) {
+            parent.opMode.telemetry.update();
+        }
         List<Integer> launchOrder = new ArrayList<>();
         String launchMessage = "";
 
@@ -369,13 +371,25 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         // Fire servos in order
         for (int idx : launchOrder) {
             launchServoByIndex(idx);
-            parent.opMode.sleep(IntakeSettings3.launchServoSweepTime + IntakeSettings3.launchServoSettleTime);
-            resetServoByIndex(idx);
-            parent.opMode.sleep(IntakeSettings3.launchServoDelay);
-        }
 
+            long servoStart = System.currentTimeMillis();
+            while (System.currentTimeMillis() - servoStart < (IntakeSettings3.launchServoSweepTime + IntakeSettings3.launchServoSettleTime)) {
+                parent.opMode.telemetry.update();
+            }
+
+            resetServoByIndex(idx);
+
+            long delayStart = System.currentTimeMillis();
+            while (System.currentTimeMillis() - delayStart < IntakeSettings3.launchServoDelay) {
+                parent.opMode.telemetry.update();
+            }
+        }
         // Re-lock servos after all launches complete
-        parent.opMode.sleep(IntakeSettings3.launchServoResetSettleTime);
+        long relockStart = System.currentTimeMillis();
+        while (System.currentTimeMillis() - relockStart < IntakeSettings3.launchServoResetSettleTime) {
+            parent.opMode.telemetry.update();
+        }
+        getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
         getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
     }
 
@@ -450,7 +464,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         getHardware().launchServo1.setSweepTime(IntakeSettings3.launchServoSweepTime);
         getHardware().launchServo2.setSweepTime(IntakeSettings3.launchServoSweepTime);
         getHardware().lockServo0.setSweepTime(IntakeSettings3.lockServoSweepTime); //testing if the servos stall on init.
-
+        setInitialServoPositions();
         Launchers[0] = new IntakeSettings3.Launcher(getHardware().launchServo0, launchServo0Launch, launchServo0Rest);
         Launchers[1] = new IntakeSettings3.Launcher(getHardware().launchServo1, launchServo1Launch, launchServo1Rest);
         Launchers[2] = new IntakeSettings3.Launcher(getHardware().launchServo2, launchServo2Launch, launchServo2Rest);
@@ -515,6 +529,9 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     public void onStart() {
         getHardware().pixel.setPosition(LEDColor.OFF.getLedPwm());
         setInitialServoPositions();
+//        parent.opMode.sleep(1200);
+//        setInitialServoPositions();
+
         drive.addController(Intake3.ControllerNames.alignController, this::alignToTarget);
     }
 

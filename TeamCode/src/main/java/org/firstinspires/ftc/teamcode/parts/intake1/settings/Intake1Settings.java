@@ -33,7 +33,7 @@ public class Intake1Settings {
     public static double servoBlueLaunch =                          0.671;
     public static double servoBlueLow =                             0.390;
 
-    public static double ticksPerRevolution =                          28;
+    public static double ticksPerRevolution =                        28;
     public double secondsPerMinute =                                 60;
     public static double autoFarLaunchMotorRPM =                     3100; // 3000; 3100; 3200
     public static double farLaunchMotorRPM =                         3300; // 3100; 3200

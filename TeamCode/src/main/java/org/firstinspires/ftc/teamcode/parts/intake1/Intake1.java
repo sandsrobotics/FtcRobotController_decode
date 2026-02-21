@@ -324,6 +324,10 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         return getSpinnerRPMfromDistance(calculateTargetDistance(positionTracker.getOverridePosition(), storedTarget));
     }
 
+    public int getLaunchMotorRPM(int RPM) {
+        return (RPM*28/60);
+    }
+
     public static double getSpinnerRPMfromDistance(double distance) {
         return interpolate(distance, nearest, farthest, spinNear, spinFar);
     }

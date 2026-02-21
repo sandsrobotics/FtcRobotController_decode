@@ -43,6 +43,8 @@ public class Intake1Tasks {
     public final TimedTask allServoStore;
     public final TimedTask allServoDock;
     public final TimedTask pinkBlueGreenServoLaunch;
+    public final TimedTask threeLaunchNear;
+    public final TimedTask threeLaunchFar;
 
     public final TimedTask teleopFarRedLaunch;
     public final TimedTask teleopNearRedLaunch;
@@ -94,6 +96,9 @@ public class Intake1Tasks {
         launchOrderZero = new TimedTask(TaskNames.launchOrderZero, intakeTasksGroup);
         launchOrderOne = new TimedTask(TaskNames.launchOrderOne, intakeTasksGroup);
         launchOrderTwo = new TimedTask(TaskNames.launchOrderTwo, intakeTasksGroup);
+        threeLaunchNear = new TimedTask(TaskNames.threeLaunchNear, intakeTasksGroup);
+        threeLaunchFar = new TimedTask(TaskNames.threeLaunchFar, intakeTasksGroup);
+
 
         allServoStore = new TimedTask(TaskNames.allServoStore, intakeTasksGroup);
         allServoDock = new TimedTask(TaskNames.allServoDock, intakeTasksGroup);
@@ -215,13 +220,13 @@ public class Intake1Tasks {
         pinkBlueGreenServoLaunch.autoStart = false;
         pinkBlueGreenServoLaunch.addStep(pinkServoLaunch::restart);
         pinkBlueGreenServoLaunch.addStep(pinkServoLaunch::isDone);
-        pinkBlueGreenServoLaunch.addDelay(300);
+        pinkBlueGreenServoLaunch.addDelay(150);
         pinkBlueGreenServoLaunch.addStep(blueServoLaunch::restart);
         pinkBlueGreenServoLaunch.addStep(blueServoLaunch::isDone);
-        pinkBlueGreenServoLaunch.addDelay(300);
+        pinkBlueGreenServoLaunch.addDelay(150);
         pinkBlueGreenServoLaunch.addStep(greenServoLaunch::restart);
         pinkBlueGreenServoLaunch.addStep(greenServoLaunch::isDone);
-        pinkBlueGreenServoLaunch.addDelay(300);
+        pinkBlueGreenServoLaunch.addDelay(150);
 
         /*    Launch Tasks         */
         //    start Launch
@@ -548,6 +553,25 @@ public class Intake1Tasks {
         teleopMoveToBlueLoadingZone.addDelay(500);
         teleopMoveToBlueLoadingZone.addStep(artifactIntakeStopTask::restart);
 
+        //   launch 3 from far -----IMPORTANT-----: only tested on blue side
+        task = threeLaunchFar;
+        task.autoStart = false;
+        task.addStep(() -> intake.setLaunchMotors(3690));
+        task.addDelay(2700);
+        task.addStep(() ->intake.tasks.allServoLaunch.restart());
+
+
+        /*   launch 3 from near -----IMPORTANT----- only tested on blue side
+        * works from anywhere onside the triangle except for ~9 in away from the goal, if ALIGNED*/
+
+        task = threeLaunchNear;
+        task.addStep(() -> intake.setLaunchMotors(2745));
+        task.addDelay(2500);
+        task.addStep(() ->intake.tasks.allServoLaunch.restart());
+
+
+
+
     }
 
     /***********************************************************************************/
@@ -588,6 +612,8 @@ public class Intake1Tasks {
         public final static String teleopThreeBlueLaunch = "teleop ThreeBlueLaunch";
         public final static String teleopMoveToRedLoadingZone = "teleop MoveToRedLoadingZone";
         public final static String teleopMoveToBlueLoadingZone = "teleop MoveToBlueLoadingZone";
+        public final static String threeLaunchNear = "launch 3 near";
+        public final static String threeLaunchFar = "launch 3 far";
 
     }
 

@@ -46,6 +46,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
     LimeLight limelight;
 
     Integer launchRPM = 3200;
+    Integer delayBetweenShot = 2000;
 
     static public int runSpikeCount = 2; // Default to 2 spikes
     static public int runLeverOpen = 0; // Default to false.
@@ -176,6 +177,20 @@ public class T1_AutoFarRed  extends LinearOpMode{
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.right_bumper, ButtonMgr.State.wasTapped)) {
                 startDelay += 1000;
             }
+//            if (robot.buttonMgr.getState(2, ButtonMgr.Buttons.b, ButtonMgr.State.wasTapped)) {
+//                launchRPM += 100;
+//            }
+//            if (robot.buttonMgr.getState(2, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
+//                launchRPM -= 100;
+//            }
+//            if (robot.buttonMgr.getState(2, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped)) {
+//                delayBetweenShot -= 1000;
+//            }
+//            if (robot.buttonMgr.getState(2, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasTapped)) {
+//                delayBetweenShot += 1000;
+//            }
+//            telemetry.addData("delay between shots", delayBetweenShot);
+//            telemetry.addData("launch RPM", launchRPM);
             if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.left_bumper, ButtonMgr.State.wasTapped)) {
                 startDelay -= 1000;
                 if(startDelay < 0) startDelay = 0;
@@ -202,6 +217,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Here is where we schedule the tasks for the autonomous run (testNewAuto function below run loop)
         // testNewAuto - Successfully Tested!
+//        testNewAuto(autoTasks);
         testNewAuto(autoTasks);
 
         startTime = System.currentTimeMillis();
@@ -288,6 +304,18 @@ public class T1_AutoFarRed  extends LinearOpMode{
         autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings));
         positionSolver.addMoveToTaskEx(DecodeSettings.getParkAfterAutoPos(), autoTasks);
     }
+//    protected void ThreeBallRPMTest(TimedTask autoTasks) {
+//        autoTasks.addStep(() -> intake.getHardware().launchMotorRight.setVelocity(intake.setLaunchMotorRPM(launchRPM)));
+//        autoTasks.addStep(() -> intake.getHardware().launchMotorLeft.setVelocity(intake.setLaunchMotorRPM(launchRPM)));
+//        autoTasks.addDelay(delayBetweenShot);
+//        autoTasks.addStep(() -> intake.tasks.pinkServoLaunch.restart());
+//        autoTasks.addStep(() -> intake.tasks.greenServoLaunch.restart());
+//        autoTasks.addStep(() -> intake.getHardware().launchMotorRight.setVelocity(intake.setLaunchMotorRPM(launchRPM+300)));
+//        autoTasks.addStep(() -> intake.getHardware().launchMotorLeft.setVelocity(intake.setLaunchMotorRPM(launchRPM+300)));
+//        autoTasks.addDelay(750);
+//        autoTasks.addStep(() -> intake.tasks.blueServoLaunch.restart());
+//        autoTasks.addStep(() -> intake.tasks.stopLaunch.restart());
+//    }
 
     // Artifact Intake and Launch.
     protected void artifactIntakeAndLaunch (TimedTask autoTasks,

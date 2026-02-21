@@ -225,6 +225,16 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
                 }
             }
 
+            // Launch All 3 Balls from Far
+            if (buttonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
+                parent.tasks.threeLaunchFar.restart();
+            }
+
+            // Launch all 3 Balls from near
+            if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
+                parent.tasks.threeLaunchNear.restart();
+            }
+
                 // Driver 1
         }
             // Driver 1 - start button is a "shift" key; anything below is when start is held first

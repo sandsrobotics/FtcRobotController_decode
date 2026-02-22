@@ -556,9 +556,14 @@ public class Intake1Tasks {
         //   launch 3 from far -----IMPORTANT-----: only tested on blue side
         task = threeLaunchFar;
         task.autoStart = false;
-        task.addStep(() -> intake.setLaunchMotors(3690));
-        task.addDelay(2700);
-        task.addStep(() ->intake.tasks.allServoLaunch.restart());
+        task.addStep(() -> intake.setLaunchMotors(3294));
+        task.addDelay(1700);
+        task.addStep(() ->intake.tasks.pinkServoLaunch.restart());
+        task.addStep(() ->intake.tasks.greenServoLaunch.restart());
+        task.addDelay(500);
+        task.addStep(() ->intake.tasks.blueServoLaunch.restart());
+
+
 
 
         /*   launch 3 from near -----IMPORTANT----- only tested on blue side

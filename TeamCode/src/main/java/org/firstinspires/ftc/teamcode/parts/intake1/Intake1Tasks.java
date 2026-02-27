@@ -556,12 +556,14 @@ public class Intake1Tasks {
         //   launch 3 from far -----IMPORTANT-----: only tested on blue side
         task = threeLaunchFar;
         task.autoStart = false;
-        task.addStep(() -> intake.setLaunchMotors(3294));
-        task.addDelay(1700);
+        task.addStep(() -> intake.setLaunchMotors(3200));
+        task.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 4000);  // todo: pick appropriate time
         task.addStep(() ->intake.tasks.pinkServoLaunch.restart());
-        task.addStep(() ->intake.tasks.greenServoLaunch.restart());
-        task.addDelay(500);
+        task.addDelay(250);
         task.addStep(() ->intake.tasks.blueServoLaunch.restart());
+        task.addDelay(250);
+        task.addStep(() ->intake.tasks.allServoLaunch.restart());
+        task.addStep(() ->intake.tasks.stopLaunch.restart());
 
 
 
@@ -570,9 +572,13 @@ public class Intake1Tasks {
         * works from anywhere onside the triangle except for ~9 in away from the goal, if ALIGNED*/
 
         task = threeLaunchNear;
-        task.addStep(() -> intake.setLaunchMotors(2745));
-        task.addDelay(2500);
+        task.autoStart = false;
+        task.addStep(() -> intake.setLaunchMotors(2500));
+        task.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 2500);  // todo: pick appropriate time
         task.addStep(() ->intake.tasks.allServoLaunch.restart());
+        task.addDelay(250);
+        task.addStep(() ->intake.tasks.stopLaunch.restart());
+
 
 
 

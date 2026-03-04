@@ -31,7 +31,7 @@ public class LimeLight extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUti
     public long manualIndicatorTimeout = 5000;       // ms to wait before turning off LED
     public long automaticIndicatorTimeout = 500;     // ms to wait before turning off LED
     public boolean automaticTransform = false;       // apply the transform automatically? Otherwise manual
-    public String ledServoName = "servo5B";          // name of the servo for the LED indicator
+    public String ledServoName = "servo4";          // name of the servo for the LED indicator
 
     // internal variables
     protected PositionTracker positionTracker;

@@ -18,11 +18,12 @@ public class Intake1Hardware {
     public final ServoSSR             pinkServo;
     public final ServoSSR             blueServo;
     public final ServoSSR             greenServo;
+    public final ServoSSR             gateServo;
     public final DcMotorEx            launchMotorLeft;
     public final DcMotorEx            launchMotorRight;
 
     public Intake1Hardware(DcMotorEx intakeMotor, DcMotorEx augerMotor, ServoSSR ledServo, ServoSSR intakeServo, ServoSSR pinkServo, ServoSSR blueServo,
-                           ServoSSR greenServo, DcMotorEx launchMotorLeft, DcMotorEx launchMotorRight) {
+                           ServoSSR greenServo, ServoSSR gateServo, DcMotorEx launchMotorLeft, DcMotorEx launchMotorRight) {
         this.intakeMotor = intakeMotor;
         this.augerMotor = augerMotor;
         this.ledServo = ledServo;
@@ -30,6 +31,7 @@ public class Intake1Hardware {
         this.pinkServo   = pinkServo;
         this.blueServo   = blueServo;
         this.greenServo  = greenServo;
+        this.gateServo   = gateServo;
         this.launchMotorLeft = launchMotorLeft;
         this.launchMotorRight = launchMotorRight;
 
@@ -53,11 +55,12 @@ public class Intake1Hardware {
         return new Intake1Hardware(
                 intakeMotorSettings.makeExMotor(hardwareMap),
                 augerMotorSettings.makeExMotor(hardwareMap),
-                new ServoSSR(hardwareMap.get(Servo.class,"servo5B")), // ledServo
+                new ServoSSR(hardwareMap.get(Servo.class,"servo4")), // ledServo
                 new ServoSSR(hardwareMap.get(Servo.class,"servo0")), // intakeServo
                 new ServoSSR(hardwareMap.get(Servo.class,"servo1")), // pink servo
                 new ServoSSR(hardwareMap.get(Servo.class,"servo2")),
                 new ServoSSR(hardwareMap.get(Servo.class,"servo3")),
+                new ServoSSR(hardwareMap.get(Servo.class, "servo0B")),
                 launchMotorLeftSettings.makeExMotor(hardwareMap),
                 launchMotorRightSettings.makeExMotor(hardwareMap)
                 );

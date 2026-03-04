@@ -27,12 +27,11 @@ public class DriveHardware {
         bottomRightMotor = bottomRightMotorSettings.makeExMotor(hardwareMap);
 
         List<DcMotorEx> motors = Arrays.asList(topLeftMotor, topRightMotor, bottomLeftMotor, bottomRightMotor);
-//        for(DcMotorEx motor : motors){
-//            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
-//            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
-//            motor.setMotorType(motorConfigurationType);
-//        }
-
+        for(DcMotorEx motor : motors){
+            MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
+            motorConfigurationType.setAchieveableMaxRPMFraction(1.0);
+            motor.setMotorType(motorConfigurationType);
+        }
     }
 
     public DriveHardware(DcMotorEx topLeftMotor, DcMotorEx topRightMotor, DcMotorEx bottomLeftMotor, DcMotorEx bottomRightMotor){

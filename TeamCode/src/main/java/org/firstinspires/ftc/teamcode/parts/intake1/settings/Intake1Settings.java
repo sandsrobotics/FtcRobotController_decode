@@ -14,7 +14,7 @@ public class Intake1Settings {
     public static final double intakeServoOff                               = 0.5;
     public static final double intakeServoOut                               = 0;
     public static double augerMotorStop                                     = 0;
-    public static double augerMotorRun                                      = 0.50; // 0.30;
+    public static double augerMotorRun                                      = 1.0; // 0.50; // 0.30;
 
     public static int launchServoDelay                          = 200;
     public static int launchServoSweepTime                      = 1000;

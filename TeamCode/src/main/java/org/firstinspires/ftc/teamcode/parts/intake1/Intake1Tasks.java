@@ -24,6 +24,7 @@ public class Intake1Tasks {
     public final TimedTask blueServoLaunchInTolerance;
     public final TimedTask greenServoLaunchInTolerance;
     public final TimedTask allServoLaunchInTolerance;
+    public final TimedTask allServoLaunchInToleranceV2;
     public final TimedTask startAutoFarLaunch;
     public final TimedTask startFarLaunch;
     public final TimedTask startGoalLaunch;
@@ -80,6 +81,7 @@ public class Intake1Tasks {
         blueServoLaunchInTolerance = new TimedTask("blue servo in tolerance", intakeTasksGroup);
         greenServoLaunchInTolerance = new TimedTask("green servo in tolerance", intakeTasksGroup);
         allServoLaunchInTolerance = new TimedTask("all servos in tolerance", intakeTasksGroup);
+        allServoLaunchInToleranceV2 = new TimedTask("all servos in tolerance 2", intakeTasksGroup);
         pinkBlueGreenServoLaunch = new TimedTask(TaskNames.pinkBlueGreenLaunch, intakeTasksGroup);
         startAutoFarLaunch = new TimedTask(TaskNames.startAutoFarLaunch, intakeTasksGroup);
         startFarLaunch = new TimedTask(TaskNames.startFarLaunch, intakeTasksGroup);
@@ -121,6 +123,7 @@ public class Intake1Tasks {
         intakeTask.addStep(allServoDock::restart);
         intakeTask.addStep(allServoDock::isDone);
         intakeTask.addStep(()->{
+            intake.getHardware().gateServo.setPosition(.523); // gate close pos
             intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeIn);
             intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoIn);
             intake.getHardware().augerMotor.setPower(Intake1Settings.augerMotorRun);
@@ -132,9 +135,11 @@ public class Intake1Tasks {
             intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeStop);
             intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoOff);
             intake.getHardware().augerMotor.setPower(Intake1Settings.augerMotorStop);
+            intake.getHardware().gateServo.setPosition(.33);
         });
         artifactIntakeStopTask.addStep(allServoStore::restart);
         artifactIntakeStopTask.addStep(allServoStore::isDone);
+        artifactIntakeStopTask.addStep(() -> intake.getHardware().gateServo.isDone());
 
          /*    Artifact outtake Task*/
         outtakeTask.autoStart = false;
@@ -188,7 +193,7 @@ public class Intake1Tasks {
         task.addStep(() -> intake.getHardware().pinkServo.setPosition(Intake1Settings.servoPinkLaunch));
         task.addStep(() -> intake.getHardware().pinkServo.isDone());
         task.addStep(() -> intake.getHardware().pinkServo.setPosition(Intake1Settings.servoPinkDock));
-        task.addStep(() -> intake.getHardware().pinkServo.isDone());
+//        task.addStep(() -> intake.getHardware().pinkServo.isDone());
         //          blue
         task = blueServoLaunchInTolerance;
         task.autoStart = false;
@@ -196,7 +201,7 @@ public class Intake1Tasks {
         task.addStep(() -> intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueLaunch));
         task.addStep(() -> intake.getHardware().blueServo.isDone());
         task.addStep(() -> intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueDock));
-        task.addStep(() -> intake.getHardware().blueServo.isDone());
+//        task.addStep(() -> intake.getHardware().blueServo.isDone());
         //        green
         task = greenServoLaunchInTolerance;
         task.autoStart = false;
@@ -204,7 +209,7 @@ public class Intake1Tasks {
         task.addStep(() -> intake.getHardware().greenServo.setPosition(Intake1Settings.servoGreenLaunch));
         task.addStep(() -> intake.getHardware().greenServo.isDone());
         task.addStep(() -> intake.getHardware().greenServo.setPosition(Intake1Settings.servoGreenDock));
-        task.addStep(() -> intake.getHardware().greenServo.isDone());
+//        task.addStep(() -> intake.getHardware().greenServo.isDone());
         //        all
         task = allServoLaunchInTolerance;
         task.autoStart = false;
@@ -214,7 +219,15 @@ public class Intake1Tasks {
         task.addStep(blueServoLaunchInTolerance::isDone);
         task.addStep(greenServoLaunchInTolerance::restart);
         task.addStep(greenServoLaunchInTolerance::isDone);
-
+        //        all v2 under construction
+        task = allServoLaunchInToleranceV2;
+        task.autoStart = false;
+        task.addStep(pinkServoLaunchInTolerance::restart);
+        task.addStep(pinkServoLaunchInTolerance::isDone);
+        task.addStep(blueServoLaunchInTolerance::restart);
+        task.addStep(blueServoLaunchInTolerance::isDone);
+        task.addStep(greenServoLaunchInTolerance::restart);
+        task.addStep(greenServoLaunchInTolerance::isDone);
 
         // pink, blue, green, with 300 delay.
         pinkBlueGreenServoLaunch.autoStart = false;

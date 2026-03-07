@@ -45,7 +45,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
     Artifacts artifacts;
     LimeLight limelight;
 
-    Integer launchRPM = 3200;
+    Integer launchRPM = 3000; // 3200;
     Integer delayBetweenShot = 2000;
 
     static public int runSpikeCount = 2; // Default to 2 spikes
@@ -53,18 +53,18 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
     // Positions to travel in AutoFarRed
     Vector3 p_targetGoal                 = new Vector3(-70.5, 70.5, 180);   // RedGoal Position.
-    Vector3 p_fieldStart                 = new Vector3(64,16,180);
+    Vector3 p_fieldStart                 = new Vector3(63,16,180); // x:64
     Vector3 p_obeliskView               = new Vector3(58, 16, 180);  // Was: 56, 16, 180; // FarRed: ObeliskView Position
-    Vector3 p_launchPosZero             = new Vector3(58,16,154);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_launchPosOne              = new Vector3(58,16,156);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(58,16,156);    // Z: 160; FarRed Launching Position for pinkServo. Z:160.
+    Vector3 p_launchPosZero             = new Vector3(58,16,152);    // Was: 56, 16, 153; // FarRed Launching Position.
+    Vector3 p_launchPosOne              = new Vector3(58,16,152);    // Z: 156; Was: 56, 16, 153; // FarRed Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(58,16,152);    // Z: 156; Z:160; FarRed Launching Position for pinkServo. Z:160.
 
     Vector3 p_pre_intakeArtifactRow1 = new Vector3(-12, 28, -90);  // Was Y: 28; Red: Ready to collect on Row1
-    Vector3 p_intakeArtifactRow1     = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
+    Vector3 p_intakeArtifactRow1     = new Vector3(-12, 51, -90);  // Y:53; Red: Intake Artifacts in Row1
     Vector3 p_pre_intakeArtifactRow2 = new Vector3(14, 28, -90);   // Was Y:28; Red: Ready to collect on Row2
-    Vector3 p_intakeArtifactRow2     = new Vector3(14, 60, -90);   // Red: Intake Artifacts in Row2
+    Vector3 p_intakeArtifactRow2     = new Vector3(14, 58, -90);   // Y: 60; Red: Intake Artifacts in Row2
     Vector3 p_pre_intakeArtifactRow3 = new Vector3(35.5, 28, -90);   // Was Y:28; Red: Ready to collect in Row3
-    Vector3 p_intakeArtifactRow3     = new Vector3(35.5, 60, -90);   // Red: Intake Artifacts in Row3
+    Vector3 p_intakeArtifactRow3     = new Vector3(35.5, 58, -90);   // Y:58; Red: Intake Artifacts in Row3
 
     Vector3 p_leverOpen                 = new Vector3(0, 55, 180);    // Red: Open Lever Position
     Vector3 p_parkAfterAuto             = new Vector3(46,16,157);    // X:32;

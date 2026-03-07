@@ -82,6 +82,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         getHardware().blueServo.setPosition(Intake1Settings.servoBlueLow);
         getHardware().greenServo.setPosition(Intake1Settings.servoGreenDock);
         getHardware().intakeServo.setPosition(Intake1Settings.intakeServoOff);
+        getHardware().intakeServo.setPosition(Intake1Settings.servoGateOpen);
     }
 
     public void initializeMotors() {

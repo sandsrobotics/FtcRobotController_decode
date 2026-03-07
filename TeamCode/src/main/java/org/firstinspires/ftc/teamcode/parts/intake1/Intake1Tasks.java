@@ -123,7 +123,7 @@ public class Intake1Tasks {
         intakeTask.addStep(allServoDock::restart);
         intakeTask.addStep(allServoDock::isDone);
         intakeTask.addStep(()->{
-            intake.getHardware().gateServo.setPosition(.523); // gate close pos
+            intake.getHardware().gateServo.setPosition(Intake1Settings.servoGateClose); // gate close pos
             intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeIn);
             intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoIn);
             intake.getHardware().augerMotor.setPower(Intake1Settings.augerMotorRun);
@@ -135,7 +135,7 @@ public class Intake1Tasks {
             intake.getHardware().intakeMotor.setPower(Intake1Settings.intakeStop);
             intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoOff);
             intake.getHardware().augerMotor.setPower(Intake1Settings.augerMotorStop);
-            intake.getHardware().gateServo.setPosition(.33);
+            intake.getHardware().gateServo.setPosition(Intake1Settings.servoGateOpen);  // gate open.
         });
         artifactIntakeStopTask.addStep(allServoStore::restart);
         artifactIntakeStopTask.addStep(allServoStore::isDone);

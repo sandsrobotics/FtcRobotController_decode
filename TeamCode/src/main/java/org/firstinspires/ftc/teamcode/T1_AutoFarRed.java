@@ -55,9 +55,9 @@ public class T1_AutoFarRed  extends LinearOpMode{
     Vector3 p_targetGoal                 = new Vector3(-70.5, 70.5, 180);   // RedGoal Position.
     Vector3 p_fieldStart                 = new Vector3(63,16,180); // x:64
     Vector3 p_obeliskView               = new Vector3(58, 16, 180);  // Was: 56, 16, 180; // FarRed: ObeliskView Position
-    Vector3 p_launchPosZero             = new Vector3(58,16,152);    // Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_launchPosOne              = new Vector3(58,16,152);    // Z: 156; Was: 56, 16, 153; // FarRed Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(58,16,152);    // Z: 156; Z:160; FarRed Launching Position for pinkServo. Z:160.
+    Vector3 p_launchPosZero             = new Vector3(58,16,160);    // Was: 56, 16, 153; // FarRed Launching Position.
+    Vector3 p_launchPosOne              = new Vector3(58,16,160);    // Z: 156; Was: 56, 16, 153; // FarRed Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(58,16,160);    // Z: 156; Z:160; FarRed Launching Position for pinkServo. Z:160.
 
     Vector3 p_pre_intakeArtifactRow1 = new Vector3(-12, 28, -90);  // Was Y: 28; Red: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1     = new Vector3(-12, 51, -90);  // Y:53; Red: Intake Artifacts in Row1

@@ -55,12 +55,12 @@ public class Intake1Hardware {
         return new Intake1Hardware(
                 intakeMotorSettings.makeExMotor(hardwareMap),
                 augerMotorSettings.makeExMotor(hardwareMap),
-                new ServoSSR(hardwareMap.get(Servo.class,"servo4")), // ledServo
-                new ServoSSR(hardwareMap.get(Servo.class,"servo0")), // intakeServo
-                new ServoSSR(hardwareMap.get(Servo.class,"servo1")), // pink servo
-                new ServoSSR(hardwareMap.get(Servo.class,"servo2")),
-                new ServoSSR(hardwareMap.get(Servo.class,"servo3")),
-                new ServoSSR(hardwareMap.get(Servo.class, "servo0B")),
+                new ServoSSR(hardwareMap.get(Servo.class,"servo4")), // ledServo.
+                new ServoSSR(hardwareMap.get(Servo.class,"servo4B")), // intakeServo.
+                new ServoSSR(hardwareMap.get(Servo.class,"servo0")), // pink servo.
+                new ServoSSR(hardwareMap.get(Servo.class,"servo2")), // blue Servo.
+                new ServoSSR(hardwareMap.get(Servo.class,"servo5")),  // green Servo.
+                new ServoSSR(hardwareMap.get(Servo.class, "servo2B")), // gate Servo.
                 launchMotorLeftSettings.makeExMotor(hardwareMap),
                 launchMotorRightSettings.makeExMotor(hardwareMap)
                 );

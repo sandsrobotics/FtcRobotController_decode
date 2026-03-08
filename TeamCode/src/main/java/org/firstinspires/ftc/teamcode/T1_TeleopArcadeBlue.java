@@ -126,6 +126,7 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
         }
 
         robot.start();
+        positionSolver.stopSolver();  // So the robot doesn't drive off the table
 
         headingSolver.setNewTarget(DecodeSettings.getTargetGoalPos(), true);
         headingSolver.stopSolver();

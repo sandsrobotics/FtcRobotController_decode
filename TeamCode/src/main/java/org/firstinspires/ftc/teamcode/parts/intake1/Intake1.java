@@ -260,6 +260,9 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         positionTracker = getBeanManager().getBestMatch(PositionTracker.class, false);  // should this be here or onBeanLoad()???
         tasks = new Intake1Tasks(this, parent);
         tasks.constructAllIntakeTasks();
+
+        //==== pre-positioned example code (not an Om part, so needs an init and a periodic run)
+        //LedStick.init(parent.opMode.hardwareMap);
     }
 
 
@@ -283,6 +286,8 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
             if (rpm > 0) setLaunchMotors(rpm);
 //            setLaunchMotors((int)calcSpinnerRPM());
         }
+        //==== pre-positioned example code (not an Om part, so needs an init and a periodic run)
+        //LedStick.runLoop();
     }
 
     @Override
@@ -301,6 +306,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 
     @Override
     public void onStop() {
+        LedStick.stop();
         drive.removeController(ControllerNames.distanceController);
     }
 

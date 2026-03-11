@@ -33,8 +33,8 @@ public class Intake1Settings {
     public static double servoBlueLaunch =                          0.671;
     public static double servoBlueLow =                             0.390;
 
-    public static double servoGateOpen =                             0.33;
-    public static double servoGateClose =                            0.523;
+    public static double servoGateOpen =                             0.378;
+    public static double servoGateClose =                            0.506;
 
     public static double ticksPerRevolution =                        28;
     public double secondsPerMinute =                                 60;

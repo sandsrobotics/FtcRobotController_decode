@@ -34,12 +34,15 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
 //    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,300);
 //    static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(550,400);
 //    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1080,300);
-    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,250);
-    static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(775,250);
-    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1080,250);
+    static final Point REGION1_TOPLEFT_ANCHOR_POINT = new Point(0,150); // (0, 250)
+    static final Point REGION2_TOPLEFT_ANCHOR_POINT = new Point(300,40); // (200, 5); (775, 250).
+    static final Point REGION3_TOPLEFT_ANCHOR_POINT = new Point(1080,150); // (1080, 250)
 
     static final int tpREGION_WIDTH = 200;
-    static final int tpREGION_HEIGHT = 350;
+    static final int tpREGION_HEIGHT = 450; //350;
+
+    static final int tpREGION_WIDTH_2 = 700;
+    static final int tpREGION_HEIGHT_2 = 200;
 
     // Define color ranges in HSV
 
@@ -74,8 +77,8 @@ public class ArtifactDetectionPipeline extends OpenCvPipeline
             REGION2_TOPLEFT_ANCHOR_POINT.x,
             REGION2_TOPLEFT_ANCHOR_POINT.y);
     Point region2_pointB = new Point(
-            REGION2_TOPLEFT_ANCHOR_POINT.x + tpREGION_WIDTH,
-            REGION2_TOPLEFT_ANCHOR_POINT.y + tpREGION_HEIGHT);
+            REGION2_TOPLEFT_ANCHOR_POINT.x + tpREGION_WIDTH_2,
+            REGION2_TOPLEFT_ANCHOR_POINT.y + tpREGION_HEIGHT_2);
     Point region3_pointA = new Point(
             REGION3_TOPLEFT_ANCHOR_POINT.x,
             REGION3_TOPLEFT_ANCHOR_POINT.y);

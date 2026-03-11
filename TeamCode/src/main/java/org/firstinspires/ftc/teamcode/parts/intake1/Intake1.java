@@ -306,7 +306,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 
     @Override
     public void onStop() {
-        LedStick.stop();
+//        LedStick.stop();
         drive.removeController(ControllerNames.distanceController);
     }
 

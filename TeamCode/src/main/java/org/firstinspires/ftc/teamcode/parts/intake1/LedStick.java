@@ -95,9 +95,9 @@ public class LedStick {
             case 1:
                 return Color.rgb(0, 255, 0);    // green
             case 2:
-                return Color.rgb(127, 0, 127);  // purple
+                return Color.rgb(255, 0, 255);  // purple
             case 3:
-                return Color.rgb(32, 0, 0);     // red (unknown)
+                return Color.rgb(255, 255, 0);     // red (unknown)
             case 0:
             default:
                 return Color.rgb(0, 0, 0);      // off (empty)

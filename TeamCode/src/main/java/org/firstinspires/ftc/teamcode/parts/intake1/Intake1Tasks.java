@@ -397,35 +397,35 @@ public class Intake1Tasks {
             currentLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
             intake.launchInOrder(currentLaunchOrder[0]);
         });
-        computeAndLaunchInOrder.addDelay(600);
+        computeAndLaunchInOrder.addDelay(300); // 600
         computeAndLaunchInOrder.addStep( () -> {
             intake.launchInOrder(currentLaunchOrder[1]);
         });
-        computeAndLaunchInOrder.addDelay(600);
+        computeAndLaunchInOrder.addDelay(300); //600
         computeAndLaunchInOrder.addStep( () -> {
             intake.launchInOrder(currentLaunchOrder[2]);
         });
-        computeAndLaunchInOrder.addDelay(400);
+        computeAndLaunchInOrder.addDelay(300); //400
         computeAndLaunchInOrder.addStep( () -> intake.tasks.allServoLaunch.restart());
-        computeAndLaunchInOrder.addDelay(300);
+        computeAndLaunchInOrder.addDelay(300); //300
 
         // launchOrderZero
         launchOrderZero.autoStart = false;
-        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), launchOrderZero, 200);
+//        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionZero(), launchOrderZero, 200);
         launchOrderZero.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
         launchOrderZero.addStep(() -> intake.tasks.greenServoLaunch.restart());
         launchOrderZero.addDelay(100);
 
         // launchOrderOne
         launchOrderOne.autoStart = false;
-        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), launchOrderOne, 200);
+//        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionOne(), launchOrderOne, 200);
         launchOrderOne.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
         launchOrderOne.addStep(() -> intake.tasks.blueServoLaunch.restart());
         launchOrderOne.addDelay(100);
 
         // launchOrderTwo
         launchOrderTwo.autoStart = false;
-        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), launchOrderTwo, 200);
+//        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), launchOrderTwo, 200);
         launchOrderTwo.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
         launchOrderTwo.addStep(() -> intake.tasks.pinkServoLaunch.restart());
         launchOrderTwo.addDelay(100);
@@ -566,15 +566,15 @@ public class Intake1Tasks {
         teleopMoveToBlueLoadingZone.addDelay(500);
         teleopMoveToBlueLoadingZone.addStep(artifactIntakeStopTask::restart);
 
-        //   launch 3 from far -----IMPORTANT-----: only tested on blue side
+        //   launch 3 from far
         task = threeLaunchFar;
         task.autoStart = false;
         task.addStep(() -> intake.setLaunchMotors(3200));
         task.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 4000);  // todo: pick appropriate time
         task.addStep(() ->intake.tasks.pinkServoLaunch.restart());
-        task.addDelay(250);
+        task.addDelay(100);
         task.addStep(() ->intake.tasks.blueServoLaunch.restart());
-        task.addDelay(250);
+        task.addDelay(100);
         task.addStep(() ->intake.tasks.allServoLaunch.restart());
         task.addStep(() ->intake.tasks.stopLaunch.restart());
 

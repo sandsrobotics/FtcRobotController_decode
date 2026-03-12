@@ -397,15 +397,15 @@ public class Intake1Tasks {
             currentLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
             intake.launchInOrder(currentLaunchOrder[0]);
         });
-        computeAndLaunchInOrder.addDelay(300); // 600
+        computeAndLaunchInOrder.addDelay(500); // 600
         computeAndLaunchInOrder.addStep( () -> {
             intake.launchInOrder(currentLaunchOrder[1]);
         });
-        computeAndLaunchInOrder.addDelay(300); //600
+        computeAndLaunchInOrder.addDelay(500); //600
         computeAndLaunchInOrder.addStep( () -> {
             intake.launchInOrder(currentLaunchOrder[2]);
         });
-        computeAndLaunchInOrder.addDelay(300); //400
+        computeAndLaunchInOrder.addDelay(200); //400
         computeAndLaunchInOrder.addStep( () -> intake.tasks.allServoLaunch.restart());
         computeAndLaunchInOrder.addDelay(300); //300
 

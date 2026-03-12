@@ -262,7 +262,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
         tasks.constructAllIntakeTasks();
 
         //==== pre-positioned example code (not an Om part, so needs an init and a periodic run)
-        //LedStick.init(parent.opMode.hardwareMap);
+        LedStick.init(parent.opMode.hardwareMap);
     }
 
 
@@ -287,7 +287,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 //            setLaunchMotors((int)calcSpinnerRPM());
         }
         //==== pre-positioned example code (not an Om part, so needs an init and a periodic run)
-        //LedStick.runLoop();
+        LedStick.runLoop();
     }
 
     @Override
@@ -306,7 +306,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
 
     @Override
     public void onStop() {
-//        LedStick.stop();
+        LedStick.stop();
         drive.removeController(ControllerNames.distanceController);
     }
 

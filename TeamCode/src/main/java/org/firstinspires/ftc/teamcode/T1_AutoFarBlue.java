@@ -15,7 +15,7 @@ public class T1_AutoFarBlue  extends T1_AutoFarRed {
 
     // Positions to travel in AutoFarBlue
     Vector3 p_targetGoal                 = new Vector3(-70.5, -70.5, 180);   // BlueGoal Position.
-    Vector3 p_fieldStart                = new Vector3(64,-16,-180);
+    Vector3 p_fieldStart                = new Vector3(63,-16,-180); //     x:64
     Vector3 p_obeliskView               = new Vector3(58, -16, -180);  // Was: 56, 16, 180; // FarBlue: ObeliskView Position
     Vector3 p_launchPosZero             = new Vector3(58,-16,-162);    // Z: -157; Was: 56, 16, 153; // FarBlue Launching Position.
     Vector3 p_launchPosOne              = new Vector3(58,-16,-160);    // Z:-157; Was: 56, 16, 153; // FarBlue Launching Position.

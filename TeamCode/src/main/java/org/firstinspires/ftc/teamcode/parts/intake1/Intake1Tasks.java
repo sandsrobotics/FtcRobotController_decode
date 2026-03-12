@@ -59,6 +59,8 @@ public class Intake1Tasks {
     public final TimedTask teleopMoveToRedLoadingZone;
     public final TimedTask teleopMoveToBlueLoadingZone;
 
+    public final TimedTask updateArtifactsForLED;
+
     private final Intake1 intake;
     private final Robot robot;
 
@@ -100,6 +102,7 @@ public class Intake1Tasks {
         launchOrderTwo = new TimedTask(TaskNames.launchOrderTwo, intakeTasksGroup);
         threeLaunchNear = new TimedTask(TaskNames.threeLaunchNear, intakeTasksGroup);
         threeLaunchFar = new TimedTask(TaskNames.threeLaunchFar, intakeTasksGroup);
+        updateArtifactsForLED = new TimedTask("artifacts for LED", intakeTasksGroup);
 
 
         allServoStore = new TimedTask(TaskNames.allServoStore, intakeTasksGroup);
@@ -128,6 +131,11 @@ public class Intake1Tasks {
             intake.getHardware().intakeServo.setPosition(Intake1Settings.intakeServoIn);
             intake.getHardware().augerMotor.setPower(Intake1Settings.augerMotorRun);
         });
+        //==== pre-positioned example code
+//        intakeTask.addStep(() -> {
+//            LedStick.updateLEDs = true;
+//            updateArtifactsForLED.restart();
+//        });
 
         /*   Artifact Intake Stop Task   */
         artifactIntakeStopTask.autoStart = false;
@@ -140,6 +148,11 @@ public class Intake1Tasks {
         artifactIntakeStopTask.addStep(allServoStore::restart);
         artifactIntakeStopTask.addStep(allServoStore::isDone);
         artifactIntakeStopTask.addStep(() -> intake.getHardware().gateServo.isDone());
+        //==== pre-positioned example code
+//        artifactIntakeStopTask.addStep(() -> {
+//            LedStick.updateLEDs = false;
+//            updateArtifactsForLED.runCommand(Group.Command.PAUSE);  // may need to debug this
+//        });
 
          /*    Artifact outtake Task*/
         outtakeTask.autoStart = false;
@@ -593,8 +606,13 @@ public class Intake1Tasks {
         task.addStep(() ->intake.tasks.stopLaunch.restart());
 
 
-
-
+        //  updateArtifactsForLED
+        //==== pre-positioned example code
+        task = updateArtifactsForLED;
+        task.autoStart = false;
+        task.autoReset = true;
+        task.addStep(() -> LedStick.setLedBuffer(intake.artifacts.getArtifactList()));
+        task.addDelay(500);
 
     }
 

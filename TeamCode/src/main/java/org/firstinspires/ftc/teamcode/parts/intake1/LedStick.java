@@ -31,17 +31,17 @@ public class LedStick {
         updateLEDs = false;
     }
 
-    public void setLedBuffer(int a, int b, int c) {
+    public static void setLedBuffer(int a, int b, int c) {
         // 0 = empty, 1 = green, 2 = purple, 3 = ???
         bufferDesired = new int[] {a,b,c};
     }
 
-    public void setLedBuffer(int[] a) {
+    public static void setLedBuffer(int[] a) {
         // 0 = empty, 1 = green, 2 = purple, 3 = ???
         bufferDesired = new int[] {a[0], a[1], a[2]};
     }
 
-    public void setLedBuffer(ArtifactDetectionPipeline.Artifact[] artifacts) {
+    public static void setLedBuffer(ArtifactDetectionPipeline.Artifact[] artifacts) {
         for (int i = 0; i < 3; i++) {
             switch (artifacts[i].color) {
                 case GREEN:

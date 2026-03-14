@@ -37,6 +37,7 @@ public class Intake1Tasks {
     public final TimedTask viewObelisk;
     public final TimedTask nearComputeAndLaunchInOrder;
     public final TimedTask computeAndLaunchInOrder;
+    public final TimedTask computeAndLaunchInOrderV2;
     public final TimedTask launchOrderZero;
     public final TimedTask launchOrderOne;
     public final TimedTask launchOrderTwo;
@@ -97,6 +98,7 @@ public class Intake1Tasks {
         viewObelisk = new TimedTask(TaskNames.viewObelisk, intakeTasksGroup);
         nearComputeAndLaunchInOrder = new TimedTask(TaskNames.nearComputeAndLaunchInOrder, intakeTasksGroup);
         computeAndLaunchInOrder = new TimedTask(TaskNames.computeAndLaunchInOrder, intakeTasksGroup);
+        computeAndLaunchInOrderV2 = new TimedTask(TaskNames.computeAndLaunchInOrderV2, intakeTasksGroup);
         launchOrderZero = new TimedTask(TaskNames.launchOrderZero, intakeTasksGroup);
         launchOrderOne = new TimedTask(TaskNames.launchOrderOne, intakeTasksGroup);
         launchOrderTwo = new TimedTask(TaskNames.launchOrderTwo, intakeTasksGroup);
@@ -377,9 +379,9 @@ public class Intake1Tasks {
         //     nearComputeAndLaunchInOrder
         nearComputeAndLaunchInOrder.autoStart = false;
         nearComputeAndLaunchInOrder.addStep(() -> {
-            intake.positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings);
+            intake.positionSolver.setSettings(PositionSolverSettings.defaultFiveExtraSlowWithZSettings); // defaultFiveSlowWithZSettings;
         });
-        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), nearComputeAndLaunchInOrder, 200);
+        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), nearComputeAndLaunchInOrder, 300);
         nearComputeAndLaunchInOrder.addStep( () -> {
             currentLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
         });
@@ -387,25 +389,49 @@ public class Intake1Tasks {
         nearComputeAndLaunchInOrder.addStep( () -> {
             intake.nearLaunchInOrder(currentLaunchOrder[0]);
         });
-        nearComputeAndLaunchInOrder.addDelay(400);
+        nearComputeAndLaunchInOrder.addDelay(300);
         nearComputeAndLaunchInOrder.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
         nearComputeAndLaunchInOrder.addStep( () -> {
             intake.nearLaunchInOrder(currentLaunchOrder[1]);
         });
-        nearComputeAndLaunchInOrder.addDelay(400);
+        nearComputeAndLaunchInOrder.addDelay(300);
         nearComputeAndLaunchInOrder.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);
         nearComputeAndLaunchInOrder.addStep( () -> {
             intake.nearLaunchInOrder(currentLaunchOrder[2]);
         });
-        nearComputeAndLaunchInOrder.addDelay(200);
+        nearComputeAndLaunchInOrder.addDelay(300);
         nearComputeAndLaunchInOrder.addStep( () -> intake.tasks.allServoLaunch.restart());
-        nearComputeAndLaunchInOrder.addDelay(200);
+        nearComputeAndLaunchInOrder.addDelay(300);
+
+        //   ComputeAndLaunchInOrderV2 (Running with No GuardRails for RPMInTolerance!)
+        task = computeAndLaunchInOrderV2;
+        task.autoStart = false;
+        task.addStep(() -> {
+            intake.positionSolver.setSettings(PositionSolverSettings.defaultFiveExtraSlowWithZSettings);
+            intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), task, 300);
+        });
+        task.addStep( () -> {
+            currentLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
+            intake.launchInOrderV2(currentLaunchOrder[0]);
+        });
+        task.addDelay(100);
+        task.addStep( () -> {
+            intake.launchInOrderV2(currentLaunchOrder[1]);
+        });
+        task.addDelay(100);
+        task.addStep( () -> {
+            intake.launchInOrderV2(currentLaunchOrder[2]);
+        });
+        task.addDelay(200);
+        task.addStep( () -> intake.tasks.allServoLaunch.restart());
+        task.addDelay(200);
 
         //     computeAndLaunchInOrder
         computeAndLaunchInOrder.autoStart = false;
         computeAndLaunchInOrder.addStep(() -> {
-            intake.positionSolver.setSettings(PositionSolverSettings.defaultFiveSlowWithZSettings);
+            intake.positionSolver.setSettings(PositionSolverSettings.defaultFiveExtraSlowWithZSettings);
         });
+        intake.positionSolver.addMoveToTaskEx(DecodeSettings.getLaunchPositionTwo(), computeAndLaunchInOrder, 300);
         computeAndLaunchInOrder.addStep( () -> {
             currentLaunchOrder = intake.computeLaunchOrder(DecodeSettings.getClassificationId());
             intake.launchInOrder(currentLaunchOrder[0]);
@@ -637,6 +663,7 @@ public class Intake1Tasks {
         public final static String viewObelisk = "view Obelisk";
         public final static String nearComputeAndLaunchInOrder = "near compute and LaunchInOrder";
         public final static String computeAndLaunchInOrder = "compute and LaunchInOrder";
+        public final static String computeAndLaunchInOrderV2 = "V2: compute and LaunchInOrder";
         public final static String launchOrderZero = "launchOrderZero";
         public final static String launchOrderOne = "launchOrderOne";
         public final static String launchOrderTwo = "launchOrderTwo";

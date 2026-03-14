@@ -319,7 +319,7 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     public static final double nearest = 64;  // 1 tile diagonally
     public static final double farthest = 152;
     public static final double spinNear = 2450; //2400; 2500;
-    public static final double spinFar = 3000; // 3200; 3300;
+    public static final double spinFar = 3100; // 3000; 3200; 3300;
 //    public static Vector3 storedTarget = new Vector3();
     public Vector3 storedTarget = DecodeSettings.targetBlue;
 
@@ -392,6 +392,22 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
                 break;
         }
     }
+
+    // V2: Helper to launch Servo in Order.
+    public void launchInOrderV2 (int index) {
+        switch (index) {
+            case 0:
+                this.tasks.greenServoLaunch.restart();
+                break;
+            case 1:
+                this.tasks.blueServoLaunch.restart();
+                break;
+            case 2:
+                this.tasks.pinkServoLaunch.restart();
+                break;
+        }
+    }
+
 
 }
 

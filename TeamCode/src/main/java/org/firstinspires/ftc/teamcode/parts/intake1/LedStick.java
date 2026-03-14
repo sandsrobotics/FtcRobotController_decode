@@ -17,8 +17,8 @@ public class LedStick {
 
     public static void init(HardwareMap hwMap) {
         qLED = hwMap.get(QwiicLEDStickLK.class, "ledstick");
-        qLED.setBrightness(1);
-        qLED.turnAllOff();
+        qLED.setBrightness(255);
+        qLED.setColor(getColorValue(4));
         updateLEDs = false;
     }
 
@@ -70,20 +70,20 @@ public class LedStick {
             case 0:
                 bufferActual[0] = bufferDesired[0];
                 bufferActual[1] = bufferDesired[1];
-                qLED.setColorGroupX2(0,2,getColorValue(bufferActual[0]),
+                qLED.setColorGroupX2(8,2,getColorValue(bufferActual[0]),
                         4,2,getColorValue(bufferActual[1]));
                 break;
             case 1:
                 bufferActual[1] = bufferDesired[1];
                 bufferActual[2] = bufferDesired[2];
                 qLED.setColorGroupX2(4,2,getColorValue(bufferActual[1]),
-                        8,2,getColorValue(bufferActual[2]));
+                        0,2,getColorValue(bufferActual[2]));
                 break;
             case 2:
                 bufferActual[0] = bufferDesired[0];
                 bufferActual[2] = bufferDesired[2];
-                qLED.setColorGroupX2(0,2,getColorValue(bufferActual[0]),
-                        8,2,getColorValue(bufferActual[2]));
+                qLED.setColorGroupX2(8,2,getColorValue(bufferActual[0]),
+                        0,2,getColorValue(bufferActual[2]));
                 break;
             default:
                 break;
@@ -97,10 +97,12 @@ public class LedStick {
             case 2:
                 return Color.rgb(255, 0, 255);  // purple
             case 3:
-                return Color.rgb(255, 255, 0);     // red (unknown)
+                return Color.rgb(255, 255, 0);// red (unknown)
+            case 4:
+                return Color.rgb(120,120,120);
             case 0:
             default:
-                return Color.rgb(0, 0, 0);      // off (empty)
+                return Color.rgb(255, 0, 0);      // off (empty)
         }
     }
 }

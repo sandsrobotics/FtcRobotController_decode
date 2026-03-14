@@ -142,7 +142,7 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
             if (buttonMgr.getState(2, Buttons.a, State.wasTapped)) {
 //                parent.tasks.pinkBlueGreenServoLaunch.restart();
 //                parent.tasks.allServoLaunch.restart();
-                parent.tasks.allServoLaunchInTolerance.restart();
+                parent.tasks.computeAndLaunchInOrder.restart();
             }
             /*      Launch ALL Servos Tasks          */
             if (buttonMgr.getState(2, Buttons.a, State.wasHeld)) {

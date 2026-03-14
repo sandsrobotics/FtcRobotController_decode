@@ -134,10 +134,10 @@ public class Intake1Tasks {
             intake.getHardware().augerMotor.setPower(Intake1Settings.augerMotorRun);
         });
         //==== pre-positioned example code
-//        intakeTask.addStep(() -> {
-//            LedStick.updateLEDs = true;
-//            updateArtifactsForLED.restart();
-//        });
+        intakeTask.addStep(() -> {
+            LedStick.updateLEDs = true;
+            updateArtifactsForLED.restart();
+        });
 
         /*   Artifact Intake Stop Task   */
         artifactIntakeStopTask.autoStart = false;
@@ -151,10 +151,10 @@ public class Intake1Tasks {
         artifactIntakeStopTask.addStep(allServoStore::isDone);
         artifactIntakeStopTask.addStep(() -> intake.getHardware().gateServo.isDone());
         //==== pre-positioned example code
-//        artifactIntakeStopTask.addStep(() -> {
-//            LedStick.updateLEDs = false;
-//            updateArtifactsForLED.runCommand(Group.Command.PAUSE);  // may need to debug this
-//        });
+        artifactIntakeStopTask.addStep(() -> {
+            LedStick.updateLEDs = false;
+            updateArtifactsForLED.runCommand(Group.Command.PAUSE);  // may need to debug this
+        });
 
          /*    Artifact outtake Task*/
         outtakeTask.autoStart = false;
@@ -169,19 +169,45 @@ public class Intake1Tasks {
         pinkServoLaunch.addStep(() -> intake.getHardware().pinkServo.isDone());
         pinkServoLaunch.addStep(() -> intake.getHardware().pinkServo.setPosition(Intake1Settings.servoPinkDock));
         pinkServoLaunch.addStep(() -> intake.getHardware().pinkServo.isDone());
+        pinkServoLaunch.addStep(() -> {
+            LedStick.updateLEDs = true;
+            updateArtifactsForLED.restart();
+        });
+        pinkServoLaunch.addDelay(50);
+        pinkServoLaunch.addStep(() ->{
+            LedStick.updateLEDs = false;
+            updateArtifactsForLED.runCommand(Group.Command.PAUSE);
+        });
         //          blue
         blueServoLaunch.autoStart = false;
         blueServoLaunch.addStep(() -> intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueLaunch));
         blueServoLaunch.addStep(() -> intake.getHardware().blueServo.isDone());
         blueServoLaunch.addStep(() -> intake.getHardware().blueServo.setPosition(Intake1Settings.servoBlueDock));
         blueServoLaunch.addStep(() -> intake.getHardware().blueServo.isDone());
+        blueServoLaunch.addStep(() -> {
+            LedStick.updateLEDs = true;
+            updateArtifactsForLED.restart();
+        });
+        blueServoLaunch.addDelay(50);
+        blueServoLaunch.addStep(() ->{
+            LedStick.updateLEDs = false;
+            updateArtifactsForLED.runCommand(Group.Command.PAUSE);
+        });
         //        green
         greenServoLaunch.autoStart = false;
         greenServoLaunch.addStep(() -> intake.getHardware().greenServo.setPosition(Intake1Settings.servoGreenLaunch));
         greenServoLaunch.addStep(() -> intake.getHardware().greenServo.isDone());
         greenServoLaunch.addStep(() -> intake.getHardware().greenServo.setPosition(Intake1Settings.servoGreenDock));
         greenServoLaunch.addStep(() -> intake.getHardware().greenServo.isDone());
-
+        greenServoLaunch.addStep(() -> {
+            LedStick.updateLEDs = true;
+            updateArtifactsForLED.restart();
+        });
+        greenServoLaunch.addDelay(50);
+        greenServoLaunch.addStep(() ->{
+            LedStick.updateLEDs = false;
+            updateArtifactsForLED.runCommand(Group.Command.PAUSE);
+        });
         // all at once
         allServoLaunch.autoStart = false;
         allServoLaunch.addStep(()->{
@@ -608,14 +634,14 @@ public class Intake1Tasks {
         //   launch 3 from far
         task = threeLaunchFar;
         task.autoStart = false;
-        task.addStep(() -> intake.setLaunchMotors(3200));
+        task.addStep(() -> intake.setLaunchMotors(3350));
         task.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 4000);  // todo: pick appropriate time
         task.addStep(() ->intake.tasks.pinkServoLaunch.restart());
-        task.addDelay(100);
+        task.addDelay(150);
         task.addStep(() ->intake.tasks.blueServoLaunch.restart());
-        task.addDelay(100);
+        task.addDelay(150);
         task.addStep(() ->intake.tasks.allServoLaunch.restart());
-        task.addStep(() ->intake.tasks.stopLaunch.restart());
+
 
 
 
@@ -625,12 +651,10 @@ public class Intake1Tasks {
 
         task = threeLaunchNear;
         task.autoStart = false;
-        task.addStep(() -> intake.setLaunchMotors(2500));
-        task.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 2500);  // todo: pick appropriate time
+        task.addStep(() -> intake.setLaunchMotors(2700));
+        task.addTimedStep(() -> {}, intake::launchRPMInToleranceV2, 3000);  // todo: pick appropriate time
         task.addStep(() ->intake.tasks.allServoLaunch.restart());
         task.addDelay(250);
-        task.addStep(() ->intake.tasks.stopLaunch.restart());
-
 
         //  updateArtifactsForLED
         //==== pre-positioned example code

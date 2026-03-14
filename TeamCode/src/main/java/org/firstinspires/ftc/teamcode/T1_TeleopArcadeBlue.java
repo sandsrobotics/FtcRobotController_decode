@@ -43,7 +43,7 @@ public class T1_TeleopArcadeBlue extends LinearOpMode {
     HeadingSolver headingSolver;
     PositionTracker pt;
     Pinpoint odo;
-    protected Vector3 p_targetGoal  = new Vector3(-70.5, -70.5, 180);   // Y: -60.5; Y: -70.5; BlueGoal Position.
+    protected Vector3 p_targetGoal  = new Vector3(-70.5, -61.5, 180);   // X:-66.5; Y: -60.5; Y: -70.5; BlueGoal Position.
     protected Vector3 fieldStartPos = new Vector3(64,-16,180);
     boolean testModeReverse = false;
 

@@ -18,8 +18,8 @@ public class T1_AutoFarBlue  extends T1_AutoFarRed {
     Vector3 p_fieldStart                = new Vector3(63,-16,-180); //     x:64
     Vector3 p_obeliskView               = new Vector3(58, -16, -180);  // Was: 56, 16, 180; // FarBlue: ObeliskView Position
     Vector3 p_launchPosZero             = new Vector3(58,-16,-162);    // Z: -157; Was: 56, 16, 153; // FarBlue Launching Position.
-    Vector3 p_launchPosOne              = new Vector3(58,-16,-162);    // Z:-157; Was: 56, 16, 153; // FarBlue Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(58,-16,-159.5);    // Was: -160; FarBlue Launching Position for pinkServo. Z:160.
+    Vector3 p_launchPosOne              = new Vector3(58,-16,-159.5);    // Z:-157; Was: 56, 16, 153; // FarBlue Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(58,-16,-158);    // Was: -160; FarBlue Launching Position for pinkServo. Z:160.
 
     Vector3 p_pre_intakeArtifactRow1    = new Vector3(-12, -28, 90);  // Blue: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1        = new Vector3(-12, -53, 90);  // Blue: Intake Artifacts in Row1

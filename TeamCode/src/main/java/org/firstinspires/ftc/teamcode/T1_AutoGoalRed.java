@@ -19,9 +19,9 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
     Vector3 p_targetGoal                = new Vector3(-70.5, 60.5, 180);   // Y: 70.5; RedGoal Position.
     Vector3 p_fieldStart                = new Vector3(-41.5,55,180); // (-40.0, 55, 180); X: -39.0; TODO: Confirm/Tune this position.
     Vector3 p_obeliskView               = new Vector3(-39.0, 31, -160);  // GoalRed: ObeliskView Position
-    Vector3 p_launchPosZero             = new Vector3(-16.0,16,132);    // GoalRed Launching Position.
-    Vector3 p_launchPosOne              = new Vector3(-16.0,16,132);    // 135; GoalRed Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(-16.0,16,135);    // Z:127; (-28,16,124) Z: 131; 135; Was: -18, 29, 130? GoalRed Launching Position for pinkServo.
+    Vector3 p_launchPosZero             = new Vector3(-16.0,16,133);    // GoalRed Launching Position.
+    Vector3 p_launchPosOne              = new Vector3(-16.0,16,135);    // 135; GoalRed Launching Position.
+    Vector3 p_launchPosTwo              = new Vector3(-16.0,16,137);    // Z:127; (-28,16,124) Z: 131; 135; Was: -18, 29, 130? GoalRed Launching Position for pinkServo.
 
     Vector3 p_pre_intakeArtifactRow1    = new Vector3(-12, 22, -90);  // Red: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1        = new Vector3(-12, 53, -90);  // Red: Intake Artifacts in Row1
@@ -63,11 +63,11 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
         autoTasks.addStep(() -> intake.tasks.startGoalLaunch.isDone());
 
         // Determine LaunchOrder and Launch
-        autoTasks.addStep(() -> intake.tasks.nearComputeAndLaunchInOrder.restart());
-        autoTasks.addStep(() -> intake.tasks.nearComputeAndLaunchInOrder.isDone());
+//        autoTasks.addStep(() -> intake.tasks.nearComputeAndLaunchInOrder.restart());
+//        autoTasks.addStep(() -> intake.tasks.nearComputeAndLaunchInOrder.isDone());
 
-//        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
-//        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
+        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.restart());
+        autoTasks.addStep(() -> intake.tasks.computeAndLaunchInOrder.isDone());
 
         // Intake from Row1.
         if (runSpikeCount >=1 ) {
@@ -107,7 +107,7 @@ public class T1_AutoGoalRed  extends T1_AutoFarRed {
                                    Vector3 pos_pre_intake,
                                    Vector3 pos_intake) {
         // Move to pre_intake position.
-        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSlowSettings));
+        autoTasks.addStep(() -> positionSolver.setSettings(PositionSolverSettings.defaultTwiceSettings)); // defaultTwiceSlowSettings;
         positionSolver.addMoveToTaskEx(pos_pre_intake, autoTasks);
 
         // Start "intake".

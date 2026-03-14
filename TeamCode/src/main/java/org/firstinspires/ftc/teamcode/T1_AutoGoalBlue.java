@@ -17,9 +17,9 @@ public class T1_AutoGoalBlue  extends T1_AutoGoalRed {
     Vector3 p_targetGoal                 = new Vector3(-70.5, -60.5, 180);   // Y: -70.5; BlueGoal Position.
     Vector3 p_fieldStart                = new Vector3(-41.5,-55,-180); // (-40.0, -55, -180) TODO: Confirm/Tune this position.
     Vector3 p_obeliskView               = new Vector3(-39.0, -31, 160);  // GoalBlue: ObeliskView Position
-    Vector3 p_launchPosZero             = new Vector3(-16.0,-16,-136);    // GoalBlue Launching Position.
+    Vector3 p_launchPosZero             = new Vector3(-16.0,-16,-138);    // GoalBlue Launching Position.
     Vector3 p_launchPosOne              = new Vector3(-16.0,-16,-136);    // Z:131; GoalBlue Launching Position.
-    Vector3 p_launchPosTwo              = new Vector3(-16.0,-16,-136);    // Z:131; GoalBlue Launching Position for pinkServo.
+    Vector3 p_launchPosTwo              = new Vector3(-16.0,-16,-134);    // Z:131; GoalBlue Launching Position for pinkServo.
 
     Vector3 p_pre_intakeArtifactRow1    = new Vector3(-12, -22, 90);  // Blue: Ready to collect on Row1
     Vector3 p_intakeArtifactRow1        = new Vector3(-12, -53, 90);  // Blue: Intake Artifacts in Row1

@@ -18,7 +18,7 @@ public class LedStick {
     public static void init(HardwareMap hwMap) {
         qLED = hwMap.get(QwiicLEDStickLK.class, "ledstick");
         qLED.setBrightness(255);
-        qLED.setColor(getColorValue(4));
+        qLED.turnAllOff();
         updateLEDs = false;
     }
 

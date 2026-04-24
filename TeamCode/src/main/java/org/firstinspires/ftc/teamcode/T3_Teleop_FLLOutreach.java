@@ -1,0 +1,156 @@
+package org.firstinspires.ftc.teamcode;
+
+import static org.firstinspires.ftc.teamcode.depricated.intake.FlipbotSettings.setControlGovernor;
+import static om.self.ezftc.utils.Constants.tileSide;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.teamcode.depricated.intake.FlipbotSettings;
+import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
+import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
+import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
+import org.firstinspires.ftc.teamcode.parts.drive.Drive;
+import org.firstinspires.ftc.teamcode.parts.drive.DriveTeleop;
+import org.firstinspires.ftc.teamcode.parts.drive.settings.DriveTeleopSettings;
+import org.firstinspires.ftc.teamcode.parts.intake3.Intake3;
+import org.firstinspires.ftc.teamcode.parts.intake3.IntakeTeleopFLLOutreach;
+import org.firstinspires.ftc.teamcode.parts.intake3.settings.IntakeSettings3;
+import org.firstinspires.ftc.teamcode.parts.limelight.LimeLight;
+import org.firstinspires.ftc.teamcode.parts.positionsolver.PositionSolver;
+import org.firstinspires.ftc.teamcode.parts.positiontracker.PositionTracker;
+import org.firstinspires.ftc.teamcode.parts.positiontracker.hardware.PositionTrackerHardware;
+import org.firstinspires.ftc.teamcode.parts.positiontracker.pinpoint.Pinpoint;
+import org.firstinspires.ftc.teamcode.parts.positiontracker.settings.PositionTrackerSettings;
+
+import java.text.DecimalFormat;
+
+import om.self.ezftc.core.Robot;
+import om.self.ezftc.utils.Vector3;
+
+@TeleOp(name="Arcade_FLLOutreach", group="32859")
+public class T3_Teleop_FLLOutreach extends LinearOpMode {
+    Drive drive;
+    Robot robot;
+    PositionSolver positionSolver;
+    PositionTracker pt;
+    Vector3 fieldStartPos = new Vector3(62,-62,180);
+    Pinpoint odo;
+    Artifacts artifacts;
+    LimeLight limelight;
+
+    public void initTeleop()
+    {
+//        IntakeSettings3.launchArmed = true;
+        new DriveTeleop(drive, DriveTeleopSettings.makeDemo1(robot));
+    }
+
+    @Override
+    public void runOpMode() {
+        DecimalFormat df = new DecimalFormat("#0.0");
+        long start;
+        FtcDashboard dashboard = FtcDashboard.getInstance();
+        TelemetryPacket packet = new TelemetryPacket();
+        robot = new Robot(this);
+        new BulkRead(robot);
+        drive = new Drive(robot);
+        artifacts = new Artifacts(robot);
+        limelight = new LimeLight(robot);
+//        Led led = new Led(robot);
+        setControlGovernor(new Vector3(1,1,1));
+        FlipbotSettings.demoDriverMultiplier = .9;
+
+        initTeleop();
+
+        PositionTrackerSettings pts = new PositionTrackerSettings(AxesOrder.XYZ, false,
+                100, new Vector3(2,2,2), fieldStartPos);
+        pt = new PositionTracker(robot,pts, PositionTrackerHardware.makeDefault(robot));
+//        XRelativeSolver solver = new XRelativeSolver(drive);
+        positionSolver = new PositionSolver(drive);
+        odo = new Pinpoint(pt,false);
+//        while (odo == null){};
+//        sleep(2000);
+//        positionSolver.setNewTarget(odo.getPosition(), false); OLD
+        pt.positionSourceId = Pinpoint.class;
+// positionSolver.setSettings(PositionSolverSettings.specimenAssistSettings);
+
+        Intake3 intake = new Intake3(robot, "Teleop");
+        new IntakeTeleopFLLOutreach(intake);
+        robot.init();
+
+
+        long timer = System.currentTimeMillis() + 2500;
+        while (odo.getValidPosition() == null && System.currentTimeMillis() <= timer) {
+            telemetry.addLine("Waiting for Pinpoint...");
+            telemetry.update();
+            //todo: What to do if it doesn't initialize?
+        }
+        positionSolver.setNewTarget(odo.getPosition(), false);
+
+
+
+        /* *********** Take this out for competition ************/
+      odo.setPosition(fieldStartPos);
+        /*  ******************************************************/
+
+        while (!isStarted()) {
+            robot.buttonMgr.runLoop();
+            telemetry.addData("position", odo.getPosition());
+            telemetry.addData ("Press Red or Blue button to select alliance","");
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
+                IntakeSettings3.isRedSide = false;  // Changed from isRedAlliance
+            }
+            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.b, ButtonMgr.State.wasTapped)) {
+                IntakeSettings3.isRedSide = true;   // Changed from isRedAlliance
+            }
+            if (IntakeSettings3.isRedSide) {  // Changed from isRedAlliance
+                intake.getHardware().pixel.setPosition(Intake3.LEDColor.RED.getLedPwm());
+            } else {
+                intake.getHardware().pixel.setPosition(Intake3.LEDColor.BLUE.getLedPwm());
+            }
+            telemetry.addData("Alliance Color:",(IntakeSettings3.isRedSide?"Red":"Blue"));  // Changed from isRedAlliance
+            telemetry.update();
+        }
+        robot.start();
+        positionSolver.stopSolver();
+
+
+        while (opModeIsActive()) {
+            start = System.currentTimeMillis();
+            robot.run();
+            // telemetry.addData("position tracker", pt.getCurrentPosition());
+            telemetry.addData("time", System.currentTimeMillis() - start);
+            // telemetry.addData("Intake speed",intake.getHardware().intakeMotor.getVelocity());
+            telemetry.addData("launch speed",intake.getCurrentLaunchRPM());
+            dashboard.sendTelemetryPacket(packet);
+            telemetry.update();
+
+            // LED LOGIC - Show green when aligned, alliance color otherwise
+            if (IntakeSettings3.isAligned) {
+                intake.getHardware().pixel.setPosition(Intake3.LEDColor.GREEN.getLedPwm());
+            } else {
+                if (IntakeSettings3.isRedSide) {
+                    intake.getHardware().pixel.setPosition(Intake3.LEDColor.RED.getLedPwm());
+                } else {
+                    intake.getHardware().pixel.setPosition(Intake3.LEDColor.BLUE.getLedPwm());
+                }
+            }
+            telemetry.addData("Alliance Color:",(IntakeSettings3.isRedSide?"Red":"Blue"));
+            telemetry.addData("Aligned:", IntakeSettings3.isAligned ? "YES" : "NO");  // Optional: show alignment status
+        }
+    }
+
+    /************************* Utilities **************************/
+    public void moveRobot(Vector3 target){
+        positionSolver.setNewTarget(target, false);
+    }
+    public Vector3 tiletoField(Vector3 p){
+        return new Vector3(p.X * tileSide, p.Y * tileSide, p.Z);
+    }
+    public Vector3 fieldToTile(Vector3 p){
+        return new Vector3(p.X / tileSide, p.Y / tileSide, p.Z);
+    }
+}

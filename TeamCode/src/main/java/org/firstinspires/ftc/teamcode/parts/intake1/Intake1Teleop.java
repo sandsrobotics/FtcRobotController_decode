@@ -71,7 +71,8 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
             parent.eStop();
         }
 
-        if (buttonMgr.getState(1, Buttons.left_bumper, State.isPressed)) {
+        if (buttonMgr.getState(1, Buttons.left_bumper, State.isPressed) ||
+                (buttonMgr.getState(1, Buttons.right_bumper, State.isPressed))) {
             enableDemoDriver = true;
             DecodeSettings.demoDriverMultiplier = DecodeSettings.demoDriverDefaultMultiplier;
         } else {
@@ -80,12 +81,8 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
         }
 
         if (buttonMgr.getState(1, Buttons.right_bumper, State.isPressed)) {
-            enableDemoDriver = true;
-            DecodeSettings.demoDriverMultiplier = DecodeSettings.demoDriverDefaultMultiplier;
             enableLaunch = true;
         } else {
-            enableDemoDriver = false;
-            DecodeSettings.demoDriverMultiplier = 0;
             enableLaunch = false;
         }
         //in telelop, disable positiontracker if Driver1 uses controls
@@ -143,7 +140,7 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
                 }
                 if (buttonMgr.getState(2,Buttons.a, State.wasPressed)) {
                     if (enableLaunch) {
-                        parent.tasks.computeAndLaunchInOrder.restart();
+                        parent.tasks.pinkBlueGreenServoLaunch.restart();
                     }
                 }
             }

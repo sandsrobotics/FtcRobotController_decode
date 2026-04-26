@@ -1,26 +1,39 @@
 package org.firstinspires.ftc.teamcode.lib;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
 
 public class ButtonMgr {
 
-    public OpMode opMode;
-    public Gamepad gamepad1;
-    public Gamepad gamepad2;
-    ControlData[] controlData;
-    int tapTime = 500;             // less than = tap, greater than = hold
-    int repeatTime = 200;
+    static public OpMode opMode;
+    static public Gamepad gamepad1;
+    static public Gamepad gamepad2;
+    static ControlData[] controlData;
+    static int tapTime = 500;             // less than = tap, greater than = hold
+    static int repeatTime = 200;
 
-    public ButtonMgr(OpMode opMode){
-        construct(opMode);
-    }
+//    public ButtonMgr(OpMode opMode){
+//        construct(opMode);
+//    }
+//
+//    void construct(OpMode opMode){
+//        this.opMode = opMode;
+//        this.gamepad1 = opMode.gamepad1;
+//        this.gamepad2 = opMode.gamepad2;
+//
+//        //allocate for # objects based on GPbuttons enum
+//        controlData = new ControlData[Buttons.values().length * 2];
+//        //create objects and assign index numbers
+//        for (int i = 0; i < Buttons.values().length * 2; i++) {
+//            controlData[i] = new ControlData();
+//            controlData[i].initData(i);
+//        }
+//    }
 
-    void construct(OpMode opMode){
-        this.opMode = opMode;
-        this.gamepad1 = opMode.gamepad1;
-        this.gamepad2 = opMode.gamepad2;
+    static public void setup(OpMode opMode){
+        ButtonMgr.opMode = opMode;
+        ButtonMgr.gamepad1 = opMode.gamepad1;
+        ButtonMgr.gamepad2 = opMode.gamepad2;
 
         //allocate for # objects based on GPbuttons enum
         controlData = new ControlData[Buttons.values().length * 2];
@@ -31,102 +44,102 @@ public class ButtonMgr {
         }
     }
 
-    public void initLoop() {
+    static public void initLoop() {
         runLoop();
     }
 
-    public void runLoop() {
+    static public void runLoop() {
         updateAll();
     }
 
-    public void updateAll()
+    static public void updateAll()
     {
         for (ControlData i : controlData) {
             i.update();
         }
     }
 
-    public boolean wasPressed(cButton ctrlButton) {
+    static public boolean wasPressed(cButton ctrlButton) {
         return wasPressed(ctrlButton.controller, ctrlButton.button);
     }
-    public boolean wasPressed(int controller, Buttons button) {
+    static public boolean wasPressed(int controller, Buttons button) {
         return controlData[getIndex(controller, button)].wasPressed;
     }
 
-    public boolean wasReleased(cButton ctrlButton) {
+    static public boolean wasReleased(cButton ctrlButton) {
         return wasReleased(ctrlButton.controller, ctrlButton.button);
     }
-    public boolean wasReleased(int controller, Buttons button) {
+    static public boolean wasReleased(int controller, Buttons button) {
         return controlData[getIndex(controller, button)].wasReleased;
     }
 
-    public boolean wasTapped(cButton ctrlButton) {
+    static public boolean wasTapped(cButton ctrlButton) {
         return wasTapped(ctrlButton.controller, ctrlButton.button);
     }
-    public boolean wasTapped(int controller, Buttons button) {
+    static public boolean wasTapped(int controller, Buttons button) {
         return controlData[getIndex(controller, button)].wasTapped;
     }
 
-    public boolean isHeld(cButton ctrlButton) {
+    static public boolean isHeld(cButton ctrlButton) {
         return isHeld(ctrlButton.controller, ctrlButton.button);
     }
-    public boolean isHeld(int controller, Buttons button) {
+    static public boolean isHeld(int controller, Buttons button) {
         return controlData[getIndex(controller, button)].isHeld;
     }
 
-    public boolean isPressed(cButton ctrlButton) {
+    static public boolean isPressed(cButton ctrlButton) {
         return isPressed(ctrlButton.controller, ctrlButton.button);
     }
-    public boolean isPressed(int controller, Buttons button) {
+    static public boolean isPressed(int controller, Buttons button) {
         return controlData[getIndex(controller, button)].lastStatus;
     }
 
-    public boolean wasSingleTapped(cButton ctrlButton) {
+    static public boolean wasSingleTapped(cButton ctrlButton) {
         return wasSingleTapped(ctrlButton.controller, ctrlButton.button);
     }
-    public boolean wasSingleTapped(int controller, Buttons button) {
+    static public boolean wasSingleTapped(int controller, Buttons button) {
         return controlData[getIndex(controller, button)].wasSingleTapped;
     }
 
-    public boolean wasDoubleTapped(cButton ctrlButton) {
+    static public boolean wasDoubleTapped(cButton ctrlButton) {
         return wasDoubleTapped(ctrlButton.controller, ctrlButton.button);
     }
-    public boolean wasDoubleTapped(int controller, Buttons button) {
+    static public boolean wasDoubleTapped(int controller, Buttons button) {
         return controlData[getIndex(controller, button)].wasDoubleTapped;
     }
 
-    public boolean wasHeld(cButton ctrlButton) {
+    static public boolean wasHeld(cButton ctrlButton) {
         return wasHeld(ctrlButton.controller, ctrlButton.button);
     }
-    public boolean wasHeld(int controller, Buttons button) {
+    static public boolean wasHeld(int controller, Buttons button) {
         return controlData[getIndex(controller, button)].wasHeld;
     }
 
-    public boolean isSingleTapHeld(cButton ctrlButton) {
+    static public boolean isSingleTapHeld(cButton ctrlButton) {
         return isSingleTapHeld(ctrlButton.controller, ctrlButton.button);
     }
-    public boolean isSingleTapHeld(int controller, Buttons button) {
+    static public boolean isSingleTapHeld(int controller, Buttons button) {
         return controlData[getIndex(controller, button)].isSingleTapHeld;
     }
 
-    public boolean isRepeating(cButton ctrlButton) {
+    static public boolean isRepeating(cButton ctrlButton) {
         return isRepeating(ctrlButton.controller, ctrlButton.button);
     }
-    public boolean isRepeating(int controller, Buttons button) {
+    static public boolean isRepeating(int controller, Buttons button) {
         return controlData[getIndex(controller, button)].isRepeating;
     }
 
-    int getIndex(int controller, Buttons button){
+    static int getIndex(int controller, Buttons button){
         //This converts an index of 0-31 based on the controller 1-2 and button 0-15
         if (controller < 1 || controller > 2) controller = 0; else controller--;
         return controller * Buttons.values().length + button.ordinal();
     }
 
-    ControlData getAllData(int controller, Buttons button) {
+    static ControlData getAllData(int controller, Buttons button) {
         return controlData[getIndex(controller, button)];
     }
 
-    public boolean getState(int controller, Buttons button, State state) {
+    static public boolean getState(int controller, Buttons button, State state) {
         switch (state) {
             //must match the elements in the Actions enum
             case isPressed:         return controlData[getIndex(controller, button)].lastStatus;
@@ -143,7 +156,7 @@ public class ButtonMgr {
         }
     }
 
-    public boolean getState(int controller, String button, State state) {
+    static public boolean getState(int controller, String button, State state) {
         try {
             return getState(controller, Buttons.valueOf(button), state);
         } catch (Exception e) {
@@ -151,7 +164,7 @@ public class ButtonMgr {
         }
     }
 
-    class ControlData {
+    static class ControlData {
         int index;
         Buttons name;
         boolean lastStatus;

@@ -110,22 +110,22 @@ public class FlipTeleopDive extends LinearOpMode {
         intake.getHardware().robotHangMotor.setPower(-1);
 
         while (!isStarted()) {
-            robot.buttonMgr.runLoop();
+            ButtonMgr.runLoop();
             telemetry.addData("Not Started", "Not Started");
 
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasDoubleTapped)) {
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasDoubleTapped)) {
                 drive.lkUpdateConfig(DriveSettings.makeDefault(), DriveHardware.lkTestChassis(robot.opMode.hardwareMap));
                 testModeReverse = true;
             }
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasSingleTapped)) {
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasSingleTapped)) {
                 drive.lkUpdateConfig(DriveSettings.makeDefault(), DriveHardware.makeDefault(robot.opMode.hardwareMap));
                 testModeReverse = false;
             }
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasTapped)) {
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasTapped)) {
                 odo.setPosition(fieldStartPos);
             }
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped) ||
-                    robot.buttonMgr.getState(2, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped) ||
+                    ButtonMgr.getState(2, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
                 intake.initializeServos();
             }
             telemetry.addData("Drive motors", testModeReverse ? "Test Reverse (AndyMark Chassis)" : "Normal - Competition");

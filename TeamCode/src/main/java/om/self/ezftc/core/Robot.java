@@ -4,6 +4,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
+import org.firstinspires.ftc.teamcode.lib.StateMachine;
 
 import om.self.beans.core.BeanManager;
 import om.self.ezftc.core.part.PartParent;
@@ -40,7 +41,7 @@ public class Robot implements PartParent{
 
     //other things
     public final LinearOpMode opMode;
-    public ButtonMgr buttonMgr;
+//    public ButtonMgr buttonMgr;
 
     public Robot(LinearOpMode opMode) {
         this.opMode = opMode;
@@ -57,7 +58,9 @@ public class Robot implements PartParent{
         endTaskManager.runCommand(Group.Command.START);
         //add bean!!
         getBeanManager().addBean(this, null, false, true);
-        buttonMgr = new ButtonMgr(opMode);
+//        buttonMgr = new ButtonMgr(opMode);
+        ButtonMgr.setup(opMode);
+        StateMachine.reset();
     }
 
     @Override
@@ -96,8 +99,10 @@ public class Robot implements PartParent{
     }
 
     public void run(){
-        buttonMgr.runLoop();
+        ButtonMgr.runLoop();
+        StateMachine.runLoop();
         taskManager.run();
+        StateMachine.addTelemetry(opMode.telemetry);
     }
 
     public void stop(){

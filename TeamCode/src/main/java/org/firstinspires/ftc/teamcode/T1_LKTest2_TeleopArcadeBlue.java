@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.GoBildaPinpointDriver;
 import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
@@ -122,11 +123,11 @@ public class T1_LKTest2_TeleopArcadeBlue extends LinearOpMode {
 
 
         while (!isStarted()) {
-            robot.buttonMgr.runLoop();
+            ButtonMgr.runLoop();
             telemetry.addData("TELEOP BLUE", "Not Started");
 
-//            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped) ||
-//                    robot.buttonMgr.getState(2, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
+//            if (ButtonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped) ||
+//                    ButtonMgr.getState(2, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
 //                intake.initializeServos();
 //            }
 

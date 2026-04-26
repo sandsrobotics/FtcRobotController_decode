@@ -11,18 +11,18 @@ import om.self.ezftc.utils.Vector3;
 
 public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings, ObjectUtils.Null> {
     private Intake1TeleopSettings settings;
-    ButtonMgr buttonMgr;
+//    ButtonMgr ButtonMgr;
 
     public Intake1Teleop(Intake1 parent) {
         super(parent, "Intake teleop");
         setSettings(Intake1TeleopSettings.makeDefault(parent.parent));
-        buttonMgr = parent.parent.buttonMgr;
+//        ButtonMgr = parent.parent.ButtonMgr;
     }
 
     public Intake1Teleop(Intake1 parent, Intake1TeleopSettings settings) {
         super(parent, "Intake teleop");
         setSettings(settings);
-        buttonMgr = parent.parent.buttonMgr;
+//        ButtonMgr = parent.parent.ButtonMgr;
     }
 
     public Intake1TeleopSettings getSettings() {
@@ -61,8 +61,8 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
 
     public void driverControls() {
         // e-stop, either driver
-        if (buttonMgr.getState(2, Buttons.back, State.wasPressed) ||
-                buttonMgr.getState(1, Buttons.back, State.wasPressed)) {
+        if (ButtonMgr.getState(2, Buttons.back, State.wasPressed) ||
+                ButtonMgr.getState(1, Buttons.back, State.wasPressed)) {
             parent.eStop();
         }
 
@@ -102,77 +102,77 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
         // Driver 2 - slide control
 //        parent.setUserSlidePower(-parent.parent.opMode.gamepad2.left_stick_y);
         // Driver 2 - start button is a "shift" key; anything below is if start is not pushed
-        if (!buttonMgr.getState(2, Buttons.start, State.isPressed)) {
+        if (!ButtonMgr.getState(2, Buttons.start, State.isPressed)) {
 
             // Driver 2
             // Manual launchSpeed Tasks.
-            if (buttonMgr.getState(2, Buttons.dpad_down, State.wasTapped)) {
+            if (ButtonMgr.getState(2, Buttons.dpad_down, State.wasTapped)) {
                 parent.autoRPM = false;
                 parent.tasks.startFarLaunch.restart();
             }
-            if (buttonMgr.getState(2, Buttons.dpad_right, State.wasTapped)) {
+            if (ButtonMgr.getState(2, Buttons.dpad_right, State.wasTapped)) {
                 parent.autoRPM = false;
                 parent.tasks.startThreeLaunch.restart();
             }
-            if (buttonMgr.getState(2, Buttons.dpad_up, State.wasTapped)) {
+            if (ButtonMgr.getState(2, Buttons.dpad_up, State.wasTapped)) {
                 parent.autoRPM = false;
                 parent.tasks.startGoalLaunch.restart();
             }
-            if (buttonMgr.getState(2, Buttons.dpad_left, State.wasTapped)) {
+            if (ButtonMgr.getState(2, Buttons.dpad_left, State.wasTapped)) {
                 parent.autoRPM = false;
                 parent.tasks.stopLaunch.restart();
             }
 
             /*      Launch Tasks          */
-            if (buttonMgr.getState(2, Buttons.b, State.wasTapped)) {
+            if (ButtonMgr.getState(2, Buttons.b, State.wasTapped)) {
 //                parent.tasks.pinkServoLaunch.restart();
                 parent.tasks.pinkServoLaunchInTolerance.restart();
             }
             /*      Launch Tasks          */
-            if (buttonMgr.getState(2, Buttons.y, State.wasTapped)) {
+            if (ButtonMgr.getState(2, Buttons.y, State.wasTapped)) {
 //                parent.tasks.blueServoLaunch.restart();
                 parent.tasks.blueServoLaunchInTolerance.restart();
             }
             /*      Launch Tasks          */
-            if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {
+            if (ButtonMgr.getState(2, Buttons.x, State.wasTapped)) {
 //                parent.tasks.greenServoLaunch.restart();
                 parent.tasks.greenServoLaunchInTolerance.restart();
             }
             /*      Launch Tasks          */
-            if (buttonMgr.getState(2, Buttons.a, State.wasTapped)) {
+            if (ButtonMgr.getState(2, Buttons.a, State.wasTapped)) {
 //                parent.tasks.pinkBlueGreenServoLaunch.restart();
 //                parent.tasks.allServoLaunch.restart();
                 parent.tasks.computeAndLaunchInOrder.restart();
             }
             /*      Launch ALL Servos Tasks          */
-            if (buttonMgr.getState(2, Buttons.a, State.wasHeld)) {
+            if (ButtonMgr.getState(2, Buttons.a, State.wasHeld)) {
                 parent.tasks.computeAndLaunchInOrder.restart();
             }
 
-//            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasTapped)) {
+//            if (ButtonMgr.getState(2, Buttons.right_bumper, State.wasTapped)) {
 //                parent.toggleAutoRPM();
 //            }
-//            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasPressed)) {
+//            if (ButtonMgr.getState(2, Buttons.right_bumper, State.wasPressed)) {
 //                parent.autoRPM = true;
 //                parent.launchOff = false;
 //            }
-//            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasReleased)) {
+//            if (ButtonMgr.getState(2, Buttons.right_bumper, State.wasReleased)) {
 //                parent.autoRPM = false;
 //                parent.setLaunchMotors(0);
 //            }
             // todo: does driver2 prefer press/release or tap/hold for autoRPM?
-            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasTapped)) {
+            if (ButtonMgr.getState(2, Buttons.right_bumper, State.wasTapped)) {
                 parent.autoRPM = true;
                 parent.launchOff = false;
             }
-            if (buttonMgr.getState(2, Buttons.right_bumper, State.wasHeld)) {
+            if (ButtonMgr.getState(2, Buttons.right_bumper, State.wasHeld)) {
                 parent.autoRPM = false;
                 parent.setLaunchMotors(0);
             }
-            if (buttonMgr.getState(2, Buttons.left_bumper, State.wasPressed)) {
+            if (ButtonMgr.getState(2, Buttons.left_bumper, State.wasPressed)) {
                 parent.headingSolver.startSolver();
             }
-            if (buttonMgr.getState(2, Buttons.left_bumper, State.wasReleased)) {
+            if (ButtonMgr.getState(2, Buttons.left_bumper, State.wasReleased)) {
                 parent.headingSolver.stopSolver();
             }
         }
@@ -185,30 +185,30 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
 
         // *** DRIVER 1 CONTROLS ***
         // Driver 1 - start button is a "shift" key; anything below is if start is not pushed
-        if (!buttonMgr.getState(1, Buttons.start, State.isPressed)) {
+        if (!ButtonMgr.getState(1, Buttons.start, State.isPressed)) {
             //           DRIVER 1
             //             intake Task
-            if (buttonMgr.getState(1, Buttons.right_bumper, State.wasTapped)) {
+            if (ButtonMgr.getState(1, Buttons.right_bumper, State.wasTapped)) {
                 parent.tasks.intakeTask.restart();
             }
-            if (buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
+            if (ButtonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
                 parent.tasks.artifactIntakeStopTask.restart();
             }
-            if (buttonMgr.getState(1, Buttons.a, State.wasTapped)) {
+            if (ButtonMgr.getState(1, Buttons.a, State.wasTapped)) {
                 parent.tasks.outtakeTask.restart();
             }
-            if (buttonMgr.getState(1, Buttons.x, State.wasTapped)) {
+            if (ButtonMgr.getState(1, Buttons.x, State.wasTapped)) {
                 parent.tasks.viewObelisk.restart();
             }
-            if (buttonMgr.getState(1, Buttons.y, State.wasTapped)) {
+            if (ButtonMgr.getState(1, Buttons.y, State.wasTapped)) {
                 parent.tasks.allServoDock.restart();
             }
-            if (buttonMgr.getState(1, Buttons.b, State.wasTapped)) {
+            if (ButtonMgr.getState(1, Buttons.b, State.wasTapped)) {
                 parent.tasks.allServoStore.restart();
             }
 
             // Pre-Selected moveToLoadingZone.
-            if (buttonMgr.getState(1, Buttons.left_stick_button, State.wasTapped)) {
+            if (ButtonMgr.getState(1, Buttons.left_stick_button, State.wasTapped)) {
                 if(DecodeSettings.isAllianceRed()) {
                     parent.tasks.teleopMoveToRedLoadingZone.restart();
                 } else {
@@ -217,7 +217,7 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
             }
 
             // Pre-Selected teleopFarLaunch
-            if (buttonMgr.getState(1, Buttons.right_stick_button, State.wasTapped)) {
+            if (ButtonMgr.getState(1, Buttons.right_stick_button, State.wasTapped)) {
                 if(DecodeSettings.isAllianceRed()) {
                     parent.tasks.teleopFarRedLaunch.restart();
                 } else {
@@ -226,12 +226,12 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
             }
 
             // Launch All 3 Balls from Far
-            if (buttonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
+            if (ButtonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
                 parent.tasks.threeLaunchFar.restart();
             }
 
             // Launch all 3 Balls from near
-            if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
+            if (ButtonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
                 parent.tasks.threeLaunchNear.restart();
             }
 
@@ -243,54 +243,54 @@ public class Intake1Teleop extends LoopedPartImpl<Intake1, Intake1TeleopSettings
 
             // LK new test
             if (DecodeSettings.lkTestMode1) {
-                if (buttonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
+                if (ButtonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
                     parent.headingSolver.startSolver();
                 }
-                if (buttonMgr.getState(1, Buttons.dpad_left, State.wasTapped)) {
+                if (ButtonMgr.getState(1, Buttons.dpad_left, State.wasTapped)) {
                     parent.headingSolver.setNewTarget(DecodeSettings.targetBlue, true);
                     parent.storedTarget = DecodeSettings.targetBlue;
                 }
-                if (buttonMgr.getState(1, Buttons.dpad_right, State.wasTapped)) {
+                if (ButtonMgr.getState(1, Buttons.dpad_right, State.wasTapped)) {
                     parent.headingSolver.setNewTarget(DecodeSettings.targetRed, true);
                     parent.storedTarget = DecodeSettings.targetRed;
                 }
-                if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
+                if (ButtonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
                     parent.headingSolver.stopSolver();
                 }
             }
             if (DecodeSettings.lkTestMode2) {
-                if (buttonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
+                if (ButtonMgr.getState(1, Buttons.dpad_up, State.wasTapped)) {
                     parent.headerAimer.setAutoAim(true);
                 }
-                if (buttonMgr.getState(1, Buttons.dpad_left, State.wasTapped)) {
+                if (ButtonMgr.getState(1, Buttons.dpad_left, State.wasTapped)) {
                     parent.headerAimer.setTarget(DecodeSettings.targetBlue);
                     parent.storedTarget = DecodeSettings.targetBlue;
                 }
-                if (buttonMgr.getState(1, Buttons.dpad_right, State.wasTapped)) {
+                if (ButtonMgr.getState(1, Buttons.dpad_right, State.wasTapped)) {
                     parent.headerAimer.setTarget(DecodeSettings.targetRed);
                     parent.storedTarget = DecodeSettings.targetRed;
                 }
-                if (buttonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
+                if (ButtonMgr.getState(1, Buttons.dpad_down, State.wasTapped)) {
                     parent.headerAimer.setAutoAim(false);
                 }
             }
             if (DecodeSettings.lkTestMode1 || DecodeSettings.lkTestMode2) {
-                if (buttonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
+                if (ButtonMgr.getState(1, Buttons.y, State.wasDoubleTapped)) {
                     parent.limeLight.applyTransform();
 //                    parent.positionTracker.setOverrideTransform(parent.limeLight.llSavedTransform);
                 }
-                if (buttonMgr.getState(1, Buttons.x, State.wasDoubleTapped)) {
+                if (ButtonMgr.getState(1, Buttons.x, State.wasDoubleTapped)) {
                     parent.limeLight.toggleAuto();
                 }
-                if (buttonMgr.getState(1, Buttons.left_bumper, State.wasDoubleTapped)) {
+                if (ButtonMgr.getState(1, Buttons.left_bumper, State.wasDoubleTapped)) {
                     parent.limeLight.acceptableStdDev = new Vector3(1,1,1);
                     parent.limeLight.setSizeOfBuffer(50);
                 }
-                if (buttonMgr.getState(1, Buttons.right_bumper, State.wasDoubleTapped)) {
+                if (ButtonMgr.getState(1, Buttons.right_bumper, State.wasDoubleTapped)) {
                     parent.limeLight.acceptableStdDev = new Vector3(2,2,2);
                     parent.limeLight.setSizeOfBuffer(25);
                 }
-                if (buttonMgr.getState(1, Buttons.right_stick_button, State.wasTapped)) {
+                if (ButtonMgr.getState(1, Buttons.right_stick_button, State.wasTapped)) {
                     parent.toggleAutoRPM();
                 }
             }

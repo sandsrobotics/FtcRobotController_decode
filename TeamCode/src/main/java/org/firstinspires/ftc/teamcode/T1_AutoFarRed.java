@@ -10,6 +10,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.teamcode.lib.ButtonMgr;
 import org.firstinspires.ftc.teamcode.lib.GoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.lib.LK.AutoDrive;
+import org.firstinspires.ftc.teamcode.lib.LK.DataTypes.NavigationTarget;
+import org.firstinspires.ftc.teamcode.lib.LK.DataTypes.Position;
+import org.firstinspires.ftc.teamcode.lib.LK.DataTypes.PositionTolerance;
+import org.firstinspires.ftc.teamcode.lib.LK.Parts;
 import org.firstinspires.ftc.teamcode.parts.artifact.Artifacts;
 import org.firstinspires.ftc.teamcode.parts.bulkread.BulkRead;
 import org.firstinspires.ftc.teamcode.parts.drive.Drive;
@@ -39,6 +44,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
     public boolean shutdownps;
     PositionSolver positionSolver;
     PositionTracker pt;
+    Parts parts;
     Vector3 startPosition;
     Pinpoint odo;
     Intake1 intake;
@@ -109,6 +115,8 @@ public class T1_AutoFarRed  extends LinearOpMode{
                 100, new Vector3(2,2,2), DecodeSettings.getRobotPosition());
         pt = new PositionTracker(robot,pts, PositionTrackerHardware.makeDefault(robot));
 
+        parts = new Parts(robot);
+
         odo = new Pinpoint(pt, false, "odo",
                 DecodeSettings.pinpointSettingsXoffset, DecodeSettings.pinpointSettingsYoffset, DecodeSettings.pinpointSettingsResolution,
                 GoBildaPinpointDriver.EncoderDirection.REVERSED, GoBildaPinpointDriver.EncoderDirection.FORWARD);
@@ -136,7 +144,7 @@ public class T1_AutoFarRed  extends LinearOpMode{
         DecodeSettings.odoFirstRun = false;
 
         while (!isStarted()) {
-            robot.buttonMgr.runLoop();
+            ButtonMgr.runLoop();
             telemetry.addData("CurrOpMode", DecodeSettings.getCurrentOpMode());
             telemetry.addData("START_P", odo.getPosition());
             // LED color indicator
@@ -149,11 +157,11 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
             telemetry.addData("D-PAD UP/DOWN to change spike count","");
             // D-pad controls for spike count
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasTapped))
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasTapped))
             {
                 runSpikeCount = Math.min(3, runSpikeCount + 1);
             }
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped))
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped))
             {
                 runSpikeCount = Math.max(1, runSpikeCount - 1);
             }
@@ -161,11 +169,11 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
             telemetry.addData("D-PAD LEFT / RIGHT to disable/enable Lever Open","");
             // D-pad controls for LeverOpen
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_left, ButtonMgr.State.wasTapped))
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.dpad_left, ButtonMgr.State.wasTapped))
             {
                 runLeverOpen = 0;
             }
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_right, ButtonMgr.State.wasTapped))
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.dpad_right, ButtonMgr.State.wasTapped))
             {
                 runLeverOpen = 1;
                 runSpikeCount = 1; // re-set runSpikeCount to 1 whenever runLeverOpen is true.
@@ -174,24 +182,24 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
             telemetry.addData("RB (+) / LB (-) to change Start Delay","");
 
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.right_bumper, ButtonMgr.State.wasTapped)) {
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.right_bumper, ButtonMgr.State.wasTapped)) {
                 startDelay += 1000;
             }
-//            if (robot.buttonMgr.getState(2, ButtonMgr.Buttons.b, ButtonMgr.State.wasTapped)) {
+//            if (ButtonMgr.getState(2, ButtonMgr.Buttons.b, ButtonMgr.State.wasTapped)) {
 //                launchRPM += 100;
 //            }
-//            if (robot.buttonMgr.getState(2, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
+//            if (ButtonMgr.getState(2, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
 //                launchRPM -= 100;
 //            }
-//            if (robot.buttonMgr.getState(2, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped)) {
+//            if (ButtonMgr.getState(2, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped)) {
 //                delayBetweenShot -= 1000;
 //            }
-//            if (robot.buttonMgr.getState(2, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasTapped)) {
+//            if (ButtonMgr.getState(2, ButtonMgr.Buttons.dpad_up, ButtonMgr.State.wasTapped)) {
 //                delayBetweenShot += 1000;
 //            }
 //            telemetry.addData("delay between shots", delayBetweenShot);
 //            telemetry.addData("launch RPM", launchRPM);
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.left_bumper, ButtonMgr.State.wasTapped)) {
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.left_bumper, ButtonMgr.State.wasTapped)) {
                 startDelay -= 1000;
                 if(startDelay < 0) startDelay = 0;
             }
@@ -250,6 +258,11 @@ public class T1_AutoFarRed  extends LinearOpMode{
 
         // Look at Obelisk, determine classificationId and Store it.
         autoTasks.addStep(intake.tasks.viewObelisk::restart);
+
+//        autoTasks.addStep(() -> parts.autoDrive.addNavTargets(toTargetAccurate(p_launchPosZero)) );
+//        autoTasks.addStep(() -> !parts.autoDrive.isNavigating);
+//        autoTasks.addStep(() -> parts.autoDrive.getStatus() == AutoDrive.Status.SUCCESS);
+//        autoTasks.addStep(() -> parts.autoDrive.getStatus() != AutoDrive.Status.DRIVING);
 
         // Prep "Launch Motor".
         autoTasks.addStep(() -> intake.setLaunchRPM((int) DecodeSettings.getLaunchRPM()));
@@ -347,4 +360,23 @@ public class T1_AutoFarRed  extends LinearOpMode{
         DecodeSettings.setLaunchRPM(launchRPM);
         DecodeSettings.lkTestMode1 = false;
     }
+
+    public NavigationTarget toTargetTransition (Vector3 vector) {
+        return new NavigationTarget(new Position(vector), toleranceTransition, 1, 5000, true);
+    }
+
+    public NavigationTarget toTargetAccurate (Vector3 vector) {
+        return new NavigationTarget(new Position(vector), toleranceHigh, 1, 5000, false);
+    }
+
+    public NavigationTarget toTarget (Vector3 vector, PositionTolerance tolerance, double maxSpeed, long timeLimit, boolean noSlow) {
+        return new NavigationTarget(new Position(vector), tolerance, maxSpeed, timeLimit, noSlow);
+    }
+
+    public PositionTolerance toleranceImpossible = new PositionTolerance (0.5, 0.5, 250);
+    public PositionTolerance toleranceHigh = new PositionTolerance (1.0, 1.0, 250);
+    public PositionTolerance toleranceMedium = new PositionTolerance (2.0, 2.0, 125);
+    public PositionTolerance toleranceLow = new PositionTolerance(2.0,6.0,5.0,50);
+    public PositionTolerance toleranceTransition = new PositionTolerance(4.0,90.0,0);
+
 }

@@ -10,19 +10,19 @@ import om.self.ezftc.core.part.LoopedPartImpl;
 
 public class IntakeTeleopDemo extends LoopedPartImpl<Intake, IntakeTeleopSettings, ObjectUtils.Null> {
     private IntakeTeleopSettings settings;
-    ButtonMgr buttonMgr;
+//    ButtonMgr ButtonMgr;
     private boolean enableDemoDriver = false;
 
     public IntakeTeleopDemo(Intake parent) {
         super(parent, "Intake teleop");
         setSettings(IntakeTeleopSettings.makeDefault(parent.parent));
-        buttonMgr = parent.parent.buttonMgr;
+//        ButtonMgr = parent.parent.ButtonMgr;
     }
 
     public IntakeTeleopDemo(Intake parent, IntakeTeleopSettings settings) {
         super(parent, "Intake teleop");
         setSettings(settings);
-        buttonMgr = parent.parent.buttonMgr;
+//        ButtonMgr = parent.parent.ButtonMgr;
     }
 
     public IntakeTeleopSettings getSettings() {
@@ -61,8 +61,8 @@ public class IntakeTeleopDemo extends LoopedPartImpl<Intake, IntakeTeleopSetting
 
     public void driverControls() {
         // e-stop, either driver
-        if (buttonMgr.getState(1, Buttons.back, State.wasPressed) ||
-                buttonMgr.getState(2, Buttons.back, State.wasPressed)) {
+        if (ButtonMgr.getState(1, Buttons.back, State.wasPressed) ||
+                ButtonMgr.getState(2, Buttons.back, State.wasPressed)) {
             parent.eStop();
         }
 
@@ -70,7 +70,7 @@ public class IntakeTeleopDemo extends LoopedPartImpl<Intake, IntakeTeleopSetting
         // Driver 1 is set to override many things here and in drive control
 
         // Driver 1 right_bumper is a dead man switch for Driver 2
-        if (buttonMgr.getState(1, Buttons.right_bumper, State.isPressed)) {
+        if (ButtonMgr.getState(1, Buttons.right_bumper, State.isPressed)) {
             enableDemoDriver = true;
             FlipbotSettings.demoDriverMultiplier = FlipbotSettings.demoDriverDefaultMultiplier;
         } else {
@@ -88,7 +88,7 @@ public class IntakeTeleopDemo extends LoopedPartImpl<Intake, IntakeTeleopSetting
         }
 
         // Driver 2 - start button is a "shift" key; anything below is if start is not pushed
-        if (!buttonMgr.getState(1, Buttons.start, State.isPressed)) {
+        if (!ButtonMgr.getState(1, Buttons.start, State.isPressed)) {
             // Start not pressed
             if (eitherGuestOrTeam(Buttons.x, State.wasTapped)) {
                 parent.stopAllIntakeTasks();
@@ -114,14 +114,14 @@ public class IntakeTeleopDemo extends LoopedPartImpl<Intake, IntakeTeleopSetting
                 parent.stopAllIntakeTasks();
                 parent.tasks.depositTask.restart();
             }
-//            if (buttonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
+//            if (ButtonMgr.getState(1, Buttons.left_bumper, State.wasTapped)) {
 //                if (parent.getHardware().spinner.isSetPosition(parent.getSettings().spinnerOut)) {
 //                    parent.setSpinner(parent.getSettings().spinnerOff);
 //                } else {
 //                    parent.setSpinner(parent.getSettings().spinnerOut);
 //                }
 //            }
-//            if (buttonMgr.getState(1, Buttons.right_bumper, State.wasTapped)) {
+//            if (ButtonMgr.getState(1, Buttons.right_bumper, State.wasTapped)) {
 //                if (parent.getHardware().spinner.isSetPosition(parent.getSettings().spinnerIn)) {
 //                    parent.setSpinner(parent.getSettings().spinnerOff);
 //                } else {
@@ -132,7 +132,7 @@ public class IntakeTeleopDemo extends LoopedPartImpl<Intake, IntakeTeleopSetting
         else {
             //start pressed
             // emergency home
-            if (buttonMgr.getState(1, Buttons.x, State.wasTapped)) {
+            if (ButtonMgr.getState(1, Buttons.x, State.wasTapped)) {
                 parent.stopAllIntakeTasks();
                 parent.tasks.startAutoHome();
             }
@@ -141,8 +141,8 @@ public class IntakeTeleopDemo extends LoopedPartImpl<Intake, IntakeTeleopSetting
 
     public boolean eitherGuestOrTeam(Buttons button, State state) {
         // if either was enabled and activated the control, return true
-        boolean team = buttonMgr.getState(1, button, state);
-        boolean guest = enableDemoDriver && buttonMgr.getState(2, button, state);
+        boolean team = ButtonMgr.getState(1, button, state);
+        boolean guest = enableDemoDriver && ButtonMgr.getState(2, button, state);
         return team || guest;
     }
 

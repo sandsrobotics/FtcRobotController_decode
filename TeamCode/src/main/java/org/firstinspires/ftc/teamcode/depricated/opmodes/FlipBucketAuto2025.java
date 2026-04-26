@@ -102,36 +102,36 @@ public class FlipBucketAuto2025 extends LinearOpMode{
         robot.init();
 
         while (!isStarted()) {
-            robot.buttonMgr.runLoop();
+            ButtonMgr.runLoop();
 
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped)) {
                 FlipbotSettings.isBlueGood = true;
                 FlipbotSettings.isRedGood = false;
             }
 
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.b, ButtonMgr.State.wasTapped)) {
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.b, ButtonMgr.State.wasTapped)) {
                 FlipbotSettings.isBlueGood = false;
                 FlipbotSettings.isRedGood = true;
             }
 
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_left, ButtonMgr.State.wasTapped)) {
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.dpad_left, ButtonMgr.State.wasTapped)) {
                 samplePosFish = samplePosFish - 1;
                 modelOfSub = modelOfSub-1;
             }
 
-            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_right, ButtonMgr.State.wasTapped)) {
+            if (ButtonMgr.getState(1, ButtonMgr.Buttons.dpad_right, ButtonMgr.State.wasTapped)) {
                 samplePosFish = samplePosFish + 1;
                 modelOfSub++;
             }
             // example configuration capability during init
 
-//            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped)) {
+//            if (ButtonMgr.getState(1, ButtonMgr.Buttons.dpad_down, ButtonMgr.State.wasTapped)) {
 //                FlipbotSettings.autonomousDebugMode = !FlipbotSettings.autonomousDebugMode;   //todo: disable this before competition!
 //            }
-//            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.right_bumper, ButtonMgr.State.wasTapped)) {
+//            if (ButtonMgr.getState(1, ButtonMgr.Buttons.right_bumper, ButtonMgr.State.wasTapped)) {
 //                startDelay += 1000;
 //            }
-//            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.left_bumper, ButtonMgr.State.wasTapped)) {
+//            if (ButtonMgr.getState(1, ButtonMgr.Buttons.left_bumper, ButtonMgr.State.wasTapped)) {
 //                startDelay -= 1000;
 //                if(startDelay < 0) startDelay = 0;
 //            }

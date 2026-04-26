@@ -78,6 +78,16 @@ public final class Drive extends ControllableLoopedPart<Robot,DriveSettings, Dri
         getHardware().bottomRightMotor.setPower(pows[3]);
     }
 
+    /**
+     * Rhindle: This method provides direct control of the motors with no error checking or smoothing.
+     */
+    public void moveRobot(double[] powers){
+        getHardware().bottomLeftMotor.setPower(powers[2]);
+        getHardware().topRightMotor.setPower(powers[1]);
+        getHardware().topLeftMotor.setPower(powers[0]);
+        getHardware().bottomRightMotor.setPower(powers[3]);
+    }
+
     public double[] fieldCentricRotation(double x, double y){
         // Get IMU angle in radians
         BNO055IMU imu = parent.opMode.hardwareMap.get(BNO055IMU.class, "imu");

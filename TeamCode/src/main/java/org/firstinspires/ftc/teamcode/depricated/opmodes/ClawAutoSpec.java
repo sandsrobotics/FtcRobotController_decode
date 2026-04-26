@@ -94,8 +94,8 @@ public class ClawAutoSpec extends LinearOpMode{
         robot.init();
 
         while (!isStarted()) {
-//            robot.buttonMgr.runLoop();
-////            if (robot.buttonMgr.getState(1, ButtonMgr.Buttons.right_bumper))
+//            ButtonMgr.runLoop();
+////            if (ButtonMgr.getState(1, ButtonMgr.Buttons.right_bumper))
 //            if (new EdgeSupplier(() -> robot.opMode.gamepad1.right_bumper).isRisingEdge()) {
 //                startDelay += 1000;
 //            } else if (new EdgeSupplier(() -> robot.opMode.gamepad1.left_bumper).isRisingEdge()) {

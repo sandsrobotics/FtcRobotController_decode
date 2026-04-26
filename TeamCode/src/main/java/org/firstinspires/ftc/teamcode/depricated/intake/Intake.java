@@ -334,8 +334,8 @@ public class Intake extends ControllablePart<Robot, IntakeSettings, IntakeHardwa
     public boolean debugDelay() {
         if (!FlipbotSettings.autonomousDebugMode) return true;
         parent.opMode.telemetry.addLine("***** Debug delay... Tap X or hold Y to continue *****");
-        return (parent.buttonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped) ||
-                parent.buttonMgr.getState(1, ButtonMgr.Buttons.y, ButtonMgr.State.isPressed));
+        return (ButtonMgr.getState(1, ButtonMgr.Buttons.x, ButtonMgr.State.wasTapped) ||
+                ButtonMgr.getState(1, ButtonMgr.Buttons.y, ButtonMgr.State.isPressed));
     }
 
     public void strafeRobot(DriveControl control) {

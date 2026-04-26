@@ -17,6 +17,7 @@ import om.self.supplier.modifiers.SimpleRampedModifier;
 
 public final class Drive extends ControllableLoopedPart<Robot,DriveSettings, DriveHardware, DriveControl> {
     private Vector3 targetPower;
+    private boolean lkOverride = false;
 
     private final SimpleRampedModifier xRamp = new SimpleRampedModifier();
     private final SimpleRampedModifier yRamp = new SimpleRampedModifier();
@@ -82,6 +83,7 @@ public final class Drive extends ControllableLoopedPart<Robot,DriveSettings, Dri
      * Rhindle: This method provides direct control of the motors with no error checking or smoothing.
      */
     public void moveRobot(double[] powers){
+        lkOverride = true;
         getHardware().bottomLeftMotor.setPower(powers[2]);
         getHardware().topRightMotor.setPower(powers[1]);
         getHardware().topLeftMotor.setPower(powers[0]);
@@ -181,13 +183,19 @@ public final class Drive extends ControllableLoopedPart<Robot,DriveSettings, Dri
 
     @Override
     public void onRun() {
-        moveRobot(powerFilter.apply(targetPower));
+        if (!lkOverride) moveRobot(powerFilter.apply(targetPower));
+        lkOverride = false;
     }
 
     @Override
     public void onRun(DriveControl control) {
         //parent.opMode.telemetry.addData("drive powers", control.power);//TODO remove
 
+//        if (lkOverride) {
+//            lkOverride = false;
+//            return;
+//        }
+//
         if(control.stop) stopRobot();
         else setTargetPower(control.power);
     }

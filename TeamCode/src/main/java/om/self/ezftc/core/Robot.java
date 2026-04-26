@@ -102,7 +102,7 @@ public class Robot implements PartParent{
         ButtonMgr.runLoop();
         StateMachine.runLoop();
         taskManager.run();
-        StateMachine.addTelemetry(opMode.telemetry);
+//        StateMachine.addTelemetry(opMode.telemetry);
     }
 
     public void stop(){

@@ -269,9 +269,9 @@ public class Intake1 extends ControllablePart<Robot, Intake1Settings, Intake1Har
     @Override
     public void onBeanLoad() {
         positionSolver = getBeanManager().getBestMatch(PositionSolver.class, false);
-        artifacts = getBeanManager().getBestMatch(Artifacts.class, false);
+        if (!DecodeSettings.lkNoCam) artifacts = getBeanManager().getBestMatch(Artifacts.class, false);
 //        artifactPipeline = getBeanManager().getBestMatch(ArtifactDetectionPipeline.class, false);
-        limeLight = getBeanManager().getBestMatch(LimeLight.class, false);
+        if (!DecodeSettings.lkNoLL) limeLight = getBeanManager().getBestMatch(LimeLight.class, false);
         // LK New Test
         if (DecodeSettings.lkTestMode1) headingSolver = getBeanManager().getBestMatch(HeadingSolver.class, false);
         if (DecodeSettings.lkTestMode2) headerAimer = getBeanManager().getBestMatch(HeaderAimer.class, false);

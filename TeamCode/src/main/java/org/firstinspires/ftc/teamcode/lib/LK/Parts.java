@@ -27,13 +27,18 @@ public class Parts extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUtils.N
    public Parts(Robot parent) {
       super(parent, "parts");
 
+      // maybe this moves to onInit?
       autoDrive = new AutoDrive(this);
+      autoDrive.initialize();
+      TelemetryMgr.setup(parent.opMode);
+      TelemetryMgr.setDebugLevel(10);
+      TelemetryMgr.enableAllCategories();
    }
 
    @Override
    public void onRun() {
       autoDrive.runLoop();
-      TelemetryMgr.Update();
+//      TelemetryMgr.Update();
    }
 
    @Override

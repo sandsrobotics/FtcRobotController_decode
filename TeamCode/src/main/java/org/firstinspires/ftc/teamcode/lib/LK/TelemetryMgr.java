@@ -24,7 +24,7 @@ public class TelemetryMgr {
 //        enableDefaultCategories();
 //    }
 
-    public void setup(LinearOpMode opMode){
+    public static void setup(LinearOpMode opMode){
         TelemetryMgr.opMode = opMode;
         showCategory = new boolean[Category.values().length];
         enableDefaultCategories();

@@ -44,6 +44,8 @@ public class DecodeSettings {
    public static boolean lkPinpoint = false;
    public static boolean lkTestMode1 = false;
    public static boolean lkTestMode2 = false;
+   public static boolean lkNoCam = false;
+   public static boolean lkNoLL = false;
    // --
 
    public static boolean autonomousDebugMode = false;

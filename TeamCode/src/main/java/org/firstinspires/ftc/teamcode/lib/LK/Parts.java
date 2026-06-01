@@ -68,6 +68,10 @@ public class Parts extends LoopedPartImpl<Robot, ObjectUtils.Null, ObjectUtils.N
       return new Position(positionTracker.getOverridePosition());
    }
 
+   public Position turretPosition() {
+      return new Position(positionTracker.getOverridePosition()).transformPosition(new Position(-2,0,0));
+   }
+
    public boolean positionMgr_hasPosition() {
       return true;
    }

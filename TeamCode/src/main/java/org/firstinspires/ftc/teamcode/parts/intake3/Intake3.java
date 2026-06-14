@@ -39,6 +39,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 //    protected ArtifactDetectionPipeline artifactPipeline;
     protected LimeLight limeLight;
     public Vector2D targetVector;
+    public int currentLaunchAllOffset = 0;
 
     //***** Constructors *****
     public Intake3(Robot parent, String modeName) {
@@ -101,6 +102,8 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         this.launchRPM = RPM;
         double targetTPS = (RPM / 60.0) * IntakeSettings3.ticksPerRev;
         getHardware().launchMotor.setVelocity(targetTPS);
+        getHardware().launchMotor1.setVelocity(targetTPS);
+
     }
 
     public double getTargetLaunchRPM() {
@@ -236,162 +239,6 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
             default: return true;
         }
     }
-    /**
-     * TELEOP ONLY - Blocking launch method with smart fallback
-     * Launches colored artifacts in matched order first, then NONE artifacts.
-     */
-    public void computeLaunchOrderAndLaunchBlocking(ArtifactDetectionPipeline.ArtifactColor[] desiredOrder) {
-        // Auto-start launcher if not running
-        if (getTargetLaunchRPM() < 500) {
-            IntakeSettings3.launchArmed = true;
-
-            // Calculate RPM based on distance immediately
-            double distance = getTargetVector(
-                    IntakeSettings3.isRedSide ? IntakeSettings3.targetRed : IntakeSettings3.targetBlue
-            ).distance;
-            int calculatedRPM = (int) getSpinnerRPMfromDistance(distance);
-
-            setLaunchRPM(calculatedRPM);
-            parent.opMode.telemetry.addData("Launch", "Starting launcher...");
-            parent.opMode.telemetry.addData("Distance", distance);
-            parent.opMode.telemetry.addData("Calculated RPM", calculatedRPM);
-            parent.opMode.telemetry.update();
-        }
-
-        // Wait for RPM once at start
-        long startTime = System.currentTimeMillis();
-        while (!launchRPMInTolerance()) {
-            if (System.currentTimeMillis() - startTime >= IntakeSettings3.launchRPMToleranceTime) {
-                parent.opMode.telemetry.addData("Launcher", "RPM timeout - launching anyway");
-                parent.opMode.telemetry.update();
-                break;
-            }
-        }
-
-        // Get current artifacts - separate colored and NONE
-        ArtifactDetectionPipeline.Artifact[] current = artifacts.getArtifactList();
-        List<Integer> coloredIndices = new ArrayList<>();
-        List<Integer> noneIndices = new ArrayList<>();
-
-        for (int i = 0; i < current.length; i++) {
-            if (current[i].color != ArtifactDetectionPipeline.ArtifactColor.NONE) {
-                coloredIndices.add(i);
-            } else {
-                noneIndices.add(i);
-            }
-        }
-
-        // If ALL are NONE, launch sequentially and exit
-        if (coloredIndices.isEmpty() && noneIndices.isEmpty()) {
-            parent.opMode.telemetry.addData("Launch", "No artifacts detected!");
-            parent.opMode.telemetry.update();
-            return;
-        }
-
-        // Unlock servos before firing
-        getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Unlock);
-        long start = System.currentTimeMillis();
-        while (System.currentTimeMillis() - start < IntakeSettings3.lockServoUnlockDelay) {
-            parent.opMode.telemetry.update();
-        }
-        List<Integer> launchOrder = new ArrayList<>();
-        String launchMessage = "";
-
-        // If we have colored artifacts, try to match them
-        if (!coloredIndices.isEmpty()) {
-            boolean shouldAttemptColorMatch = true;
-            String fallbackReason = "";
-
-            // Check 1: No April tag detected
-            if (desiredOrder == null) {
-                shouldAttemptColorMatch = false;
-                fallbackReason = "No April tag detected";
-            }
-            // Check 2: All colored artifacts are the same color
-            else if (coloredIndices.size() >= 2) {
-                ArtifactDetectionPipeline.ArtifactColor firstColor = current[coloredIndices.get(0)].color;
-                boolean allSameColor = true;
-                for (int idx : coloredIndices) {
-                    if (current[idx].color != firstColor) {
-                        allSameColor = false;
-                        break;
-                    }
-                }
-                if (allSameColor) {
-                    shouldAttemptColorMatch = false;
-                    fallbackReason = "All artifacts same color (" + firstColor + ")";
-                }
-            }
-
-            // Try color matching if conditions are good
-            if (shouldAttemptColorMatch) {
-                boolean[] used = new boolean[current.length];
-
-                for (int i = 0; i < desiredOrder.length; i++) {
-                    boolean found = false;
-                    for (int j : coloredIndices) {
-                        if (!used[j] && current[j].color == desiredOrder[i]) {
-                            launchOrder.add(j);
-                            used[j] = true;
-                            found = true;
-                            break;
-                        }
-                    }
-                }
-
-                // Add any unmatched colored artifacts
-                for (int j : coloredIndices) {
-                    if (!used[j]) {
-                        launchOrder.add(j);
-                    }
-                }
-
-                if (launchOrder.size() == coloredIndices.size()) {
-                    launchMessage = "Color matched!";
-                } else {
-                    launchMessage = "Partial match";
-                }
-            } else {
-                // Use sequential order for colored artifacts
-                launchOrder.addAll(coloredIndices);
-                launchMessage = "Sequential - " + fallbackReason;
-            }
-        }
-
-        // Add NONE artifacts at the end
-        launchOrder.addAll(noneIndices);
-
-        if (!noneIndices.isEmpty()) {
-            launchMessage += " (NONE last)";
-        }
-
-        parent.opMode.telemetry.addData("Launch", launchMessage);
-        parent.opMode.telemetry.update();
-
-        // Fire servos in order
-        for (int idx : launchOrder) {
-            launchServoByIndex(idx);
-
-            long servoStart = System.currentTimeMillis();
-            while (System.currentTimeMillis() - servoStart < (IntakeSettings3.launchServoSweepTime + IntakeSettings3.launchServoSettleTime)) {
-                parent.opMode.telemetry.update();
-            }
-
-            resetServoByIndex(idx);
-
-            long delayStart = System.currentTimeMillis();
-            while (System.currentTimeMillis() - delayStart < IntakeSettings3.launchServoDelay) {
-                parent.opMode.telemetry.update();
-            }
-        }
-        // Re-lock servos after all launches complete
-        long relockStart = System.currentTimeMillis();
-        while (System.currentTimeMillis() - relockStart < IntakeSettings3.launchServoResetSettleTime) {
-            parent.opMode.telemetry.update();
-        }
-        getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
-        getHardware().lockServo0.setPosition(IntakeSettings3.lockServo0Lock);
-    }
 
     private void waitForLauncherToleranceOrTimeout() {
         long startTime = System.currentTimeMillis();
@@ -420,7 +267,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
     }
 
     public static double getSpinnerRPMfromDistance(double distance) {
-        return Functions.interpolate(distance, IntakeSettings3.nearTest, IntakeSettings3.farTest, IntakeSettings3.spinNear, IntakeSettings3.spinFar);
+        return Functions.interpolate(distance, IntakeSettings3.snearDist, IntakeSettings3.sfarDist, IntakeSettings3.spinNear, IntakeSettings3.spinFar);
     }
 
     public Vector2D getTargetVector(Vector3 target) {
@@ -487,6 +334,7 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
         tasks.constructAllIntakeTasks();
         setLaunchRPM(0);
         getHardware().launchMotor.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, IntakeSettings3.spinnerPID);
+        getHardware().launchMotor1.setPIDFCoefficients(DcMotorEx.RunMode.RUN_USING_ENCODER, IntakeSettings3.spinnerPID);
         getHardware().pixel.setPosition(LEDColor.GREEN.getLedPwm());
     }
 
@@ -517,10 +365,15 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 
         // update launch RPM
         if (IntakeSettings3.launchArmed) {
-            int launchRPM = (int) getSpinnerRPMfromDistance(targetVector.distance);
+            int launchRPM = (int) getSpinnerRPMfromDistance(targetVector.distance) + currentLaunchAllOffset;
             setLaunchRPM(launchRPM);
             parent.opMode.telemetry.addData("Calc launch RPM", launchRPM);
         }
+
+//        // test if we can auto remove extra balls
+//        if (isTeleop && (artifacts.getArtifactCount() == 3)) {
+//            setIntakeRPM(-IntakeSettings3.intakeRPM);
+//        }
 
         parent.opMode.telemetry.addData("Launch Servos", (int)index0Rpm + "," + (int)index1Rpm + "," + (int)index2Rpm);
     }

@@ -11,6 +11,7 @@ import om.self.ezftc.utils.hardware.motor.MotorSettings;
 public class IntakeHardware3 {
     public final DcMotorEx intakeMotor;
     public final DcMotorEx launchMotor;
+    public final DcMotorEx launchMotor1;
     public final ServoSSR launchServo0;
     public final ServoSSR launchServo1;
     public final ServoSSR launchServo2;
@@ -19,9 +20,10 @@ public class IntakeHardware3 {
     public final ServoSSR lockServo2;
     public final ServoSSR pixel;
 
-    public IntakeHardware3(DcMotorEx intakeMotor, DcMotorEx launchMotor, ServoSSR launchServo0,ServoSSR launchServo1,ServoSSR launchServo2, ServoSSR pixel, ServoSSR lockServo0,ServoSSR lockServo1,ServoSSR lockServo2) {
+    public IntakeHardware3(DcMotorEx intakeMotor, DcMotorEx launchMotor, DcMotorEx launchMotor1, ServoSSR launchServo0,ServoSSR launchServo1,ServoSSR launchServo2, ServoSSR pixel, ServoSSR lockServo0,ServoSSR lockServo1,ServoSSR lockServo2) {
         this.intakeMotor = intakeMotor;
         this.launchMotor = launchMotor;
+        this.launchMotor1 = launchMotor1;
         this.launchServo0 = launchServo0;
         this.launchServo1 = launchServo1;
         this.launchServo2 = launchServo2;
@@ -42,10 +44,12 @@ public class IntakeHardware3 {
     public static IntakeHardware3 makeDefault(HardwareMap hardwareMap)  {
         MotorSettings intakeMotorSettings =new MotorSettings(MotorSettings.Number.ZERO_B, DcMotorEx.Direction.REVERSE, DcMotorEx.ZeroPowerBehavior.BRAKE, DcMotorEx.RunMode.RUN_USING_ENCODER, 1);
         MotorSettings launchMotorSettings = new MotorSettings(MotorSettings.Number.THREE_B, DcMotorEx.Direction.REVERSE, DcMotorEx.ZeroPowerBehavior.BRAKE, DcMotorEx.RunMode.RUN_USING_ENCODER, 1);
+        MotorSettings launchMotor1Settings = new MotorSettings(MotorSettings.Number.TWO_B, DcMotorEx.Direction.FORWARD, DcMotorEx.ZeroPowerBehavior.BRAKE, DcMotorEx.RunMode.RUN_USING_ENCODER, 1);
 
         return new IntakeHardware3(
             intakeMotorSettings.makeExMotor(hardwareMap),
             launchMotorSettings.makeExMotor(hardwareMap),
+            launchMotor1Settings.makeExMotor(hardwareMap),
             new ServoSSR(hardwareMap.get(Servo.class,"servo0B")), // launch servo on the left
             new ServoSSR(hardwareMap.get(Servo.class,"servo1B")), //launch servo in the middle
             new ServoSSR(hardwareMap.get(Servo.class,"servo2B")), // launch servo on the right

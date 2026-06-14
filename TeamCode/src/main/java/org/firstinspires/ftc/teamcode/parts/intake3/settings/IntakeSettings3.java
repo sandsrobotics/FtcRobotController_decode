@@ -29,7 +29,7 @@ public class IntakeSettings3 {
 
     // launch servo values
     public static int launchServoDelay = 100; //use tolerance not delay
-    public static int launchServoDelayforA = 600; //use tolerance not delay
+    public static int launchServoDelayforA = 200; //use tolerance not delay
     public static int launchServoSweepTime = 400;
     public static int lockServoSweepTime = 400;
     public static int launchRPMTolerance = 75;
@@ -38,17 +38,18 @@ public class IntakeSettings3 {
     public static PIDFCoefficients spinnerPID = new PIDFCoefficients(100,0,0,12.4);
     public static int launchRPM = 3150; // for teleop tests
     public static int launchAllRPM = 3500;
+    public static int launchAllOffset = 160;
     public static int intakeRPM = 950;
     public static final double ticksPerRev = 28;
     public static final double ticksPerRev1150 = 145.1;
 
-    public static double spinNear                 = 2450; // 2500 at 72
+    public static double spinNear                 = 2410; // 2500 at 72
     public static final double spinMiddle               = 0;//
     public static double spinFar                  = 3050; // 3250 at 137
 
-    public static double nearTest      = 71.9;  // 1 tile diagonally 40
+    public static double snearDist      = 69.93;  // 1 tile diagonally 40
     public static final double midTest       = 98; //98
-    public static double farTest       = 148; // 140
+    public static double sfarDist       = 138.59; // 140
 
     public static final Vector3 targetRed              = new Vector3(-70.5, 70.5, 0.0);
     public static final Vector3 targetBlue             = new Vector3(-70.5, -70.5, 0.0);
@@ -63,8 +64,8 @@ public class IntakeSettings3 {
     public static Vector3 shootingRed = new Vector3(-20.3, 8.67, 133.667); // Shooting Pos Red
 
 
-    public static Vector3 shootingTriBlue = new Vector3(43.51, 3.603, -150.479); // Shooting Pos Blue
-    public static Vector3 shootingTriRed = new Vector3(43.51, -3.603, 150.479); // Shooting Pos Red
+    public static Vector3 shootingTriBlue = new Vector3(42.47, -2.518, -144.368); // Shooting Pos Blue
+    public static Vector3 shootingTriRed = new Vector3(42.47, 2.518, 144.368); // Shooting Pos Red
 
 
     public static Vector3 shootingWallBlue = new Vector3(-57.064, -0.244, -89.097); // Shooting Pos Blue
@@ -72,7 +73,7 @@ public class IntakeSettings3 {
 
     //
     public static boolean isRedSide = false;
-    public static double limelightFarXOffset = 2; // degrees to shift left on blue and right on red at tiny triangle
+    public static double limelightFarXOffset = 2.5; // degrees to shift left on blue and right on red at tiny triangle
 
     public static final int redTagId = 24;
     public static final int blueTagId = 20;

@@ -37,7 +37,7 @@ public class T3_AutoBlueGoal extends T3_AutoBase {
         Vector3 start = fieldStartPos; //new Vector3(-51, -50, 140);
         Vector3 aprilTag = transformFunc.apply(new Vector3(-42, -41, 140)); //z=122
 
-        LaunchData shootLaunchData = new LaunchData(2450, transformFunc.apply(new Vector3(-26, -14, -128 )));
+        LaunchData shootLaunchData = new LaunchData(2350, transformFunc.apply(new Vector3(-26, -14, -128 )));
 
         Vector3 blueSpikeReady1 = transformFunc.apply(new Vector3(-12,-28,-90));
         Vector3 blueSpike1 = transformFunc.apply(new Vector3(-12,-53,-90));

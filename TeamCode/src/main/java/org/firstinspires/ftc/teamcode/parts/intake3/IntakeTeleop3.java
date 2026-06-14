@@ -108,7 +108,7 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.setIntakeRPM(0);
         }
 
-        // B BUTTON - test and find out.
+        // B BUTTON - Launch all artifacts at once.
         if (buttonMgr.getState(1, Buttons.b, State.wasTapped)) {
             IntakeSettings3.launchArmed = false;
             parent.setLaunchRPM(0);
@@ -253,37 +253,61 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.setIntakeRPM(IntakeSettings3.intakeRPM);  // Turn on when released
         }
 
-        // RIGHT TRIGGER - Color-ordered launch (auto-starts launcher)
+
+        // RIGHT TRIGGER - Hold to warm up launcher and also turn off intake to shift more power to launcher, release to shut down
         if (buttonMgr.getState(2, Buttons.right_trigger, State.wasPressed)) {
+            IntakeSettings3.launchArmed = true;
+            parent.setIntakeRPM(0);
+        }
+        if (buttonMgr.getState(2, Buttons.right_trigger, State.wasReleased)) {
+            IntakeSettings3.launchArmed = false;
+            parent.setLaunchRPM(0);
+            parent.setIntakeRPM(IntakeSettings3.intakeRPM);
+        }
+
+        // X Button (Used to be right trigger) - Color-ordered  launch
+        if (buttonMgr.getState(2, Buttons.x, State.wasPressed)) {
             if (parent.getTargetLaunchRPM() < 500) {
                 parent.setLaunchRPM(IntakeSettings3.launchRPM);
                 IntakeSettings3.launchArmed = true;
             }
             parent.stopAllIntakeTasks();
+            parent.setIntakeRPM(0);
             parent.tasks.orderedColorLaunchTask.restart();
         }
+        if (buttonMgr.getState(2, Buttons.x, State.wasReleased)) {
+            parent.setIntakeRPM(IntakeSettings3.intakeRPM);
+        }
 
-
-        // RIGHT TRIGGER - Color-ordered launch close up (auto-starts launcher)
+// A BUTTON - Color-ordered launch close up
         if (buttonMgr.getState(2, Buttons.a, State.wasPressed)) {
             if (parent.getTargetLaunchRPM() < 500) {
                 parent.setLaunchRPM(IntakeSettings3.launchRPM);
                 IntakeSettings3.launchArmed = true;
             }
             parent.stopAllIntakeTasks();
+            parent.setIntakeRPM(0);
             parent.tasks.orderedColorLaunchTaskClose.restart();
         }
+//        if (buttonMgr.getState(2, Buttons.a, State.wasReleased)) {
+//            parent.setIntakeRPM(IntakeSettings3.intakeRPM);
+//        }
 
-        // Y BUTTON - Start/Stop launcher
-        if (buttonMgr.getState(2, Buttons.y, State.wasTapped)) {
-            parent.setLaunchRPM(IntakeSettings3.launchRPM);
-            IntakeSettings3.launchArmed = true;  // use true for interpolated
+// B BUTTON - Simultaneous launch
+        if (buttonMgr.getState(2, Buttons.b, State.wasPressed)) {
+            if (parent.getTargetLaunchRPM() < 500) {
+                parent.setLaunchRPM(IntakeSettings3.launchAllRPM);
+                IntakeSettings3.launchArmed = true;
+            }
+            parent.stopAllIntakeTasks();
+            parent.setIntakeRPM(0);
+            parent.tasks.sameTimeBallLaunchTask.restart();
         }
+//        if (buttonMgr.getState(2, Buttons.b, State.wasReleased)) {
+//            parent.setIntakeRPM(IntakeSettings3.intakeRPM);
+//        }
 
-        if (buttonMgr.getState(2, Buttons.y, State.wasDoubleTapped)) {
-            IntakeSettings3.launchArmed = false;
-            parent.setLaunchRPM(0);
-        }
+
 
         // X BUTTON - Move to blueshoot1 and launch (auto-starts launcher)
 //        if (buttonMgr.getState(2, Buttons.x, State.wasTapped)) {
@@ -294,17 +318,6 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
 //            parent.tasks.moveAndLaunch.restart();
 //        }
 
-
-
-        // B BUTTON - Simultaneous launch (auto-starts launcher)
-        if (buttonMgr.getState(2, Buttons.b, State.wasTapped)) {
-            if (parent.getTargetLaunchRPM() < 500) {
-                parent.setLaunchRPM(IntakeSettings3.launchAllRPM);
-                IntakeSettings3.launchArmed = true;
-            }
-            parent.stopAllIntakeTasks();
-            parent.tasks.sameTimeBallLaunchTask.restart();
-        }
 
         // A BUTTON - Sequential launch (auto-starts launcher)
 //        if (buttonMgr.getState(2, Buttons.a, State.wasTapped)) {

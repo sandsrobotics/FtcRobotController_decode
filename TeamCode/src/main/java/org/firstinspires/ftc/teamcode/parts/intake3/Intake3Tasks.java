@@ -81,29 +81,34 @@ public class Intake3Tasks {
 
         // all three ball task at the same time
         sameTimeBallLaunchTask.autoStart = false;
-
+        sameTimeBallLaunchTask.addStep(()-> intake.currentLaunchAllOffset = IntakeSettings3.launchAllOffset);
+        sameTimeBallLaunchTask.addStep(()-> intake.setIntakeRPM(0));
         //unlock all
         sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo0.setPosition(intake.getSettings().lockServo0Unlock));
+        sameTimeBallLaunchTask.addTimedStep(() -> {}, () -> intake.launchRPMInTolerance(), intake.getSettings().launchRPMToleranceTime);
         sameTimeBallLaunchTask.addStep(()-> intake.getHardware().lockServo0.isDone());
 
         //launch
-        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo0.setPosition(intake.getSettings().launchServo0Launch));
-        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo1.setPosition(intake.getSettings().launchServo1Launch));
-        sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Launch));
+        sameTimeBallLaunchTask.addStep(()-> {
+            intake.getHardware().launchServo0.setPosition(intake.getSettings().launchServo0Launch);
+            intake.getHardware().launchServo1.setPosition(intake.getSettings().launchServo1Launch);
+            intake.getHardware().launchServo2.setPosition(intake.getSettings().launchServo2Launch);
+        });
         sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo0.isDone());
         sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo1.isDone());
         sameTimeBallLaunchTask.addStep(()-> intake.getHardware().launchServo2.isDone());
 
         //launch reset
         sameTimeBallLaunchTask.addStep(()-> resetLaunchServos.restart());
-
+        sameTimeBallLaunchTask.addStep(()-> intake.currentLaunchAllOffset = 0);
+        sameTimeBallLaunchTask.addStep(()-> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
         /* End */
 
         /* Begin */
 
 // Ordered color launch
         orderedColorLaunchTaskClose.autoStart = false;
-
+        orderedColorLaunchTaskClose.addStep(() -> intake.setIntakeRPM(0 ));
 // Unlock
         orderedColorLaunchTaskClose.addStep(() -> intake.getHardware().lockServo0.setPosition(intake.getSettings().lockServo0Unlock));
         orderedColorLaunchTaskClose.addStep(() -> intake.getHardware().lockServo0.isDone());
@@ -146,7 +151,7 @@ public class Intake3Tasks {
 
 // Reset
         orderedColorLaunchTaskClose.addStep(() -> resetLaunchServos.restart());
-
+        orderedColorLaunchTaskClose.addStep(() -> intake.setIntakeRPM(IntakeSettings3.intakeRPM));
         /* End */
 
         /* Begin */

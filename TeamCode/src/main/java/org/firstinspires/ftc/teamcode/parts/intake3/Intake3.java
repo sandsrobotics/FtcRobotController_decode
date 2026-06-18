@@ -64,9 +64,11 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
 
                 if (!aligned) {
                     turnPower = calculateTurnPower(adjustForDist(limeLight.tx));
-                    control.power = control.power.addZ(turnPower / 3);
+                    control.power = control.power.addZ(turnPower / 2);
                 } else {
-                    control.power = control.power.withZ(0);
+                    if (control.power.Z > 0)
+                        control.power = control.power.withZ(0);
+                    IntakeSettings3.alignTarget = false;
                 }
             } else {
                 IntakeSettings3.isAligned = false;  // no target visible
@@ -370,6 +372,12 @@ public class Intake3 extends ControllablePart<Robot, IntakeSettings3, IntakeHard
             parent.opMode.telemetry.addData("Calc launch RPM", launchRPM);
         }
 
+        if (isTeleop) {
+            if (artifacts.getArtifactCount() == 3)
+                IntakeSettings3.alignTarget = true;
+            if (artifacts.getArtifactCount()  == 0)
+                IntakeSettings3.alignTarget = false;
+        }
 //        // test if we can auto remove extra balls
 //        if (isTeleop && (artifacts.getArtifactCount() == 3)) {
 //            setIntakeRPM(-IntakeSettings3.intakeRPM);

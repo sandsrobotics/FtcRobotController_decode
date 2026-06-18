@@ -243,7 +243,7 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
         if (buttonMgr.getState(2, Buttons.left_bumper, State.isHeld)) {
             IntakeSettings3.alignTarget = true;
         } else {
-            IntakeSettings3.alignTarget = false;
+//            IntakeSettings3.alignTarget = false;
         }
 
         // LEFT TRIGGER - Intake control (hold to turn off, release to turn on)
@@ -253,16 +253,14 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
             parent.setIntakeRPM(IntakeSettings3.intakeRPM);  // Turn on when released
         }
 
-
-        // RIGHT TRIGGER - Hold to warm up launcher and also turn off intake to shift more power to launcher, release to shut down
         if (buttonMgr.getState(2, Buttons.right_trigger, State.wasPressed)) {
-            IntakeSettings3.launchArmed = true;
+            if (parent.getTargetLaunchRPM() < 500) {
+                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+                IntakeSettings3.launchArmed = true;
+            }
+            parent.stopAllIntakeTasks();
             parent.setIntakeRPM(0);
-        }
-        if (buttonMgr.getState(2, Buttons.right_trigger, State.wasReleased)) {
-            IntakeSettings3.launchArmed = false;
-            parent.setLaunchRPM(0);
-            parent.setIntakeRPM(IntakeSettings3.intakeRPM);
+            parent.tasks.orderedColorLaunchTaskClose.restart();
         }
 
         // X Button (Used to be right trigger) - Color-ordered  launch

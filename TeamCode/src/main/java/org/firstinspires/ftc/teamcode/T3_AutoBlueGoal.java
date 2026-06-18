@@ -117,6 +117,8 @@ public class T3_AutoBlueGoal extends T3_AutoBase {
         autoTasks.addStep(() -> intake.setIntakeRPM(0));
 
         // Use ordered color launch instead of regular ball launch
+//        autoTasks.addStep(intake.tasks.sameTimeBallLaunchTask::restart);
+//        autoTasks.addStep(intake.tasks.sameTimeBallLaunchTask::isDone);
         autoTasks.addStep(intake.tasks.orderedColorLaunchTask::restart);
         autoTasks.addStep(intake.tasks.orderedColorLaunchTask::isDone);
     }

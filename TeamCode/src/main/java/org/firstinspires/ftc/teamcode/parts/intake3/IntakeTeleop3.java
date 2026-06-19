@@ -107,7 +107,16 @@ public class IntakeTeleop3 extends LoopedPartImpl<Intake3, IntakeSettings3, Obje
                 buttonMgr.getState(1, Buttons.dpad_up, State.wasDoubleTapped)) {
             parent.setIntakeRPM(0);
         }
-
+// A BUTTON - Color-ordered launch close up
+        if (buttonMgr.getState(1, Buttons.a, State.wasPressed)) {
+            if (parent.getTargetLaunchRPM() < 500) {
+                parent.setLaunchRPM(IntakeSettings3.launchRPM);
+                IntakeSettings3.launchArmed = true;
+            }
+            parent.stopAllIntakeTasks();
+            parent.setIntakeRPM(0);
+            parent.tasks.orderedColorLaunchTaskClose.restart();
+        }
         // B BUTTON - Launch all artifacts at once.
         if (buttonMgr.getState(1, Buttons.b, State.wasTapped)) {
             IntakeSettings3.launchArmed = false;
